@@ -21,4 +21,22 @@ function showError(err: any) {
   }
 }
 
-export { server, showSuccess, showError }
+// types:
+
+interface UserLogin {
+  payload: {
+    name: string
+    email: string
+    isRealtor: boolean
+  }
+  token: string
+}
+
+type RootStackParamList = {
+  Auth: undefined,
+  Home: UserLogin,
+  // Profile: { userId: string }
+  // Feed: { sort: 'latest' | 'top' } | undefined;
+}
+
+export { server, showSuccess, showError, RootStackParamList, UserLogin }

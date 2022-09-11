@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
-import { AsyncStorage, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
 import axios from 'axios'
-import { server, showError, showSuccess } from '../common'
+import jwtDecode from 'jwt-decode'
+import { RootStackParamList, server, showError, showSuccess, UserLogin } from '../common'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export const Auth: React.FC = (props) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Auth'>
+
+export const Auth = ({ navigation, route }: Props) => {
   const [stageNew, setStageNew] = useState(false)
   const [name, setName] = useState('Gustavo')
   const [email, setEmail] = useState('gustavo@gmail.com')
@@ -40,17 +45,20 @@ export const Auth: React.FC = (props) => {
   const login = async () => {
     // console.warn("LOGIN")
     try {     
-      const res = await axios.post(`${server}/users/login`, {
+      const res = await axios.post<UserLogin>(`${server}/users/login`, {
         email,
         password,
       })
-      console.warn(JSON.stringify(res.data))
+      
+      AsyncStorage.setItem('userData', JSON.stringify(res.data))
 
-      // AsyncStorage.setItem('userData', JSON.stringify(res.data))
+      console.warn(jwtDecode(res.data.token))
+
       // axios.defaults.headers.common[
       //   'Authorization'
       // ] = `bearer ${res.data.token}`
-      // props.navigation.navigate('Home', res.data)
+      navigation.navigate('Home', res.data)
+
     } catch (e) {
       showError(e)
     }
@@ -59,6 +67,10 @@ export const Auth: React.FC = (props) => {
   const toggleIsRealtor = () => setIsRealtor(previousState => !previousState)
   
   useEffect(() => {
+    validateInputs()
+  })
+  
+  const validateInputs = () => {
     const validations = []
     validations.push(email && email.includes('@'))
     validations.push(password && password.length >= 6)
@@ -69,14 +81,10 @@ export const Auth: React.FC = (props) => {
     }
 
     setValidForm(validations.reduce((total, current) => total && current) as boolean)
-  })
-  
-  const validateInputs = () => {
-    console.warn("teste")
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
       {stageNew && (
         <AuthInput
@@ -151,7 +159,7 @@ export const Auth: React.FC = (props) => {
           {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
         </Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 

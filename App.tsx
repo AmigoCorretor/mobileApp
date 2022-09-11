@@ -1,12 +1,13 @@
 // import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView, StyleSheet } from 'react-native'
+import { Navigator } from './src/Navigator'
 import { Auth } from './src/screens/Auth'
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Auth />
-    </SafeAreaView>
+    // <SafeAreaView style={styles.container}>
+    <Navigator />
+    // </SafeAreaView>
   )
 }
 
