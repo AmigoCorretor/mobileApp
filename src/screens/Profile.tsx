@@ -5,13 +5,13 @@ import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-type FeedScreenNavigationProp = CompositeScreenProps<
-  BottomTabScreenProps<BottomTabParamList, 'Feed'>,
+type ProfileScreenNavigationProp = CompositeScreenProps<
+  BottomTabScreenProps<BottomTabParamList, 'Profile'>,
   NativeStackScreenProps<StackParamList>
 >
-// type Props = BottomTabScreenProps<BottomTabParamList, 'Feed'>
+// type Props = BottomTabScreenProps<BottomTabParamList, 'Profile'>
 
-export const Feed: React.FC<FeedScreenNavigationProp> = ({
+export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   navigation,
   route,
 }) => {
@@ -36,8 +36,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Feed</Text>
-      <Text style={styles.text}>{route.params?.payload.name}</Text>
+      <Text style={styles.title}>Profile</Text>
     </SafeAreaView>
   )
 }

@@ -11,13 +11,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigatorScreenParams } from '@react-navigation/native'
 import { DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { StatusBar, useColorScheme } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Profile } from './screens/Profile'
 
 
 export type StackParamList = {
-  Auth: undefined, // Feed do artigo
-  Home: NavigatorScreenParams<BottomTabParamList>, // MainNav do artigo
-  // MainNav: NavigatorScreenParams<BottomTabParamList>;
-  // Feed: undefined;
+  Auth: undefined,
+  Home: NavigatorScreenParams<BottomTabParamList>,
 }
 
 export type BottomTabParamList = {
@@ -26,35 +26,57 @@ export type BottomTabParamList = {
   NewPost: undefined
   Notifications: undefined
   Profile: undefined
-  
-  // Home: undefined;
-  // Profile: undefined
-  // Settings: undefined;
 }
 
 const Stack = createNativeStackNavigator<StackParamList>()
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
-// MainNav do artigo
 const HomeScreen = ({
   navigation,
   route,
 }: NativeStackScreenProps<StackParamList, 'Home'>) => {
   return (
-    <BottomTab.Navigator initialRouteName="Feed">
+    <BottomTab.Navigator
+     initialRouteName="Feed"
+     screenOptions={
+      { 
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: 'orange'
+        }
+      }>
       <BottomTab.Screen
         name="Feed"
         component={Feed}
+        options={{tabBarIcon: ({focused, color, size}) => {
+          return <MaterialIcons
+          name='home'
+          size={size}
+          color={color}
+        />
+        }
+      }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={Profile}
+        options={{tabBarIcon: ({focused, color, size}) => {
+          return <MaterialIcons
+          name='person'
+          size={size}
+          color={color}
+        />
+        }
+      }}
       />
     </BottomTab.Navigator>
   )
 }
 
-// "PAI" do artigo
 const AuthNavigator = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, contentStyle: { alignItems: 'center'} }}
+      screenOptions={{ headerShown: false }}
       initialRouteName="Auth">
       {/* <Stack.Screen
         name="AuthOrApp"
@@ -63,6 +85,7 @@ const AuthNavigator = () => {
       <Stack.Screen
         name="Auth"
         component={Auth}
+        options={{contentStyle: { alignItems: 'center'}}}
       />
       <Stack.Screen
         name="Home"
