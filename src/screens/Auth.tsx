@@ -5,12 +5,13 @@ import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
-import { RootStackParamList, server, showError, showSuccess, UserLogin } from '../common'
+import { server, showError, showSuccess, UserLogin } from '../common'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackParamList } from '../Navigator'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Auth'>
+type AuthScreenProps = NativeStackScreenProps<StackParamList, 'Auth'>
 
-export const Auth = ({ navigation, route }: Props) => {
+export const Auth = ({ navigation }: AuthScreenProps) => {
   const [stageNew, setStageNew] = useState(false)
   const [name, setName] = useState('Gustavo')
   const [email, setEmail] = useState('gustavo@gmail.com')
@@ -43,7 +44,6 @@ export const Auth = ({ navigation, route }: Props) => {
   }
 
   const login = async () => {
-    // console.warn("LOGIN")
     try {     
       const res = await axios.post<UserLogin>(`${server}/users/login`, {
         email,
@@ -57,7 +57,10 @@ export const Auth = ({ navigation, route }: Props) => {
       // axios.defaults.headers.common[
       //   'Authorization'
       // ] = `bearer ${res.data.token}`
-      navigation.navigate('Home', res.data)
+      navigation.navigate('Home', {
+        screen: 'Feed',
+        params: res.data
+      })
 
     } catch (e) {
       showError(e)

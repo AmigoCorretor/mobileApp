@@ -32,11 +32,4 @@ interface UserLogin {
   token: string
 }
 
-type RootStackParamList = {
-  Auth: undefined,
-  Home: UserLogin,
-  // Profile: { userId: string }
-  // Feed: { sort: 'latest' | 'top' } | undefined;
-}
-
-export { server, showSuccess, showError, RootStackParamList, UserLogin }
+export { server, showSuccess, showError, UserLogin }
