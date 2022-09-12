@@ -8,6 +8,8 @@ import jwtDecode from 'jwt-decode'
 import { server, showError, showSuccess, UserLogin } from '../common'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamList } from '../Navigator'
+import { useTheme } from '@react-navigation/native'
+
 
 type AuthScreenProps = NativeStackScreenProps<StackParamList, 'Auth'>
 
@@ -19,6 +21,9 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   const [confirmPassword, setConfirmPassword] = useState('123456')
   const [isRealtor, setIsRealtor] = useState(false)
   const [validForm, setValidForm] = useState(false)
+
+  const { colors } = useTheme()
+  const theme = useTheme()
 
   const loginOrSignup = () => {
     if (stageNew) {
@@ -86,9 +91,53 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
     setValidForm(validations.reduce((total, current) => total && current) as boolean)
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      width: '90%' ,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    title: {
+      color: colors.text,
+      fontSize: 24
+    },
+    text: {
+      color: colors.text,
+      fontSize: 18
+    },
+    input: {
+      marginTop: 10,
+      backgroundColor: '#CCC',
+    },
+    buttonText: {
+      color: colors.text,
+    },
+    switchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: 10,
+      justifyContent: 'space-around',
+      width: '50%',
+    },
+    button: {
+      flexDirection: 'row',
+      backgroundColor: '#080',
+      marginTop: 10,
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 8,
+    },
+    buttonIcon: {
+      marginRight: 10,
+    },
+  })
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
+      <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
       {stageNew && (
         <AuthInput
           icon="person"
@@ -126,7 +175,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       )}
       {stageNew && (
         <View style={styles.switchContainer}>
-          <Text>Você é corretor?</Text>
+          <Text style={styles.text}>Você é corretor?</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
             thumbColor={isRealtor ? '#f5dd4b' : '#f4f3f4'}
@@ -164,37 +213,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       </TouchableOpacity>
     </SafeAreaView>
   )
+  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input: {
-    marginTop: 10,
-    backgroundColor: '#CCC',
-  },
-  buttonText: {},
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-    justifyContent: 'space-around',
-    width: '50%',
-  },
-  button: {
-    flexDirection: 'row',
-    backgroundColor: '#080',
-    marginTop: 10,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-  },
-  buttonIcon: {
-    marginRight: 10,
-  },
-})
+

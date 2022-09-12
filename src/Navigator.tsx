@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
@@ -9,6 +9,9 @@ import { UserLogin } from './common'
 import { Feed } from './screens/Feed'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigatorScreenParams } from '@react-navigation/native'
+import { DefaultTheme, DarkTheme } from '@react-navigation/native'
+import { StatusBar, useColorScheme } from 'react-native'
+
 
 export type StackParamList = {
   Auth: undefined, // Feed do artigo
@@ -51,7 +54,7 @@ const HomeScreen = ({
 const AuthNavigator = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, contentStyle: { alignItems: 'center'} }}
       initialRouteName="Auth">
       {/* <Stack.Screen
         name="AuthOrApp"
@@ -70,9 +73,30 @@ const AuthNavigator = () => {
 }
 
 export const Navigator: React.FC = () => {
+  let theme = useColorScheme() === 'dark' ? CustomDarkTheme : CustomDefaultTheme
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme}>
+      <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background} />
       <AuthNavigator />
     </NavigationContainer>
   )
+}
+
+const CustomDefaultTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#fff',
+    text: '#333'
+  }
+}
+
+const CustomDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: '#333',
+    text: '#fff'
+  }
 }
