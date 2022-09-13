@@ -9,6 +9,7 @@ import { server, showError, showSuccess, UserLogin } from '../common'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
+import { LinearGradient } from 'expo-linear-gradient'
 
 
 type AuthScreenProps = NativeStackScreenProps<StackParamList, 'Auth'>
@@ -49,12 +50,12 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   }
 
   const login = async () => {
-    try {     
+    try {
       const res = await axios.post<UserLogin>(`${server}/users/login`, {
         email,
         password,
       })
-      
+
       AsyncStorage.setItem('userData', JSON.stringify(res.data))
 
       console.warn(jwtDecode(res.data.token))
@@ -73,11 +74,11 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   }
 
   const toggleIsRealtor = () => setIsRealtor(previousState => !previousState)
-  
+
   useEffect(() => {
     validateInputs()
   })
-  
+
   const validateInputs = () => {
     const validations = []
     validations.push(email && email.includes('@'))
@@ -94,7 +95,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      width: '90%' ,
+      width: '100%',
       backgroundColor: colors.background,
       alignItems: 'center',
       justifyContent: 'center',
@@ -109,7 +110,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
     },
     input: {
       marginTop: 10,
-      backgroundColor: '#CCC',
+      backgroundColor: '#EFEFEF',
     },
     buttonText: {
       color: colors.text,
@@ -119,101 +120,120 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       alignItems: 'center',
       marginVertical: 10,
       justifyContent: 'space-around',
-      width: '50%',
+      width: '60%',
     },
     button: {
       flexDirection: 'row',
-      backgroundColor: '#080',
+      backgroundColor: theme.dark ? '#0096FF' : '#0096FF',
       marginTop: 10,
       padding: 10,
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 8,
+      
     },
     buttonIcon: {
       marginRight: 10,
+      color: theme.dark ? '#FFF' : '#000',
     },
+    background: {
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 30
+
+    },
+
   })
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
-      {stageNew && (
-        <AuthInput
-          icon="person"
-          placeholder="Nome"
-          value={name}
-          style={styles.input}
-          onChangeText={setName}
-        />
-      )}
+      <LinearGradient
+        colors={theme.dark ? ["#0096FF", "#332657"]: ["#0096FF", "#F2F2F2"]}
+        start={[0.1, 0.1]}
+        style={styles.background}
+      >
 
-      <AuthInput
-        icon="email"
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <AuthInput
-        icon="lock"
-        style={styles.input}
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      {stageNew && (
+
+        <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
+        {stageNew && (
+          <AuthInput
+            icon="person"
+            placeholder="Nome"
+            value={name}
+            style={styles.input}
+            onChangeText={setName}
+          />
+        )}
+
+        <AuthInput
+          icon="email"
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
         <AuthInput
           icon="lock"
-          placeholder="Confirmar senha"
-          value={confirmPassword}
           style={styles.input}
-          onChangeText={setConfirmPassword}
-          secureTextEntry={true}
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
         />
-      )}
-      {stageNew && (
-        <View style={styles.switchContainer}>
-          <Text style={styles.text}>Você é corretor?</Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isRealtor ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleIsRealtor}
-            value={isRealtor}
+        {stageNew && (
+          <AuthInput
+            icon="lock"
+            placeholder="Confirmar senha"
+            value={confirmPassword}
+            style={styles.input}
+            onChangeText={setConfirmPassword}
+            secureTextEntry={true}
           />
-        </View>
-      )}
+        )}
+        {stageNew && (
+          <View style={styles.switchContainer}>
+            <Text style={styles.text}>Você é corretor?</Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#0096FF' }}
+              thumbColor={isRealtor ? '#FFF' : '#AAA'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleIsRealtor}
+              value={isRealtor}
+            />
+          </View>
+        )}
 
-      <TouchableOpacity
-        onPress={loginOrSignup}
-        disabled={!validForm}>
-        <View
-          style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
-          <MaterialIcons
-            name="login"
-            size={20}
-            color="#FFF"
-            style={styles.buttonIcon}
-            solid
-          />
+        <TouchableOpacity
+          onPress={loginOrSignup}
+          disabled={!validForm}>
+          <View
+            style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
+            <MaterialIcons
+              name="login"
+              size={20}
+              color="#FFF"
+              style={styles.buttonIcon}
+              solid
+            />
+            <Text style={styles.buttonText}>
+              {stageNew ? 'Registrar' : 'Entrar'}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ padding: 10 }}
+          onPress={() => setStageNew(!stageNew)}>
           <Text style={styles.buttonText}>
-            {stageNew ? 'Registrar' : 'Entrar'}
+            {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
           </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={{ padding: 10 }}
-        onPress={() => setStageNew(!stageNew)}>
-        <Text style={styles.buttonText}>
-          {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
-        </Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </LinearGradient>
     </SafeAreaView>
   )
-  
+
 }
 
 

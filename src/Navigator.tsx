@@ -37,37 +37,39 @@ const HomeScreen = ({
 }: NativeStackScreenProps<StackParamList, 'Home'>) => {
   return (
     <BottomTab.Navigator
-     initialRouteName="Feed"
-     screenOptions={
-      { 
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: 'orange'
+      initialRouteName="Feed"
+      screenOptions={
+        {
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: 'orange'
         }
       }>
       <BottomTab.Screen
         name="Feed"
         component={Feed}
-        options={{tabBarIcon: ({focused, color, size}) => {
-          return <MaterialIcons
-          name='home'
-          size={size}
-          color={color}
-        />
-        }
-      }}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            return <MaterialIcons
+              name='home'
+              size={size}
+              color={color}
+            />
+          }
+        }}
       />
       <BottomTab.Screen
         name="Profile"
         component={Profile}
-        options={{tabBarIcon: ({focused, color, size}) => {
-          return <MaterialIcons
-          name='person'
-          size={size}
-          color={color}
-        />
-        }
-      }}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            return <MaterialIcons
+              name='person'
+              size={size}
+              color={color}
+            />
+          }
+        }}
       />
     </BottomTab.Navigator>
   )
@@ -85,7 +87,7 @@ const AuthNavigator = () => {
       <Stack.Screen
         name="Auth"
         component={Auth}
-        options={{contentStyle: { alignItems: 'center'}}}
+        options={{ contentStyle: { alignItems: 'center' } }}
       />
       <Stack.Screen
         name="Home"
@@ -100,7 +102,7 @@ export const Navigator: React.FC = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background} />
+      <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor='#0096FF' />
       <AuthNavigator />
     </NavigationContainer>
   )
