@@ -16,21 +16,23 @@ type ProfileScreenNavigationProp = CompositeScreenProps<
 // type Props = BottomTabScreenProps<BottomTabParamList, 'Profile'>
 
 export interface UserInfo {
-  id: number;
-  email: string;
-  photo: string;
-  name: string;
-  isRealtor: true;
-  creci: string;
-  stars: number;
-  comletedSells: number;
-  completedRents: number;
-  phone: string;
-  posts: any[];
+  id: number
+  bio: string
+  email: string
+  photo: string
+  name: string
+  isRealtor: true
+  creci: string
+  stars: number
+  comletedSells: number
+  completedRents: number
+  phone: string
+  posts: any[]
 }
 
 const userInfo: UserInfo = {
   id: 11,
+  bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, sunt illo nulla quam doloremque deleniti, mollitia iusto distinctio ipsa ullam eveniet, maiores minima quo quae obcaecati repudiandae enim aut tempora!',
   email: 'gustavo@gmail.com',
   photo: 'https://picsum.photos/seed/picsum/300',
   name: 'Gustavo',
@@ -179,6 +181,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
         onCancel={() => setShowLogoutModal(false)}
         isVisible={showLogoutModal}
         logout={handleLogout}
+        userInfo={userInfo}
       />
       <FlatList
         data={userInfo.posts}

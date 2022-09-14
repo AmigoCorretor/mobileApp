@@ -13,7 +13,8 @@ type Props = {
   placeholderTextColor?: string
   showCancelButton?: boolean
   autoFocus?: boolean
-  closeKeyboardOnCancel?: boolean
+  closeKeyboardOnCancel?: boolean,
+  multiline?: boolean
 }
 
 export const AuthInput = (props: Props) => {

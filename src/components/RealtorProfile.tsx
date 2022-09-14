@@ -103,10 +103,7 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.description}>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente
-              consequuntur expedita vero, tenetur pariatur aliquam, obcaecati
-              error quia earum ipsam debitis doloremque laboriosam aut aliquid
-              ab quasi blanditiis asperiores modi?
+              {userInfo.bio}
             </Text>
           </View>
         </View>

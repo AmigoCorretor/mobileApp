@@ -1,22 +1,32 @@
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard, Modal, SafeAreaView } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Text, Modal, Image } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { UserInfo } from '../screens/Profile'
+import { AuthInput } from './AuthInput'
 
 type Props = {
   // icon: keyof typeof MaterialIcons.glyphMap
   isVisible: boolean
   onCancel: any,
-  logout: any
+  logout: any,
+  userInfo: UserInfo,
 }
 
 export const EditRealtorProfile = (props: Props) => {
   const { colors } = useTheme()
 
+  const [name, setName] = useState(props.userInfo.name)
+  const [email, setEmail] = useState(props.userInfo.email)
+  const [phone, setPhone] = useState(props.userInfo.phone)
+  const [bio, setBio] = useState(props.userInfo.bio)
+  // const [password, setPassword] = useState('123456')
+  // const [confirmPassword, setConfirmPassword] = useState('123456')
+
   const styles = StyleSheet.create({
     container: {
       width: '100%',
-      height: 200,
+      height: '100%',
       backgroundColor: colors.background,
       borderRadius: 20,
       alignItems: 'center',
@@ -27,13 +37,33 @@ export const EditRealtorProfile = (props: Props) => {
       marginLeft: 20,
     },
     input: {
-      marginLeft: 20,
-      width: '70%',
+      width: '85%',
+      borderRadius: 5,
+      marginVertical: 5
+    },
+    title: {
+      color: colors.text,
+      fontSize: 22,
+      marginBottom: 20
+    },
+    subTitle: {
+      color: colors.text,
+      fontSize: 18
+    },
+    editInfosContainer: {
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: 20
+    },
+    profilePicture: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
     },
     buttonsContainer: {
-      width: '60%',
+      width: '85%',
       flexDirection: 'row',
-      justifyContent: 'space-around'
+      justifyContent: 'space-between'
     },
     button: {
       width: 100,
@@ -55,17 +85,42 @@ export const EditRealtorProfile = (props: Props) => {
       onRequestClose={props.onCancel}
       animationType="slide">
       <View style={styles.container}>
+        <Text style={styles.title}>Editar perfil</Text>
+        <View style={styles.editInfosContainer}>
+          <TouchableOpacity>
+            <View style={{ alignItems: 'center' }}>
+              <Image
+                style={styles.profilePicture}
+                source={{ uri: props.userInfo.photo }} />
+              <Text style={styles.subTitle}>Troca foto de perfil</Text>
+            </View>
+          </TouchableOpacity>
+          <AuthInput value={name} onChangeText={setName} icon='person' placeholder='Nome' style={styles.input} />
+          <AuthInput value={email} onChangeText={setEmail} icon='email' placeholder='Email' style={styles.input} />
+          <AuthInput value={phone} onChangeText={setPhone} icon='phone' placeholder='Telefone' style={styles.input} />
+          <AuthInput value={bio} onChangeText={setBio} icon='description' placeholder='Biografia' style={[styles.input, { height: 120 }]} multiline />
+        </View>
+
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, { backgroundColor: '#F88' }]}
             onPress={props.onCancel}>
             <MaterialIcons
               name='cancel'
               size={20}
               style={styles.cancelButtonIcon}
-              solid
             />
             <Text>Cancelar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: '#8F8' }]}
+            onPress={props.onCancel}>
+            <MaterialIcons
+              name='save'
+              size={20}
+              style={styles.cancelButtonIcon}
+            />
+            <Text>Salvar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
@@ -74,7 +129,6 @@ export const EditRealtorProfile = (props: Props) => {
               name='logout'
               size={20}
               style={styles.cancelButtonIcon}
-              solid
             />
             <Text>Logout</Text>
           </TouchableOpacity>
