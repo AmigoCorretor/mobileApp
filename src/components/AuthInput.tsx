@@ -8,6 +8,7 @@ type Props = {
   value: string
   onChangeText: any
   secureTextEntry?: boolean
+  placeholderTextColor?: string
 }
 
 export const AuthInput = (props: Props) => {

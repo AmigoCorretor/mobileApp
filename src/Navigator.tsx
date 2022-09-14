@@ -13,6 +13,7 @@ import { DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { StatusBar, useColorScheme } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Profile } from './screens/Profile'
+import { Search } from './screens/Search'
 
 
 export type StackParamList = {
@@ -42,7 +43,7 @@ const HomeScreen = ({
         {
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarActiveTintColor: 'orange'
+          tabBarActiveTintColor: '#0096FF'
         }
       }>
       <BottomTab.Screen
@@ -52,6 +53,19 @@ const HomeScreen = ({
           tabBarIcon: ({ focused, color, size }) => {
             return <MaterialIcons
               name='home'
+              size={size}
+              color={color}
+            />
+          }
+        }}
+      />
+      <BottomTab.Screen
+        name="Search"
+        component={Search}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            return <MaterialIcons
+              name='search'
               size={size}
               color={color}
             />
