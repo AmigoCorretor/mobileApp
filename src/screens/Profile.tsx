@@ -1,10 +1,13 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RealtorProfile } from '../components/RealtorProfile'
+import { EditRealtorProfile } from '../components/EditRealtorProfile'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type ProfileScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Profile'>,
@@ -126,6 +129,18 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   route,
 }) => {
   const { colors } = useTheme()
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
+
+  useEffect(() => {
+    const logOut = navigation.addListener('tabLongPress', e => {
+      setShowLogoutModal(true)
+    })
+  }, [navigation])
+
+  const handleLogout = () => {
+    AsyncStorage.setItem('userData', '')
+    navigation.navigate('Auth')
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -159,7 +174,12 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   })
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <EditRealtorProfile
+        onCancel={() => setShowLogoutModal(false)}
+        isVisible={showLogoutModal}
+        logout={handleLogout}
+      />
       <FlatList
         data={userInfo.posts}
         keyExtractor={post => `${post.id}`}
@@ -177,6 +197,6 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -57,8 +57,6 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       })
 
       AsyncStorage.setItem('userData', JSON.stringify(res.data))
-
-      console.warn(jwtDecode(res.data.token))
 
       // axios.defaults.headers.common[
       //   'Authorization'
@@ -130,7 +128,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 8,
-      
+
     },
     buttonIcon: {
       marginRight: 10,
@@ -148,9 +146,9 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   })
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <LinearGradient
-        colors={theme.dark ? ["#0096FF", "#332657"]: ["#0096FF", "#F2F2F2"]}
+        colors={theme.dark ? ["#0096FF", "#332657"] : ["#0096FF", "#F2F2F2"]}
         start={[0.1, 0.1]}
         style={styles.background}
       >
@@ -231,7 +229,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           </Text>
         </TouchableOpacity>
       </LinearGradient>
-    </SafeAreaView>
+    </View>
   )
 
 }

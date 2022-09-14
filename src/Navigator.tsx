@@ -39,6 +39,7 @@ const HomeScreen = ({
   return (
     <BottomTab.Navigator
       initialRouteName="Feed"
+      backBehavior='initialRoute'
       screenOptions={
         {
           headerShown: false,
@@ -92,7 +93,7 @@ const HomeScreen = ({
 const AuthNavigator = () => {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
       initialRouteName="Auth">
       {/* <Stack.Screen
         name="AuthOrApp"
