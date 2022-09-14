@@ -1,11 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { useState, useEffect } from 'react'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { AuthInput } from '../components/AuthInput'
-import { useState } from 'react'
 
 type SearchScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Search'>,
@@ -19,6 +19,16 @@ export const Search: React.FC<SearchScreenNavigationProp> = ({
 }) => {
   const [searchInput, setSearchInput] = useState('')
   const { colors } = useTheme()
+
+  const [showCancelButton, setShowCancelButton] = useState(false)
+
+  useEffect(() => {
+    if (!showCancelButton && searchInput.trim().length > 0) {
+      setShowCancelButton(true)
+    } else if (showCancelButton && searchInput.trim().length === 0) {
+      setShowCancelButton(false)
+    }
+  }, [searchInput])
 
   const styles = StyleSheet.create({
     container: {
@@ -36,22 +46,15 @@ export const Search: React.FC<SearchScreenNavigationProp> = ({
       color: colors.text,
     },
     searchInputView: {
-      // marginTop: 30,
-      width: '70%'
+      width: '90%',
     },
-    cancelButtonText:{
-      color: colors.text
-    },
-    cancelButton:{
-
-    },
-    searchInputContainer:{
+    searchInputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: 30,
       justifyContent: 'space-around',
-      width:'93%'
-    }
+      width: '93%',
+    },
   })
 
   return (
@@ -63,13 +66,11 @@ export const Search: React.FC<SearchScreenNavigationProp> = ({
           placeholder='Pesquisar'
           value={searchInput}
           onChangeText={setSearchInput}
-          placeholderTextColor="#000"
+          placeholderTextColor='#000'
+          showCancelButton={showCancelButton}
+          autoFocus={true}
+          closeKeyboardOnCancel
         />
-        
-        <TouchableOpacity style={styles.cancelButton}>
-          <Text style={styles.cancelButtonText}>Cancelar</Text>
-
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
