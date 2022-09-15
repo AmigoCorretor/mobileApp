@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Text, Modal, Image } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
@@ -11,6 +11,7 @@ type Props = {
   onCancel: any,
   logout: any,
   userInfo: UserInfo,
+  handleSaveEdit: (name: string, email: string, phone: string, bio: string, photo?: string) => void
 }
 
 export const EditRealtorProfile = (props: Props) => {
@@ -26,7 +27,8 @@ export const EditRealtorProfile = (props: Props) => {
   const styles = StyleSheet.create({
     container: {
       width: '100%',
-      height: '100%',
+      flexGrow: 1,
+      // height: '100%',
       backgroundColor: colors.background,
       borderRadius: 20,
       alignItems: 'center',
@@ -84,7 +86,10 @@ export const EditRealtorProfile = (props: Props) => {
       visible={props.isVisible}
       onRequestClose={props.onCancel}
       animationType="slide">
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}>
+
         <Text style={styles.title}>Editar perfil</Text>
         <View style={styles.editInfosContainer}>
           <TouchableOpacity>
@@ -135,7 +140,10 @@ export const EditRealtorProfile = (props: Props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: '#8F8' }]}
-            onPress={props.onCancel}>
+            onPress={() => {
+              props.handleSaveEdit(name, email, phone, bio)
+              props.onCancel()
+            }}>
             <MaterialIcons
               name='save'
               size={20}
@@ -154,8 +162,7 @@ export const EditRealtorProfile = (props: Props) => {
             <Text>Logout</Text>
           </TouchableOpacity>
         </View>
-
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   )
 }

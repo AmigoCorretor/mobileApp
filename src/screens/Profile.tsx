@@ -30,7 +30,7 @@ export interface UserInfo {
   posts: any[]
 }
 
-const userInfo: UserInfo = {
+let userInfo: UserInfo = {
   id: 11,
   bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, sunt illo nulla quam doloremque deleniti, mollitia iusto distinctio ipsa ullam eveniet, maiores minima quo quae obcaecati repudiandae enim aut tempora!',
   email: 'gustavo@gmail.com',
@@ -144,6 +144,16 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     navigation.navigate('Auth')
   }
 
+  const handleSaveEdit = (name: string, email: string, phone: string, bio: string, photo?: string) => {
+    userInfo = {
+      ...userInfo,
+      name,
+      email,
+      phone,
+      bio,
+    }
+  }
+
   const styles = StyleSheet.create({
     container: {
       width: '100%',
@@ -182,6 +192,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
         isVisible={showLogoutModal}
         logout={handleLogout}
         userInfo={userInfo}
+        handleSaveEdit={handleSaveEdit}
       />
       <FlatList
         data={userInfo.posts}
