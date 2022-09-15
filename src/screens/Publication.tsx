@@ -30,7 +30,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         container: {
             alignItems: 'center',
         },
-        title:{
+        title: {
             fontSize: 22,
             color: colors.text,
             marginTop: 10,
@@ -42,7 +42,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             width: '90%',
             alignItems: 'center'
         },
-        infosInputData:{
+        infosInputData: {
             color: colors.text,
             fontSize: 17,
             textAlign: 'center'
@@ -76,7 +76,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             color: '#333',
         },
     })
-    
+
 
 
     return (
@@ -88,6 +88,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 placeholder='Título'
                 value={title}
                 onChangeText={setTitle}
+                placeholderTextColor='#333'
             />
             <AuthInput
                 icon='photo'
@@ -95,6 +96,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 placeholder='Foto'
                 value={photo}
                 onChangeText={setPhoto}
+                placeholderTextColor='#333'
             />
             <AuthInput
                 icon='description'
@@ -102,6 +104,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 placeholder='Descrição'
                 value={description}
                 onChangeText={setDescription}
+                placeholderTextColor='#333'
             />
 
             <View style={styles.viewNumberInputData}>
@@ -114,6 +117,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     placeholder='Área total'
                     value={totalArea}
                     onChangeText={setTotalArea}
+                    placeholderTextColor='#333'
                 />
                 <AuthInput
                     icon='aspect-ratio'
@@ -121,6 +125,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     placeholder='Área útil'
                     value={usefulArea}
                     onChangeText={setUseFulArea}
+                    placeholderTextColor='#333'
                 />
                 <AuthInput
                     icon='bathtub'
@@ -128,6 +133,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     placeholder='Banheiro(s)'
                     value={bathrooms}
                     onChangeText={setBathrooms}
+                    placeholderTextColor='#333'
                 />
                 <AuthInput
                     icon='airline-seat-individual-suite'
@@ -135,6 +141,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     placeholder='Quarto(s)'
                     value={bedrooms}
                     onChangeText={setBedrooms}
+                    placeholderTextColor='#333'
                 />
                 <AuthInput
                     icon='king-bed'
@@ -142,6 +149,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     placeholder='Suítes'
                     value={suites}
                     onChangeText={setSuites}
+                    placeholderTextColor='#333'
                 />
             </View>
             <View style={styles.viewButton}>
@@ -183,7 +191,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 //         alignItems: 'center'
 //     },
 //     infosInputData:{
-//         color: 
+//         color:
 //     },
 //     numberInputData: {
 //         width: 150,

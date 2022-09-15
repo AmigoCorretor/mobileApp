@@ -95,10 +95,31 @@ export const EditRealtorProfile = (props: Props) => {
               <Text style={styles.subTitle}>Troca foto de perfil</Text>
             </View>
           </TouchableOpacity>
-          <AuthInput value={name} onChangeText={setName} icon='person' placeholder='Nome' style={styles.input} />
-          <AuthInput value={email} onChangeText={setEmail} icon='email' placeholder='Email' style={styles.input} />
-          <AuthInput value={phone} onChangeText={setPhone} icon='phone' placeholder='Telefone' style={styles.input} />
-          <AuthInput value={bio} onChangeText={setBio} icon='description' placeholder='Biografia' style={[styles.input, { height: 120 }]} multiline />
+          <AuthInput
+            value={name}
+            onChangeText={setName}
+            icon='person'
+            placeholder='Nome'
+            style={styles.input} placeholderTextColor='#333' />
+          <AuthInput
+            value={email}
+            onChangeText={setEmail}
+            icon='email'
+            placeholder='Email'
+            style={styles.input} placeholderTextColor='#333' />
+          <AuthInput
+            value={phone}
+            onChangeText={setPhone}
+            icon='phone'
+            placeholder='Telefone'
+            style={styles.input} placeholderTextColor='#333' />
+          <AuthInput
+            value={bio}
+            onChangeText={setBio}
+            icon='description'
+            placeholder='Biografia'
+            style={[styles.input, { height: 120 }]}
+            multiline />
         </View>
 
         <View style={styles.buttonsContainer}>

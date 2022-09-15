@@ -66,7 +66,7 @@ export const Search: React.FC<SearchScreenNavigationProp> = ({
           placeholder='Pesquisar'
           value={searchInput}
           onChangeText={setSearchInput}
-          placeholderTextColor='#000'
+          placeholderTextColor='#333'
           showCancelButton={showCancelButton}
           autoFocus={true}
           closeKeyboardOnCancel
