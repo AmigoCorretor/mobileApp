@@ -22,6 +22,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   const [confirmPassword, setConfirmPassword] = useState('123456')
   const [isRealtor, setIsRealtor] = useState(false)
   const [validForm, setValidForm] = useState(false)
+  const [creci, setCreci] = useState('')
 
   const { colors } = useTheme()
   const theme = useTheme()
@@ -36,12 +37,23 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
 
   const signUp = async () => {
     try {
-      await axios.post(`${server}/users`, {
-        name,
-        email,
-        password,
-        isRealtor
-      })
+      if(isRealtor){
+        await axios.post(`${server}/users`, {
+          name,
+          email,
+          password,
+          isRealtor,
+          creci
+        })
+      }else{
+        await axios.post(`${server}/users`, {
+          name,
+          email,
+          password,
+          isRealtor
+        })
+      }
+     
 
       showSuccess('Usuário castrado!')
     } catch (e) {
@@ -85,6 +97,9 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
     if (stageNew) {
       validations.push(name && name.trim().length >= 3)
       validations.push(password === confirmPassword)
+      if(isRealtor){
+        validations.push(creci && creci.trim().length >= 5 && creci.trim().length <= 10)
+      }
     }
 
     setValidForm(validations.reduce((total, current) => total && current) as boolean)
@@ -162,15 +177,17 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
             value={name}
             style={styles.input}
             onChangeText={setName}
+            placeholderTextColor='#333'
           />
         )}
 
         <AuthInput
           icon="email"
           style={styles.input}
-          placeholder="Email"
+          placeholder="E-mail"
           value={email}
           onChangeText={setEmail}
+          placeholderTextColor='#333'
         />
         <AuthInput
           icon="lock"
@@ -179,6 +196,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          placeholderTextColor='#333'
         />
         {stageNew && (
           <AuthInput
@@ -188,6 +206,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
             style={styles.input}
             onChangeText={setConfirmPassword}
             secureTextEntry={true}
+            placeholderTextColor='#333'
           />
         )}
         {stageNew && (
@@ -202,6 +221,18 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
             />
           </View>
         )}
+        {(stageNew && isRealtor)&& (
+          <AuthInput
+            icon="vpn-key"
+            placeholder="CRECI"
+            value={creci}
+            style={[styles.input, { width: '50%' }]}
+            onChangeText={setCreci}
+            placeholderTextColor='#333'
+          />
+        )}
+
+
 
         <TouchableOpacity
           onPress={loginOrSignup}
@@ -233,5 +264,3 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   )
 
 }
-
-
