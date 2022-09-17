@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
 // import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
-import { UserInfo } from '../screens/Profile'
+import { UserInfo } from '../contexts/AuthContext'
 
 type Props = {
   userInfo: UserInfo,
@@ -128,14 +128,3 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: 40,
-    backgroundColor: '#EEE',
-    borderRadius: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-})

@@ -2,8 +2,8 @@ import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidin
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
-import { UserInfo } from '../screens/Profile'
 import { AuthInput } from './AuthInput'
+import { UserInfo } from '../contexts/AuthContext'
 
 type Props = {
   // icon: keyof typeof MaterialIcons.glyphMap

@@ -5,7 +5,6 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack'
 import { Auth } from './screens/Auth'
-import { UserLogin } from './common'
 import { Feed } from './screens/Feed'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigatorScreenParams } from '@react-navigation/native'
@@ -15,6 +14,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Profile } from './screens/Profile'
 import { Search } from './screens/Search'
 import { Publication } from './screens/Publication'
+import AuthProvider from './contexts/AuthContext'
 
 
 
@@ -24,7 +24,7 @@ export type StackParamList = {
 }
 
 export type BottomTabParamList = {
-  Feed: UserLogin,
+  Feed: undefined,
   Search: undefined
   Publication: undefined
   Notifications: undefined
@@ -107,23 +107,25 @@ const HomeScreen = ({
 
 const AuthNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false, gestureEnabled: false }}
-      initialRouteName="Auth">
-      {/* <Stack.Screen
+    <AuthProvider>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false, gestureEnabled: false }}
+        initialRouteName="Auth">
+        {/* <Stack.Screen
         name="AuthOrApp"
         component={AuthOrApp}
       /> */}
-      <Stack.Screen
-        name="Auth"
-        component={Auth}
-        options={{ contentStyle: { alignItems: 'center' } }}
-      />
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-      />
-    </Stack.Navigator>
+        <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={{ contentStyle: { alignItems: 'center' } }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+        />
+      </Stack.Navigator>
+    </AuthProvider>
   )
 }
 

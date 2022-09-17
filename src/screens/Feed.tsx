@@ -4,6 +4,8 @@ import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useContext } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
 
 type FeedScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Feed'>,
@@ -16,6 +18,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   route,
 }) => {
   const { colors } = useTheme()
+  const { user } = useContext(AuthContext)
 
   const styles = StyleSheet.create({
     container: {
@@ -37,7 +40,10 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Feed</Text>
-      <Text style={styles.text}>{route.params?.payload.name}</Text>
+      {/* <Text style={styles.text}>{route.params?.payload.name}</Text> */}
+      <Text>{user.id}</Text>
+      <Text>{user.name}</Text>
+      <Text>{user.email}</Text>
     </SafeAreaView>
   )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
@@ -10,6 +10,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { AuthContext } from '../contexts/AuthContext'
 
 
 type AuthScreenProps = NativeStackScreenProps<StackParamList, 'Auth'>
@@ -27,6 +28,8 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   const { colors } = useTheme()
   const theme = useTheme()
 
+  const { user, setUser } = useContext(AuthContext)
+
   const loginOrSignup = () => {
     if (stageNew) {
       signUp()
@@ -37,7 +40,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
 
   const signUp = async () => {
     try {
-      if(isRealtor){
+      if (isRealtor) {
         await axios.post(`${server}/users`, {
           name,
           email,
@@ -45,7 +48,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           isRealtor,
           creci
         })
-      }else{
+      } else {
         await axios.post(`${server}/users`, {
           name,
           email,
@@ -53,7 +56,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           isRealtor
         })
       }
-     
+
 
       showSuccess('Usuário castrado!')
     } catch (e) {
@@ -68,15 +71,19 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
         password,
       })
 
+      const userDecoded: { id: number, iat: number } = jwtDecode(res.data.token)
+      const currentUserInfo = await (await axios.get(`${server}/users/${userDecoded.id}`)).data
+      console.warn(currentUserInfo)
+
+      setUser(currentUserInfo)
+
+
       AsyncStorage.setItem('userData', JSON.stringify(res.data))
 
       // axios.defaults.headers.common[
       //   'Authorization'
       // ] = `bearer ${res.data.token}`
-      navigation.navigate('Home', {
-        screen: 'Feed',
-        params: res.data
-      })
+      navigation.navigate('Home', { screen: 'Feed' })
 
     } catch (e) {
       showError(e)
@@ -97,7 +104,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
     if (stageNew) {
       validations.push(name && name.trim().length >= 3)
       validations.push(password === confirmPassword)
-      if(isRealtor){
+      if (isRealtor) {
         validations.push(creci && creci.trim().length >= 5 && creci.trim().length <= 10)
       }
     }
@@ -221,7 +228,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
             />
           </View>
         )}
-        {(stageNew && isRealtor)&& (
+        {(stageNew && isRealtor) && (
           <AuthInput
             icon="vpn-key"
             placeholder="CRECI"
