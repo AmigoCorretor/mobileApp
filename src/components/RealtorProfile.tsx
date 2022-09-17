@@ -1,10 +1,10 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
 // import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
-import { UserInfo } from '../contexts/AuthContext'
+import { User } from '../contexts/AuthContext'
 
 type Props = {
-  userInfo: UserInfo,
+  userInfo: User,
 }
 export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
   const { colors } = useTheme()

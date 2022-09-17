@@ -3,14 +3,14 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { AuthInput } from './AuthInput'
-import { UserInfo } from '../contexts/AuthContext'
+import { User } from '../contexts/AuthContext'
 
 type Props = {
   // icon: keyof typeof MaterialIcons.glyphMap
   isVisible: boolean
   onCancel: any,
   logout: any,
-  userInfo: UserInfo,
+  userInfo: User,
   handleSaveEdit: (name: string, email: string, phone: string, bio: string, photo?: string) => void
 }
 

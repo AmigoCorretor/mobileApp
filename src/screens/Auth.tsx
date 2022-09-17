@@ -39,29 +39,29 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   }
 
   const signUp = async () => {
-    try {
-      if (isRealtor) {
-        await axios.post(`${server}/users`, {
-          name,
-          email,
-          password,
-          isRealtor,
-          creci
-        })
-      } else {
-        await axios.post(`${server}/users`, {
-          name,
-          email,
-          password,
-          isRealtor
-        })
-      }
-
-
-      showSuccess('Usuário castrado!')
-    } catch (e) {
-      showError(e)
+    let user: {
+      name: string,
+      email: string
+      password: string
+      isRealtor: boolean,
+      creci?: string
+    } = {
+      name,
+      email,
+      password,
+      isRealtor
     }
+    if (isRealtor) {
+      user = { ...user, creci }
+    }
+    // try {
+    await axios.post(`${server}/users`, user)
+      .then(_ => showSuccess('Usuário castrado!'))
+      .catch(e => showError(e))
+    // showSuccess('Usuário castrado!')
+    // } catch (e) {
+    //   // showError(e)
+    // }
   }
 
   const login = async () => {
@@ -73,8 +73,6 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
 
       const userDecoded: { id: number, iat: number } = jwtDecode(res.data.token)
       const currentUserInfo = await (await axios.get(`${server}/users/${userDecoded.id}`)).data
-      console.warn(currentUserInfo)
-
       setUser(currentUserInfo)
 
 
@@ -97,15 +95,15 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   })
 
   const validateInputs = () => {
-    const validations = []
-    validations.push(email && email.includes('@'))
-    validations.push(password && password.length >= 6)
+    const validations: boolean[] = []
+    validations.push(email.includes('@'))
+    validations.push(password.length >= 6)
 
     if (stageNew) {
-      validations.push(name && name.trim().length >= 3)
+      validations.push(name.trim().length >= 3)
       validations.push(password === confirmPassword)
       if (isRealtor) {
-        validations.push(creci && creci.trim().length >= 5 && creci.trim().length <= 10)
+        validations.push(creci.trim().length >= 5 && creci.trim().length <= 10)
       }
     }
 

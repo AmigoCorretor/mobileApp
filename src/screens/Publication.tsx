@@ -1,30 +1,39 @@
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { CompositeScreenProps, useTheme } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
-import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import React, { useContext, useState, useEffect } from "react"
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
+import { CompositeScreenProps, useTheme } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons'
 
-
 import { AuthInput } from '../components/AuthInput'
-import { BottomTabParamList, StackParamList } from "../Navigator";
+import { BottomTabParamList, StackParamList } from "../Navigator"
+import axios from "axios"
+import { server, showError, showSuccess } from "../common"
+import { AuthContext, Image, Post } from "../contexts/AuthContext"
 
 type PublicationScreenNavigationProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabParamList, 'Publication'>,
     NativeStackScreenProps<StackParamList>
 >
+interface NewPostResponse {
+    message: string,
+    results: Post
+}
 
 export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const { colors } = useTheme()
     const [title, setTitle] = useState('')
-    const [photo, setPhoto] = useState('')
+    const [image, setImage] = useState('https://picsum.photos/id/222/300')
     const [description, setDescription] = useState('')
     const [totalArea, setTotalArea] = useState('')
     const [usefulArea, setUseFulArea] = useState('')
     const [bathrooms, setBathrooms] = useState('')
     const [bedrooms, setBedrooms] = useState('')
     const [suites, setSuites] = useState('')
+    const [validPost, setValidPost] = useState(false)
+
+    const { user, setUser } = useContext(AuthContext)
 
     const styles = StyleSheet.create({
         container: {
@@ -77,7 +86,44 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         },
     })
 
+    useEffect(() => {
+        validateInputs()
+    })
 
+    const validateInputs = () => {
+        const validations: boolean[] = []
+        validations.push(title.length > 0)
+        validations.push(image.length > 0)
+
+        setValidPost(validations.reduce((total, current) => total && current))
+    }
+
+    const saveNewPost = async () => {
+        try {
+            const res = await axios.post<NewPostResponse>(`${server}/posts`, {
+                title,
+                description: +description,
+                totalArea: +totalArea,
+                usefulArea: +usefulArea,
+                bathrooms: +bathrooms,
+                bedrooms: +bedrooms,
+                suites: +suites,
+                user: user.id
+            })
+
+            const idNewPost = +res.data.results.id
+
+            const savedImage: Image = await axios.post(`${server}/images`, {
+                link: image,
+                post: idNewPost
+            })
+            const updatedUser = await (await axios.get(`${server}/users/${user.id}`)).data
+            setUser(updatedUser)
+            showSuccess('Post criado com sucesso!')
+        } catch (e) {
+            showError(e)
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -94,8 +140,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 icon='photo'
                 style={styles.inputs}
                 placeholder='Foto'
-                value={photo}
-                onChangeText={setPhoto}
+                value={image}
+                onChangeText={setImage}
                 placeholderTextColor='#333'
             />
             <AuthInput
@@ -164,8 +210,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     <Text>Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: '#8F8' }]}
-                    onPress={() => { }}>
+                    style={[styles.button, validPost ? { backgroundColor: '#8F8' } : { backgroundColor: '#AAA' }]}
+                    onPress={saveNewPost}
+                    disabled={!validPost}>
                     <MaterialIcons
                         name='save'
                         size={20}
