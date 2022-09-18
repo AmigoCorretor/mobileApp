@@ -1,5 +1,4 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
-// import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { User } from '../contexts/AuthContext'
 
@@ -56,11 +55,11 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
       fontSize: 18,
       color: colors.text,
     },
-    descriptionContainer: {
+    bioContainer: {
       width: '60%',
       paddingLeft: 10,
     },
-    description: {
+    bio: {
       fontSize: 15,
       color: colors.text,
       textAlign: 'justify',
@@ -101,8 +100,8 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
               <Text style={styles.msgButtonText}>Mensagem</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>
+          <View style={styles.bioContainer}>
+            <Text style={styles.bio}>
               {userInfo.bio}
             </Text>
           </View>

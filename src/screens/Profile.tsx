@@ -8,7 +8,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RealtorProfile } from '../components/RealtorProfile'
 import { EditRealtorProfile } from '../components/EditRealtorProfile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { AuthContext } from '../contexts/AuthContext'
+import { AuthContext, User } from '../contexts/AuthContext'
+import { server, showError, showSuccess } from '../common'
+import axios from 'axios'
 
 type ProfileScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Profile'>,
@@ -35,7 +37,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     navigation.navigate('Auth')
   }
 
-  const handleSaveEdit = (name: string, email: string, phone: string, bio: string, photo?: string) => {
+  const handleSaveEdit = async (name: string, email: string, phone: string, bio: string, photo?: string) => {
     const newUserInfo = {
       ...user,
       name,
@@ -43,7 +45,15 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       phone,
       bio
     }
-    setUser(newUserInfo)
+    try {
+      await axios.patch(`${server}/users/${user.id}`, newUserInfo)
+
+      const updatedUser: User = (await (await axios.get(`${server}/users/${user.id}`)).data)
+      setUser(updatedUser)
+      showSuccess('Perfil atualizado com sucesso!')
+    } catch (e) {
+      showError(e)
+    }
   }
 
   const styles = StyleSheet.create({
