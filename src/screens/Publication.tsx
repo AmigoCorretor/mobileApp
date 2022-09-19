@@ -86,6 +86,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         },
     })
 
+    const capitalize = (str: string) => {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
+
     useEffect(() => {
         validateInputs()
     })
@@ -101,8 +105,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const saveNewPost = async () => {
         try {
             const res = await axios.post<NewPostResponse>(`${server}/posts`, {
-                title,
-                description: +description,
+                title: capitalize(title),
+                description: capitalize(description),
                 totalArea: +totalArea,
                 usefulArea: +usefulArea,
                 bathrooms: +bathrooms,
