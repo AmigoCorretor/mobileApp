@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity, Linking } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { User } from '../contexts/AuthContext'
+import { MaterialIcons } from '@expo/vector-icons'
 
 type Props = {
   userInfo: User,
@@ -30,6 +31,12 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
       width: 100,
       height: 100,
       borderRadius: 50,
+    },
+    verifiedIcon: {
+      color: colors.primary,
+      position: 'absolute',
+      right: 10,
+      fontSize: 30
     },
     userInfoContainer: {
       alignItems: 'center',
@@ -94,6 +101,10 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
               style={styles.profilePicture}
               source={{ uri: userInfo.photo }}
             />
+            <MaterialIcons
+              name='verified'
+              style={styles.verifiedIcon}
+            />
             <TouchableOpacity
               style={styles.msgButton}
               onPress={() => Linking.openURL(`https://wa.me/${userInfo.phone}`)}>
@@ -124,6 +135,6 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
           </View>
         </View>
       </View>
-    </View>
+    </View >
   )
 }
