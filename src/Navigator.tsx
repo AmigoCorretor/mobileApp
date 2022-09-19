@@ -23,20 +23,20 @@ export type StackParamList = {
   Auth: undefined,
   Home: NavigatorScreenParams<BottomTabParamList>,
 }
-export type PostStackParamList = {
+export type FeedStackParamList = {
   Feed: undefined
   Post: { post: Post, user: User },
 }
 
 export type BottomTabParamList = {
-  FeedRoutes: NavigatorScreenParams<PostStackParamList>,
+  FeedRoutes: NavigatorScreenParams<FeedStackParamList>,
   Search: undefined
   Publication: undefined
   Profile: undefined
 }
 
 const Stack = createNativeStackNavigator<StackParamList>()
-const PostStack = createNativeStackNavigator<PostStackParamList>()
+const FeedStack = createNativeStackNavigator<FeedStackParamList>()
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 
@@ -50,24 +50,24 @@ const FeedRoutes: React.FC<FeedRoutesScreenNavigationProp> = ({
   route,
 }) => {
   return (
-    <PostStack.Navigator
+    <FeedStack.Navigator
       // screenOptions={{ headerShown: false }}
       initialRouteName="Feed">
       {/* <Stack.Screen
         name="AuthOrApp"
         component={AuthOrApp}
       /> */}
-      <PostStack.Screen
+      <FeedStack.Screen
         name="Feed"
         component={Feed}
         options={{ headerShown: false }}
       />
-      <PostStack.Screen
+      <FeedStack.Screen
         name="Post"
         component={PostScreen}
         options={({ route }) => ({ title: route.params.post.title })}
       />
-    </PostStack.Navigator>
+    </FeedStack.Navigator>
   )
 }
 

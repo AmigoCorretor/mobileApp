@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { BottomTabParamList, FeedStackParamList, StackParamList } from '../Navigator'
+import { BottomTabParamList, FeedStackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
@@ -15,7 +15,7 @@ type FeedScreenNavigationProp = CompositeScreenProps<
   NativeStackScreenProps<FeedStackParamList, 'Feed'>,
   BottomTabScreenProps<BottomTabParamList>
 >
-type Props = BottomTabScreenProps<FeedStackParamList, 'Feed'>
+// type Props = BottomTabScreenProps<FeedStackParamList, 'Feed'>
 
 export const Feed: React.FC<FeedScreenNavigationProp> = ({
   navigation,

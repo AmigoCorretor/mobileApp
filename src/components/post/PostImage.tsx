@@ -1,5 +1,4 @@
-import { useContext } from 'react'
-import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { Post, User } from '../../contexts/AuthContext'
 import { MaterialIcons } from '@expo/vector-icons'
