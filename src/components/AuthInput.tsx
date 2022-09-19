@@ -1,6 +1,5 @@
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import { useTheme } from '@react-navigation/native'
 import { useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -19,7 +18,7 @@ type Props = {
 
 export const AuthInput = (props: Props) => {
   const [showCancelButton, setShowCancelButton] = useState(false)
-  const localInputRef = useRef<TextInput>();
+  const localInputRef = useRef<TextInput>()
 
   const keyboardDidHideCallback = () => {
     localInputRef.current!.blur?.()
@@ -31,10 +30,6 @@ export const AuthInput = (props: Props) => {
       Keyboard.dismiss()
     }
   }
-  const handleInputFocus = () => {
-    setShowCancelButton(true)
-  }
-
   useEffect(() => {
     const keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', keyboardDidHideCallback)
 
@@ -78,9 +73,10 @@ export const AuthInput = (props: Props) => {
       <TextInput
         {...props}
         style={styles.input}
-        onFocus={handleInputFocus}
+        onFocus={() => setShowCancelButton(true)}
+        onBlur={() => setShowCancelButton(false)}
         ref={(ref) => {
-          localInputRef && (localInputRef.current = ref as any);
+          localInputRef && (localInputRef.current = ref as any)
         }}
       />
       <TouchableOpacity onPress={handleCancel}
