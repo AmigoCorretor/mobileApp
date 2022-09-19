@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { BottomTabParamList, FeedStackParamList } from '../Navigator'
+import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
@@ -7,14 +7,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 
-// type FeedScreenNavigationProp = CompositeScreenProps<
-//   BottomTabScreenProps<BottomTabParamList, 'Feed'>,
-//   NativeStackScreenProps<StackParamList>
-// >
 type FeedScreenNavigationProp = CompositeScreenProps<
-  NativeStackScreenProps<FeedStackParamList, 'Feed'>,
-  BottomTabScreenProps<BottomTabParamList>
+  BottomTabScreenProps<BottomTabParamList, 'Feed'>,
+  NativeStackScreenProps<StackParamList>
 >
+// type FeedScreenNavigationProp = CompositeScreenProps<
+//   NativeStackScreenProps<FeedStackParamList, 'Feed'>,
+//   BottomTabScreenProps<BottomTabParamList>
+// >
 // type Props = BottomTabScreenProps<FeedStackParamList, 'Feed'>
 
 export const Feed: React.FC<FeedScreenNavigationProp> = ({
@@ -47,11 +47,11 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Feed</Text>
       {/* <Text style={styles.text}>{route.params?.payload.name}</Text> */}
-      <Text>{user.id}</Text>
-      <Text>{user.name}</Text>
-      <Text>{user.email}</Text>
+      <Text>Id: {user.id}</Text>
+      <Text>Nome: {user.name}</Text>
+      <Text>E-mail: {user.email}</Text>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Post', { post, user })}>
+        onPress={() => navigation.navigate('Post', { user, post })}>
         <Text style={styles.title}>Abrir POST</Text>
       </TouchableOpacity>
     </SafeAreaView>

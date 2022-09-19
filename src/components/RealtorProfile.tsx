@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Text, Image, TouchableOpacity, Linking } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { User } from '../contexts/AuthContext'
 
@@ -96,7 +96,7 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
             />
             <TouchableOpacity
               style={styles.msgButton}
-              onPress={() => console.warn('Abrir whatsapp ' + userInfo.phone)}>
+              onPress={() => Linking.openURL(`https://wa.me/${userInfo.phone}`)}>
               <Text style={styles.msgButtonText}>Mensagem</Text>
             </TouchableOpacity>
           </View>

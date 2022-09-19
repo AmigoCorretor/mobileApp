@@ -20,56 +20,61 @@ import { Post as PostScreen } from './screens/Post'
 
 
 export type StackParamList = {
-  Auth: undefined,
-  Home: NavigatorScreenParams<BottomTabParamList>,
+  Auth: undefined
+  Home: NavigatorScreenParams<BottomTabParamList>
+  Post: {
+    user: User,
+    post: Post
+  }
 }
-export type FeedStackParamList = {
-  Feed: undefined
-  Post: { post: Post, user: User },
-}
+// export type FeedStackParamList = {
+//   Feed: undefined
+//   Post: { post: Post, user: User },
+// }
 
 export type BottomTabParamList = {
-  FeedRoutes: NavigatorScreenParams<FeedStackParamList>,
+  // FeedRoutes: NavigatorScreenParams<FeedStackParamList>,
+  Feed: undefined
   Search: undefined
   Publication: undefined
   Profile: undefined
 }
 
 const Stack = createNativeStackNavigator<StackParamList>()
-const FeedStack = createNativeStackNavigator<FeedStackParamList>()
+// const FeedStack = createNativeStackNavigator<FeedStackParamList>()
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 
-type FeedRoutesScreenNavigationProp = CompositeScreenProps<
-  BottomTabScreenProps<BottomTabParamList, 'FeedRoutes'>,
-  NativeStackScreenProps<StackParamList>
->
+// type FeedRoutesScreenNavigationProp = CompositeScreenProps<
+//   BottomTabScreenProps<BottomTabParamList, 'FeedRoutes'>,
+//   NativeStackScreenProps<StackParamList>
+// >
 
-const FeedRoutes: React.FC<FeedRoutesScreenNavigationProp> = ({
-  navigation,
-  route,
-}) => {
-  return (
-    <FeedStack.Navigator
-      // screenOptions={{ headerShown: false }}
-      initialRouteName="Feed">
-      {/* <Stack.Screen
-        name="AuthOrApp"
-        component={AuthOrApp}
-      /> */}
-      <FeedStack.Screen
-        name="Feed"
-        component={Feed}
-        options={{ headerShown: false }}
-      />
-      <FeedStack.Screen
-        name="Post"
-        component={PostScreen}
-        options={({ route }) => ({ title: route.params.post.title })}
-      />
-    </FeedStack.Navigator>
-  )
-}
+// const FeedRoutes: React.FC<FeedRoutesScreenNavigationProp> = ({
+//   navigation,
+//   route,
+// }) => {
+//   return (
+//     <FeedStack.Navigator
+//       // screenOptions={{ headerShown: false }}
+//       initialRouteName="Feed">
+//       {/* <Stack.Screen
+//         name="AuthOrApp"
+//         component={AuthOrApp}
+//       /> */}
+//       <FeedStack.Screen
+//         name="Feed"
+//         component={Feed}
+//         options={{ headerShown: false }}
+//       />
+//       <FeedStack.Screen
+//         name="Post"
+//         component={PostScreen}
+//         options={({ route }) => ({ title: route.params.post.title })}
+//       />
+//     </FeedStack.Navigator>
+//   )
+// }
 
 const HomeScreen = ({
   navigation,
@@ -77,7 +82,7 @@ const HomeScreen = ({
 }: NativeStackScreenProps<StackParamList, 'Home'>) => {
   return (
     <BottomTab.Navigator
-      initialRouteName="FeedRoutes"
+      initialRouteName="Feed"
       backBehavior='initialRoute'
       screenOptions={
         {
@@ -100,8 +105,8 @@ const HomeScreen = ({
         }}
       /> */}
       <BottomTab.Screen
-        name="FeedRoutes"
-        component={FeedRoutes}
+        name="Feed"
+        component={Feed}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return <MaterialIcons
@@ -155,11 +160,23 @@ const HomeScreen = ({
   )
 }
 
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
+
 const AuthNavigator = () => {
   return (
     <AuthProvider>
       <Stack.Navigator
-        screenOptions={{ headerShown: false, gestureEnabled: false }}
+        screenOptions={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right' }}
         initialRouteName="Auth">
         {/* <Stack.Screen
         name="AuthOrApp"
@@ -168,11 +185,17 @@ const AuthNavigator = () => {
         <Stack.Screen
           name="Auth"
           component={Auth}
-          options={{ contentStyle: { alignItems: 'center' } }}
+          options={{ contentStyle: { alignItems: 'center' }, headerShown: false }}
         />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="Post"
+          component={PostScreen}
+          options={{ gestureEnabled: true, gestureDirection: 'horizontal' }}
         />
       </Stack.Navigator>
     </AuthProvider>

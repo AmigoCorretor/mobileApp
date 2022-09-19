@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
@@ -8,7 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RealtorProfile } from '../components/RealtorProfile'
 import { EditRealtorProfile } from '../components/EditRealtorProfile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { AuthContext, User } from '../contexts/AuthContext'
+import { AuthContext, Post, User } from '../contexts/AuthContext'
 import { server, showError, showSuccess } from '../common'
 import axios from 'axios'
 
@@ -24,6 +24,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
 }) => {
   const { colors } = useTheme()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
+  const [selectPostId, setSelectPostId] = useState(null)
   const { user, setUser } = useContext(AuthContext)
 
   useEffect(() => {
@@ -35,6 +36,9 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   const handleLogout = () => {
     AsyncStorage.setItem('userData', '')
     navigation.navigate('Auth')
+  }
+  const handleOpenPost = (post: Post) => {
+    navigation.navigate('Post', { user, post })
   }
 
   const handleSaveEdit = async (name: string, email: string, phone: string, bio: string, photo?: string) => {
@@ -103,14 +107,16 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
         ListHeaderComponent={() => <RealtorProfile userInfo={user} />}
         contentContainerStyle={styles.postsList}
         renderItem={({ item }) => (
-          <View style={styles.post}>
+          <TouchableOpacity
+            onPress={() => handleOpenPost(item)}
+            style={styles.post}>
             {/* <View style={styles.dummyPostImage} /> */}
             <Image
               style={styles.dummyPostImage}
               source={{ uri: item.images[0].link }}
             />
             <Text style={styles.postText}>{item.title}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </SafeAreaView>

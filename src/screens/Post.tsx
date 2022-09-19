@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
-import { BottomTabParamList, FeedStackParamList } from '../Navigator'
+import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
@@ -11,11 +11,14 @@ import { PostInfos } from '../components/post/PostInfos'
 //   BottomTabScreenProps<BottomTabParamList, 'Post'>,
 //   NativeStackScreenProps<StackParamList>
 // >
-type PostScreenNavigationProp = CompositeScreenProps<
-  NativeStackScreenProps<FeedStackParamList, 'Post'>,
-  BottomTabScreenProps<BottomTabParamList>
->
-export const Post: React.FC<PostScreenNavigationProp> = ({
+// type PostScreenNavigationProp = CompositeScreenProps<
+//   NativeStackScreenProps<FeedStackParamList, 'Post'>,
+//   BottomTabScreenProps<BottomTabParamList>
+// >
+
+type Props = BottomTabScreenProps<StackParamList, 'Post'>
+
+export const Post: React.FC<Props> = ({
   navigation,
   route,
 }) => {
