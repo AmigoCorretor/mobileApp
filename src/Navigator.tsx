@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { CompositeScreenProps, NavigationContainer } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack'
 import { Auth } from './screens/Auth'
 import { Feed } from './screens/Feed'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigatorScreenParams } from '@react-navigation/native'
 import { DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { StatusBar, useColorScheme } from 'react-native'
@@ -14,7 +14,8 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Profile } from './screens/Profile'
 import { Search } from './screens/Search'
 import { Publication } from './screens/Publication'
-import AuthProvider from './contexts/AuthContext'
+import AuthProvider, { Post, User } from './contexts/AuthContext'
+import { Post as PostScreen } from './screens/Post'
 
 
 
@@ -22,17 +23,53 @@ export type StackParamList = {
   Auth: undefined,
   Home: NavigatorScreenParams<BottomTabParamList>,
 }
+export type PostStackParamList = {
+  Feed: undefined
+  Post: { post: Post, user: User },
+}
 
 export type BottomTabParamList = {
-  Feed: undefined,
+  FeedRoutes: NavigatorScreenParams<PostStackParamList>,
   Search: undefined
   Publication: undefined
-  Notifications: undefined
   Profile: undefined
 }
 
 const Stack = createNativeStackNavigator<StackParamList>()
+const PostStack = createNativeStackNavigator<PostStackParamList>()
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
+
+
+type FeedRoutesScreenNavigationProp = CompositeScreenProps<
+  BottomTabScreenProps<BottomTabParamList, 'FeedRoutes'>,
+  NativeStackScreenProps<StackParamList>
+>
+
+const FeedRoutes: React.FC<FeedRoutesScreenNavigationProp> = ({
+  navigation,
+  route,
+}) => {
+  return (
+    <PostStack.Navigator
+      // screenOptions={{ headerShown: false }}
+      initialRouteName="Feed">
+      {/* <Stack.Screen
+        name="AuthOrApp"
+        component={AuthOrApp}
+      /> */}
+      <PostStack.Screen
+        name="Feed"
+        component={Feed}
+        options={{ headerShown: false }}
+      />
+      <PostStack.Screen
+        name="Post"
+        component={PostScreen}
+        options={({ route }) => ({ title: route.params.post.title })}
+      />
+    </PostStack.Navigator>
+  )
+}
 
 const HomeScreen = ({
   navigation,
@@ -40,7 +77,7 @@ const HomeScreen = ({
 }: NativeStackScreenProps<StackParamList, 'Home'>) => {
   return (
     <BottomTab.Navigator
-      initialRouteName="Feed"
+      initialRouteName="FeedRoutes"
       backBehavior='initialRoute'
       screenOptions={
         {
@@ -49,9 +86,22 @@ const HomeScreen = ({
           tabBarActiveTintColor: '#0096FF'
         }
       }>
+      {/* <BottomTab.Screen
+        name="Post"
+        component={Post}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            return <MaterialIcons
+              name='home'
+              size={size}
+              color={color}
+            />
+          }
+        }}
+      /> */}
       <BottomTab.Screen
-        name="Feed"
-        component={Feed}
+        name="FeedRoutes"
+        component={FeedRoutes}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return <MaterialIcons
@@ -145,7 +195,8 @@ const CustomDefaultTheme = {
   colors: {
     ...DefaultTheme.colors,
     background: '#fff',
-    text: '#333'
+    text: '#333',
+    primary: '#0096FF'
   }
 }
 
@@ -154,6 +205,7 @@ const CustomDarkTheme = {
   colors: {
     ...DarkTheme.colors,
     background: '#333',
-    text: '#fff'
+    text: '#fff',
+    primary: '#0096FF'
   }
 }

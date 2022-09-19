@@ -1,5 +1,5 @@
-import { SafeAreaView, StyleSheet, Text } from 'react-native'
-import { BottomTabParamList, StackParamList } from '../Navigator'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { BottomTabParamList, FeedStackParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
@@ -7,11 +7,15 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 
+// type FeedScreenNavigationProp = CompositeScreenProps<
+//   BottomTabScreenProps<BottomTabParamList, 'Feed'>,
+//   NativeStackScreenProps<StackParamList>
+// >
 type FeedScreenNavigationProp = CompositeScreenProps<
-  BottomTabScreenProps<BottomTabParamList, 'Feed'>,
-  NativeStackScreenProps<StackParamList>
+  NativeStackScreenProps<FeedStackParamList, 'Feed'>,
+  BottomTabScreenProps<BottomTabParamList>
 >
-// type Props = BottomTabScreenProps<BottomTabParamList, 'Feed'>
+type Props = BottomTabScreenProps<FeedStackParamList, 'Feed'>
 
 export const Feed: React.FC<FeedScreenNavigationProp> = ({
   navigation,
@@ -19,6 +23,8 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
 }) => {
   const { colors } = useTheme()
   const { user } = useContext(AuthContext)
+
+  const post = user.posts[0]
 
   const styles = StyleSheet.create({
     container: {
@@ -44,6 +50,10 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       <Text>{user.id}</Text>
       <Text>{user.name}</Text>
       <Text>{user.email}</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Post', { post, user })}>
+        <Text style={styles.title}>Abrir POST</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }

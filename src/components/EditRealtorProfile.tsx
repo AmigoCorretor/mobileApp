@@ -69,14 +69,14 @@ export const EditRealtorProfile = (props: Props) => {
     },
     button: {
       width: 100,
-      backgroundColor: colors.text,
+      backgroundColor: colors.primary,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
       padding: 10,
       borderRadius: 8
     },
-    cancelButtonIcon: {
+    buttonIcon: {
       color: '#333',
     },
   })
@@ -134,7 +134,7 @@ export const EditRealtorProfile = (props: Props) => {
             <MaterialIcons
               name='cancel'
               size={20}
-              style={styles.cancelButtonIcon}
+              style={styles.buttonIcon}
             />
             <Text>Cancelar</Text>
           </TouchableOpacity>
@@ -147,7 +147,7 @@ export const EditRealtorProfile = (props: Props) => {
             <MaterialIcons
               name='save'
               size={20}
-              style={styles.cancelButtonIcon}
+              style={styles.buttonIcon}
             />
             <Text>Salvar</Text>
           </TouchableOpacity>
@@ -157,7 +157,7 @@ export const EditRealtorProfile = (props: Props) => {
             <MaterialIcons
               name='logout'
               size={20}
-              style={styles.cancelButtonIcon}
+              style={styles.buttonIcon}
             />
             <Text>Logout</Text>
           </TouchableOpacity>

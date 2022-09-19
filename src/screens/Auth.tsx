@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { server, showError, showSuccess, UserLogin } from '../common'
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -142,7 +142,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
     },
     button: {
       flexDirection: 'row',
-      backgroundColor: theme.dark ? '#0096FF' : '#0096FF',
+      backgroundColor: colors.primary,
       marginTop: 10,
       padding: 10,
       alignItems: 'center',
@@ -168,7 +168,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={theme.dark ? ["#0096FF", "#332657"] : ["#0096FF", "#F2F2F2"]}
+        colors={theme.dark ? [colors.primary, "#332657"] : [colors.primary, "#F2F2F2"]}
         start={[0.1, 0.1]}
         style={styles.background}
       >
@@ -177,8 +177,8 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
         <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
         {stageNew && (
           <AuthInput
-            icon="person"
-            placeholder="Nome"
+            icon='person'
+            placeholder='Nome'
             value={name}
             style={styles.input}
             onChangeText={setName}
@@ -187,17 +187,17 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
         )}
 
         <AuthInput
-          icon="email"
+          icon='email'
           style={styles.input}
-          placeholder="E-mail"
+          placeholder='E-mail'
           value={email}
           onChangeText={setEmail}
           placeholderTextColor='#333'
         />
         <AuthInput
-          icon="lock"
+          icon='lock'
           style={styles.input}
-          placeholder="Senha"
+          placeholder='Senha'
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -205,8 +205,8 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
         />
         {stageNew && (
           <AuthInput
-            icon="lock"
-            placeholder="Confirmar senha"
+            icon='lock'
+            placeholder='Confirmar senha'
             value={confirmPassword}
             style={styles.input}
             onChangeText={setConfirmPassword}
@@ -218,9 +218,9 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           <View style={styles.switchContainer}>
             <Text style={styles.text}>Você é corretor?</Text>
             <Switch
-              trackColor={{ false: '#767577', true: '#0096FF' }}
+              trackColor={{ false: '#767577', true: colors.primary }}
               thumbColor={isRealtor ? '#FFF' : '#AAA'}
-              ios_backgroundColor="#3e3e3e"
+              ios_backgroundColor='#3e3e3e'
               onValueChange={toggleIsRealtor}
               value={isRealtor}
             />
@@ -228,8 +228,8 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
         )}
         {(stageNew && isRealtor) && (
           <AuthInput
-            icon="vpn-key"
-            placeholder="CRECI"
+            icon='vpn-key'
+            placeholder='CRECI'
             value={creci}
             style={[styles.input, { width: '50%' }]}
             onChangeText={setCreci}
@@ -245,9 +245,9 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           <View
             style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
             <MaterialIcons
-              name="login"
+              name='login'
               size={20}
-              color="#FFF"
+              color='#FFF'
               style={styles.buttonIcon}
               solid
             />
