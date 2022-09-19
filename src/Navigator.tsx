@@ -16,10 +16,12 @@ import { Search } from './screens/Search'
 import { Publication } from './screens/Publication'
 import AuthProvider, { Post, User } from './contexts/AuthContext'
 import { Post as PostScreen } from './screens/Post'
+import { AuthOrApp } from './screens/AuthOrApp'
 
 
 
 export type StackParamList = {
+  AuthOrApp: undefined
   Auth: undefined
   Home: NavigatorScreenParams<BottomTabParamList>
   Post: {
@@ -176,12 +178,13 @@ const AuthNavigator = () => {
   return (
     <AuthProvider>
       <Stack.Navigator
-        screenOptions={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right' }}
-        initialRouteName="Auth">
-        {/* <Stack.Screen
-        name="AuthOrApp"
-        component={AuthOrApp}
-      /> */}
+        screenOptions={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'fade' }}
+        initialRouteName="AuthOrApp">
+        <Stack.Screen
+          name="AuthOrApp"
+          component={AuthOrApp}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
         <Stack.Screen
           name="Auth"
           component={Auth}
@@ -195,7 +198,7 @@ const AuthNavigator = () => {
         <Stack.Screen
           name="Post"
           component={PostScreen}
-          options={{ gestureEnabled: true, gestureDirection: 'horizontal' }}
+          options={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right' }}
         />
       </Stack.Navigator>
     </AuthProvider>
