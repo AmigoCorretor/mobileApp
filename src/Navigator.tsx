@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { CompositeScreenProps, NavigationContainer } from '@react-navigation/native'
+import { CompositeScreenProps, NavigationContainer, useTheme } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -175,6 +175,7 @@ const config = {
 };
 
 const AuthNavigator = () => {
+  const { colors } = useTheme()
   return (
     <AuthProvider>
       <Stack.Navigator
@@ -198,7 +199,7 @@ const AuthNavigator = () => {
         <Stack.Screen
           name="Post"
           component={PostScreen}
-          options={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right' }}
+          options={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right', headerTransparent: true, headerStyle: { backgroundColor: `${colors.background}7`, } }}
         />
       </Stack.Navigator>
     </AuthProvider>
@@ -210,7 +211,7 @@ export const Navigator: React.FC = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor='#0096FF' />
+      <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.primary} />
       <AuthNavigator />
     </NavigationContainer>
   )

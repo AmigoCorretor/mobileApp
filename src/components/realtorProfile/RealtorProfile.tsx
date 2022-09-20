@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity, Linking } from 'react-native'
 import { useTheme } from '@react-navigation/native'
-import { User } from '../contexts/AuthContext'
+import { User } from '../../contexts/AuthContext'
 import { MaterialIcons } from '@expo/vector-icons'
 
 type Props = {
@@ -65,6 +65,7 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
     bioContainer: {
       width: '60%',
       paddingLeft: 10,
+      justifyContent: 'center'
     },
     bio: {
       fontSize: 15,

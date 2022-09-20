@@ -5,8 +5,8 @@ import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RealtorProfile } from '../components/RealtorProfile'
-import { EditRealtorProfile } from '../components/EditRealtorProfile'
+import { RealtorProfile } from '../components/realtorProfile/RealtorProfile'
+import { EditRealtorProfile } from '../components/realtorProfile/EditRealtorProfile'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthContext, Post, User } from '../contexts/AuthContext'
 import { server, showError, showSuccess } from '../common'
@@ -24,7 +24,6 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
 }) => {
   const { colors } = useTheme()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
-  const [selectPostId, setSelectPostId] = useState(null)
   const { user, setUser } = useContext(AuthContext)
 
   useEffect(() => {
