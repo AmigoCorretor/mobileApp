@@ -189,7 +189,7 @@ const AuthNavigator = () => {
         <Stack.Screen
           name="Auth"
           component={Auth}
-          options={{ contentStyle: { alignItems: 'center' }, headerShown: false }}
+          options={{ contentStyle: { alignItems: 'center' }, headerShown: false, gestureEnabled: false }}
         />
         <Stack.Screen
           name="Home"
@@ -199,7 +199,7 @@ const AuthNavigator = () => {
         <Stack.Screen
           name="Post"
           component={PostScreen}
-          options={{ gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right', headerTransparent: true, headerStyle: { backgroundColor: `${colors.background}7`, } }}
+          options={({ route }) => ({ title: route.params.post.title, gestureEnabled: true, gestureDirection: 'horizontal', animation: 'slide_from_right', headerTransparent: true, headerStyle: { backgroundColor: `${colors.background}7` } })}
         />
       </Stack.Navigator>
     </AuthProvider>
