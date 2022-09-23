@@ -1,9 +1,12 @@
+import { useEffect, useContext } from 'react'
 import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useState } from 'react'
 import { AuthInput } from '../AuthInput'
-import { User } from '../../contexts/AuthContext'
+import { AuthContext, User } from '../../contexts/AuthContext'
+import axios from 'axios'
+import { server } from '../../common'
 
 type Props = {
   // icon: keyof typeof MaterialIcons.glyphMap
@@ -11,11 +14,12 @@ type Props = {
   onCancel: any,
   logout: any,
   userInfo: User,
-  handleSaveEdit: (name: string, email: string, phone: string, bio: string, photo?: string) => void
+  handleSaveEdit: (name: string, email: string, phone: string, bio: string, photo?: string) => void,
 }
 
 export const EditRealtorProfile = (props: Props) => {
   const { colors } = useTheme()
+  const { user, setUser } = useContext(AuthContext)
 
   const [name, setName] = useState(props.userInfo.name)
   const [email, setEmail] = useState(props.userInfo.email)
@@ -23,6 +27,19 @@ export const EditRealtorProfile = (props: Props) => {
   const [bio, setBio] = useState(props.userInfo.bio)
   // const [password, setPassword] = useState('123456')
   // const [confirmPassword, setConfirmPassword] = useState('123456')
+
+  useEffect(() => {
+    const updateUser = async () => {
+      const currentUserInfo = await (await axios.get(`${server}/users/${user.id}`)).data
+      setUser(currentUserInfo)
+      setName(currentUserInfo.name)
+      setEmail(currentUserInfo.email)
+      setPhone(currentUserInfo.phone)
+      setBio(currentUserInfo.bio)
+    }
+    updateUser()
+  }, [props.isVisible])
+
 
   const styles = StyleSheet.create({
     container: {

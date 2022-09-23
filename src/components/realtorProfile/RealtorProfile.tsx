@@ -5,8 +5,9 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 type Props = {
   userInfo: User,
+  setShowLogoutModal: (show: boolean) => void
 }
-export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
+export const RealtorProfile: React.FC<Props> = ({ userInfo, setShowLogoutModal }) => {
   const { colors } = useTheme()
 
   const styles = StyleSheet.create({
@@ -16,6 +17,7 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
     title: {
       fontSize: 24,
       color: colors.text,
+      // textAlign: 'center',
     },
     headerContainer: {
       flexDirection: 'row',
@@ -26,6 +28,14 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    settingsButton: {
+      position: 'absolute',
+      right: 10,
+    },
+    settingsIcon: {
+      color: colors.primary,
+      fontSize: 30,
     },
     profilePicture: {
       width: 100,
@@ -90,10 +100,13 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo }) => {
   return (
     <View>
       <View style={styles.headerContainer}>
-        {/* <TouchableHighlight>
-          <Text>Voltar</Text>
-        </TouchableHighlight> */}
         <Text style={styles.title}>{userInfo.name}</Text>
+        <TouchableOpacity style={styles.settingsButton} onPress={() => setShowLogoutModal(true)}>
+          <MaterialIcons
+            name='settings'
+            style={styles.settingsIcon}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.userInfoContainer}>
         <View style={styles.userInfoHeader}>

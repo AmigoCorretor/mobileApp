@@ -27,7 +27,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   const { user, setUser } = useContext(AuthContext)
 
   useEffect(() => {
-    const logOut = navigation.addListener('tabLongPress', e => {
+    navigation.addListener('tabLongPress', e => {
       setShowLogoutModal(true)
     })
   }, [navigation])
@@ -52,8 +52,8 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     try {
       await axios.patch(`${server}/users/${user.id}`, newUserInfo)
 
-      const updatedUser: User = (await (await axios.get(`${server}/users/${user.id}`)).data)
-      setUser(updatedUser)
+      // const updatedUser: User = (await (await axios.get(`${server}/users/${user.id}`)).data)
+      // setUser(updatedUser)
       showSuccess('Perfil atualizado com sucesso!')
     } catch (e) {
       showError(e)
@@ -104,7 +104,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
         data={user.posts}
         keyExtractor={post => `${post.id}`}
         numColumns={2}
-        ListHeaderComponent={() => <RealtorProfile userInfo={user} />}
+        ListHeaderComponent={() => <RealtorProfile userInfo={user} setShowLogoutModal={setShowLogoutModal} />}
         contentContainerStyle={styles.postsList}
         renderItem={({ item }) => (
           <TouchableOpacity
