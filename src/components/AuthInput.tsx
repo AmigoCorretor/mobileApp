@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard } from 'react-native'
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useEffect, useRef, useState } from 'react'
 
@@ -64,30 +64,34 @@ export const AuthInput = (props: Props) => {
   })
   return (
     <View style={[styles.container, props.style]}>
-      <MaterialIcons
-        name={props.icon}
-        size={20}
-        style={styles.icon}
-        solid
-      />
-      <TextInput
-        {...props}
-        style={styles.input}
-        onFocus={() => setShowCancelButton(true)}
-        onBlur={() => setShowCancelButton(false)}
-        ref={(ref) => {
-          localInputRef && (localInputRef.current = ref as any)
-        }}
-      />
-      <TouchableOpacity onPress={handleCancel}
-        style={[styles.cancelButton, showCancelButton ? { display: 'flex' } : {}]}>
-        <MaterialIcons
-          name='cancel'
-          size={20}
-          style={styles.cancelButtonIcon}
-          solid
-        />
-      </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => { localInputRef.current!.focus() }}>
+        <View style={styles.container}>
+          <MaterialIcons
+            name={props.icon}
+            size={20}
+            style={styles.icon}
+            onPress={() => { localInputRef.current!.focus() }}
+          />
+          <TextInput
+            {...props}
+            style={styles.input}
+            onFocus={() => setShowCancelButton(true)}
+            onBlur={() => setShowCancelButton(false)}
+            ref={(ref) => {
+              localInputRef && (localInputRef.current = ref as any)
+            }}
+          />
+          <TouchableOpacity onPress={handleCancel}
+            style={[styles.cancelButton, showCancelButton ? { display: 'flex' } : {}]}>
+            <MaterialIcons
+              name='cancel'
+              size={20}
+              style={styles.cancelButtonIcon}
+              solid
+            />
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
