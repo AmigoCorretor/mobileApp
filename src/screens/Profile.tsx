@@ -35,6 +35,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   const handleLogout = () => {
     AsyncStorage.setItem('userData', '')
     navigation.navigate('Auth')
+    setShowLogoutModal(false)
   }
   const handleOpenPost = (post: Post) => {
     navigation.navigate('Post', { user, post })
