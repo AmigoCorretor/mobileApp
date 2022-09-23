@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useState } from 'react'
@@ -89,79 +89,82 @@ export const EditRealtorProfile = (props: Props) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}>
+        <ScrollView keyboardShouldPersistTaps='handled'
+          contentContainerStyle={styles.container}
+        >
+          <Text style={styles.title}>Editar perfil</Text>
+          <View style={styles.editInfosContainer}>
+            <TouchableOpacity>
+              <View style={{ alignItems: 'center' }}>
+                <Image
+                  style={styles.profilePicture}
+                  source={{ uri: props.userInfo.photo }} />
+                <Text style={styles.subTitle}>Troca foto de perfil</Text>
+              </View>
+            </TouchableOpacity>
+            <AuthInput
+              value={name}
+              onChangeText={setName}
+              icon='person'
+              placeholder='Nome'
+              style={styles.input} placeholderTextColor='#333' />
+            <AuthInput
+              value={email}
+              onChangeText={setEmail}
+              icon='email'
+              placeholder='Email'
+              style={styles.input} placeholderTextColor='#333' />
+            <AuthInput
+              value={phone}
+              onChangeText={setPhone}
+              icon='phone'
+              placeholder='Telefone'
+              style={styles.input} placeholderTextColor='#333' />
+            <AuthInput
+              value={bio}
+              onChangeText={setBio}
+              icon='description'
+              placeholder='Biografia'
+              style={[styles.input, { height: 120 }]}
+              multiline />
+          </View>
 
-        <Text style={styles.title}>Editar perfil</Text>
-        <View style={styles.editInfosContainer}>
-          <TouchableOpacity>
-            <View style={{ alignItems: 'center' }}>
-              <Image
-                style={styles.profilePicture}
-                source={{ uri: props.userInfo.photo }} />
-              <Text style={styles.subTitle}>Troca foto de perfil</Text>
-            </View>
-          </TouchableOpacity>
-          <AuthInput
-            value={name}
-            onChangeText={setName}
-            icon='person'
-            placeholder='Nome'
-            style={styles.input} placeholderTextColor='#333' />
-          <AuthInput
-            value={email}
-            onChangeText={setEmail}
-            icon='email'
-            placeholder='Email'
-            style={styles.input} placeholderTextColor='#333' />
-          <AuthInput
-            value={phone}
-            onChangeText={setPhone}
-            icon='phone'
-            placeholder='Telefone'
-            style={styles.input} placeholderTextColor='#333' />
-          <AuthInput
-            value={bio}
-            onChangeText={setBio}
-            icon='description'
-            placeholder='Biografia'
-            style={[styles.input, { height: 120 }]}
-            multiline />
-        </View>
-
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#F88' }]}
-            onPress={props.onCancel}>
-            <MaterialIcons
-              name='cancel'
-              size={20}
-              style={styles.buttonIcon}
-            />
-            <Text>Cancelar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#8F8' }]}
-            onPress={() => {
-              props.handleSaveEdit(name, email, phone, bio)
-              props.onCancel()
-            }}>
-            <MaterialIcons
-              name='save'
-              size={20}
-              style={styles.buttonIcon}
-            />
-            <Text>Salvar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={props.logout}>
-            <MaterialIcons
-              name='logout'
-              size={20}
-              style={styles.buttonIcon}
-            />
-            <Text>Logout</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#F88' }]}
+              onPress={props.onCancel}>
+              <MaterialIcons
+                name='cancel'
+                size={20}
+                style={styles.buttonIcon}
+              />
+              <Text>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#8F8' }]}
+              onPress={() => {
+                props.handleSaveEdit(name, email, phone, bio)
+                props.onCancel()
+              }}>
+              <MaterialIcons
+                name='save'
+                size={20}
+                style={styles.buttonIcon}
+              />
+              <Text>Salvar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={props.logout}>
+              <MaterialIcons
+                name='logout'
+                size={20}
+                style={styles.buttonIcon}
+              />
+              <Text>Logout</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </Modal>
   )
