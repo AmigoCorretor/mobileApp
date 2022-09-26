@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { Animated, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -29,6 +29,19 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   const theme = useTheme()
 
   const { user, setUser } = useContext(AuthContext)
+
+  let position = useRef(new Animated.ValueXY({ x: 0, y: 200 })).current
+
+  useState(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault()
+    })
+    Animated.spring(position, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: false
+    }).start()
+  })
+
 
   const loginOrSignup = () => {
     if (stageNew) {
@@ -75,14 +88,12 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       const currentUserInfo = await (await axios.get(`${server}/users/${userDecoded.id}`)).data
       setUser(currentUserInfo)
 
-
       AsyncStorage.setItem('userData', JSON.stringify(res.data))
 
       // axios.defaults.headers.common[
       //   'Authorization'
       // ] = `bearer ${res.data.token}`
       navigation.navigate('Home', { screen: 'Feed' })
-
     } catch (e) {
       showError(e)
     }
@@ -114,7 +125,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
     container: {
       flex: 1,
       width: '100%',
-      backgroundColor: colors.background,
+      // backgroundColor: colors.background,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -166,106 +177,105 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   })
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.container}>
       <LinearGradient
-        colors={theme.dark ? [colors.primary, "#332657"] : [colors.primary, "#F2F2F2"]}
+        colors={theme.dark ? [colors.primary, '#332657'] : [colors.primary, '#F2F2F2']}
         start={[0.1, 0.1]}
         style={styles.background}
       >
+        <Animated.View style={[styles.container, position.getLayout()]}>
 
+          <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
+          {stageNew && (
+            <AuthInput
+              icon='person'
+              placeholder='Nome'
+              value={name}
+              style={styles.input}
+              onChangeText={setName}
+              placeholderTextColor='#333'
+            />
+          )}
 
-        <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
-        {stageNew && (
           <AuthInput
-            icon='person'
-            placeholder='Nome'
-            value={name}
+            icon='email'
             style={styles.input}
-            onChangeText={setName}
+            placeholder='E-mail'
+            value={email}
+            onChangeText={setEmail}
             placeholderTextColor='#333'
           />
-        )}
-
-        <AuthInput
-          icon='email'
-          style={styles.input}
-          placeholder='E-mail'
-          value={email}
-          onChangeText={setEmail}
-          placeholderTextColor='#333'
-        />
-        <AuthInput
-          icon='lock'
-          style={styles.input}
-          placeholder='Senha'
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          placeholderTextColor='#333'
-        />
-        {stageNew && (
           <AuthInput
             icon='lock'
-            placeholder='Confirmar senha'
-            value={confirmPassword}
             style={styles.input}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={true}
+            placeholder='Senha'
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
             placeholderTextColor='#333'
           />
-        )}
-        {stageNew && (
-          <View style={styles.switchContainer}>
-            <Text style={styles.text}>Você é corretor?</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: colors.primary }}
-              thumbColor={isRealtor ? '#FFF' : '#AAA'}
-              ios_backgroundColor='#3e3e3e'
-              onValueChange={toggleIsRealtor}
-              value={isRealtor}
+          {stageNew && (
+            <AuthInput
+              icon='lock'
+              placeholder='Confirmar senha'
+              value={confirmPassword}
+              style={styles.input}
+              onChangeText={setConfirmPassword}
+              secureTextEntry={true}
+              placeholderTextColor='#333'
             />
-          </View>
-        )}
-        {(stageNew && isRealtor) && (
-          <AuthInput
-            icon='vpn-key'
-            placeholder='CRECI'
-            value={creci}
-            style={[styles.input, { width: '50%' }]}
-            onChangeText={setCreci}
-            placeholderTextColor='#333'
-          />
-        )}
-
-
-
-        <TouchableOpacity
-          onPress={loginOrSignup}
-          disabled={!validForm}>
-          <View
-            style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
-            <MaterialIcons
-              name='login'
-              size={20}
-              color='#FFF'
-              style={styles.buttonIcon}
-              solid
+          )}
+          {stageNew && (
+            <View style={styles.switchContainer}>
+              <Text style={styles.text}>Você é corretor?</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: colors.primary }}
+                thumbColor={isRealtor ? '#FFF' : '#AAA'}
+                ios_backgroundColor='#3e3e3e'
+                onValueChange={toggleIsRealtor}
+                value={isRealtor}
+              />
+            </View>
+          )}
+          {(stageNew && isRealtor) && (
+            <AuthInput
+              icon='vpn-key'
+              placeholder='CRECI'
+              value={creci}
+              style={[styles.input, { width: '50%' }]}
+              onChangeText={setCreci}
+              placeholderTextColor='#333'
             />
+          )}
+
+          <TouchableOpacity
+            onPress={loginOrSignup}
+            disabled={!validForm}>
+            <View
+              style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
+              <MaterialIcons
+                name='login'
+                size={20}
+                color='#FFF'
+                style={styles.buttonIcon}
+                solid
+              />
+              <Text style={styles.buttonText}>
+                {stageNew ? 'Registrar' : 'Entrar'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ padding: 10 }}
+            onPress={() => setStageNew(!stageNew)}>
             <Text style={styles.buttonText}>
-              {stageNew ? 'Registrar' : 'Entrar'}
+              {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
             </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ padding: 10 }}
-          onPress={() => setStageNew(!stageNew)}>
-          <Text style={styles.buttonText}>
-            {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
-          </Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Animated.View>
       </LinearGradient>
-    </View>
+    </Animated.View>
   )
 
 }

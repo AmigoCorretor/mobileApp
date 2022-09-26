@@ -1,4 +1,6 @@
+import axios from "axios"
 import React, { createContext, useState } from "react"
+import { server } from "../common"
 
 export interface Image {
   id: number
@@ -135,10 +137,11 @@ export let userInfo: User = {
 
 export type AuthContent = {
   user: User,
-  setUser: (u: User) => void
+  setUser: (u: User) => void,
+  updateUser: () => void
 }
 
-export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { } })
+export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { } })
 
 type Props = {
   children: JSX.Element,
@@ -147,8 +150,12 @@ type Props = {
 const AuthProvider: React.FC<Props> = (props) => {
   const [user, setUser] = useState<User>(userInfo)
 
+  const updateUser = async () => {
+    const currentUserInfo = await (await axios.get(`${server}/users/${user.id}`)).data
+    setUser(currentUserInfo)
+  }
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, updateUser }}>
       {props.children}
     </AuthContext.Provider>
   )

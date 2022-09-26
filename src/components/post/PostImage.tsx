@@ -1,15 +1,16 @@
 import { useRef } from 'react'
-import { Animated, Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native'
+import { Animated, Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { Post, User } from '../../contexts/AuthContext'
 import { MaterialIcons } from '@expo/vector-icons'
 
 type Props = {
   user: User,
-  post: Post
+  post: Post,
+  deletePost: (id: number) => void
 }
 
-export const PostImages: React.FC<Props> = ({ user, post }) => {
+export const PostImages: React.FC<Props> = ({ user, post, deletePost }) => {
   const { colors } = useTheme()
   const { width, height } = Dimensions.get('screen')
 
@@ -55,20 +56,40 @@ export const PostImages: React.FC<Props> = ({ user, post }) => {
 
   const scrollX = useRef(new Animated.Value(0)).current
   return (
-    < View >
-      <View style={styles.userContainer}>
-        <View>
-          <Image
-            style={styles.profilePicture}
-            source={{ uri: user.photo }} />
-          <MaterialIcons
-            name='verified'
-            size={20}
-            style={styles.verifiedIcon}
-          />
+    <View>
+      <View style={{ width: '100%', height: 100, position: 'absolute', zIndex: 1 }}>
+        <View style={styles.userContainer}>
+          <View>
+            <Image
+              style={styles.profilePicture}
+              source={{ uri: user.photo }} />
+            <MaterialIcons
+              name='verified'
+              size={20}
+              style={styles.verifiedIcon}
+            />
+          </View>
+          <Text style={styles.name}>{user.name}</Text>
         </View>
-        <Text style={styles.name}>{user.name}</Text>
+        <TouchableOpacity style={{
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: `${colors.background}7`,
+          borderRadius: 40,
+          padding: 10,
+          right: 0,
+          top: Platform.OS === 'android' ? 56 : 0
+        }}
+          onPress={() => deletePost(post.id)}
+        >
+          <MaterialIcons
+            name='more-horiz'
+            size={20}
+            style={{ color: colors.text }}
+          />
+        </TouchableOpacity>
       </View>
+
       <View style={[StyleSheet.absoluteFillObject]}>
         {post.images.map((img, index) => {
           const inputRange = [

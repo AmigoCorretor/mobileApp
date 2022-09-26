@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
@@ -6,6 +7,9 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { PostImages } from '../components/post/PostImage'
 import { PostInfos } from '../components/post/PostInfos'
+import axios from 'axios'
+import { server, showError, showSuccess } from '../common'
+import { AuthContext } from '../contexts/AuthContext'
 
 // type PostScreenNavigationProp = CompositeScreenProps<
 //   BottomTabScreenProps<BottomTabParamList, 'Post'>,
@@ -22,6 +26,8 @@ export const Post: React.FC<Props> = ({
   navigation,
   route,
 }) => {
+  const { updateUser } = useContext(AuthContext)
+
   const { colors } = useTheme()
 
   const post = route.params.post
@@ -67,10 +73,18 @@ export const Post: React.FC<Props> = ({
     }
   })
 
+  const deletePost = async (id: number) => {
+    await axios.delete(`${server}/posts/${id}`)
+      .then(_ => showSuccess('Post apagado!'))
+      .then(_ => updateUser())
+      .then(_ => navigation.goBack())
+      .catch(e => showError(e))
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ width: '100%' }}>
-        <PostImages user={user} post={post} />
+        <PostImages user={user} post={post} deletePost={deletePost} />
         <PostInfos post={post} />
       </ScrollView>
     </SafeAreaView>
