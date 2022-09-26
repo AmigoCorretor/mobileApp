@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, ScrollView } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons'
 
-import { AuthInput } from '../components/AuthInput'
+import { CustomInput } from '../components/CustomInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
 import axios from "axios"
 import { server, showError, showSuccess } from "../common"
@@ -138,7 +138,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     contentContainerStyle={styles.container}
                 >
                     <Text style={styles.title}>Nova Publicação</Text>
-                    <AuthInput
+                    <CustomInput
                         icon='title'
                         style={styles.inputs}
                         placeholder='Título'
@@ -146,7 +146,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         onChangeText={setTitle}
                         placeholderTextColor='#333'
                     />
-                    <AuthInput
+                    <CustomInput
                         icon='photo'
                         style={styles.inputs}
                         placeholder='Foto'
@@ -154,7 +154,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         onChangeText={setImage}
                         placeholderTextColor='#333'
                     />
-                    <AuthInput
+                    <CustomInput
                         icon='description'
                         style={styles.inputs}
                         placeholder='Descrição'
@@ -165,7 +165,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
                     <View style={styles.viewNumberInputData}>
                         <Text style={[styles.numberInputData, styles.adicitionalInfosInputData]}>Informações Adicionais:</Text>
-                        <AuthInput
+                        <CustomInput
                             icon='crop-din'
                             style={styles.numberInputData}
                             placeholder='Área total'
@@ -173,7 +173,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                             onChangeText={setTotalArea}
                             placeholderTextColor='#333'
                         />
-                        <AuthInput
+                        <CustomInput
                             icon='aspect-ratio'
                             style={styles.numberInputData}
                             placeholder='Área útil'
@@ -181,7 +181,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                             onChangeText={setUseFulArea}
                             placeholderTextColor='#333'
                         />
-                        <AuthInput
+                        <CustomInput
                             icon='bathtub'
                             style={styles.numberInputData}
                             placeholder='Banheiro(s)'
@@ -189,7 +189,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                             onChangeText={setBathrooms}
                             placeholderTextColor='#333'
                         />
-                        <AuthInput
+                        <CustomInput
                             icon='airline-seat-individual-suite'
                             style={styles.numberInputData}
                             placeholder='Quarto(s)'
@@ -197,7 +197,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                             onChangeText={setBedrooms}
                             placeholderTextColor='#333'
                         />
-                        <AuthInput
+                        <CustomInput
                             icon='king-bed'
                             style={styles.numberInputData}
                             placeholder='Suítes'

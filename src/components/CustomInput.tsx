@@ -16,7 +16,7 @@ type Props = {
   multiline?: boolean
 }
 
-export const AuthInput = (props: Props) => {
+export const CustomInput = (props: Props) => {
   const [showCancelButton, setShowCancelButton] = useState(false)
   const localInputRef = useRef<TextInput>()
 
@@ -58,7 +58,7 @@ export const AuthInput = (props: Props) => {
     },
     input: {
       paddingLeft: 20,
-      width: '70%',
+      maxWidth: '45%',
     },
     cancelButton: {
       display: 'none',
