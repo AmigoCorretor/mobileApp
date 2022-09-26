@@ -32,7 +32,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
 
   let position = useRef(new Animated.ValueXY({ x: 0, y: 200 })).current
 
-  useState(() => {
+  useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       e.preventDefault()
     })
@@ -40,7 +40,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       toValue: { x: 0, y: 0 },
       useNativeDriver: false
     }).start()
-  })
+  }, [])
 
 
   const loginOrSignup = () => {
