@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
@@ -10,6 +10,7 @@ import { PostInfos } from '../components/post/PostInfos'
 import axios from 'axios'
 import { server, showError, showSuccess } from '../common'
 import { AuthContext } from '../contexts/AuthContext'
+import { EditPost } from '../components/post/EditPost'
 
 // type PostScreenNavigationProp = CompositeScreenProps<
 //   BottomTabScreenProps<BottomTabParamList, 'Post'>,
@@ -27,6 +28,7 @@ export const Post: React.FC<Props> = ({
   route,
 }) => {
   const { updateUser } = useContext(AuthContext)
+  const [showEditPost, setShowEditPost] = useState(false)
 
   const { colors } = useTheme()
 
@@ -84,7 +86,12 @@ export const Post: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ width: '100%' }}>
-        <PostImages user={user} post={post} deletePost={deletePost} />
+        <EditPost
+          onCancel={() => setShowEditPost(false)}
+          isVisible={showEditPost}
+          postInfo={post}
+        />
+        <PostImages user={user} post={post} deletePost={deletePost} showEditModal={setShowEditPost} />
         <PostInfos post={post} />
       </ScrollView>
     </SafeAreaView>

@@ -7,10 +7,11 @@ import { MaterialIcons } from '@expo/vector-icons'
 type Props = {
   user: User,
   post: Post,
+  showEditModal: (show: boolean) => void,
   deletePost: (id: number) => void
 }
 
-export const PostImages: React.FC<Props> = ({ user, post, deletePost }) => {
+export const PostImages: React.FC<Props> = ({ user, post, deletePost, showEditModal }) => {
   const { colors } = useTheme()
   const { width, height } = Dimensions.get('screen')
 
@@ -80,7 +81,7 @@ export const PostImages: React.FC<Props> = ({ user, post, deletePost }) => {
           right: 0,
           top: Platform.OS === 'android' ? 56 : 0
         }}
-          onPress={() => deletePost(post.id)}
+          onPress={() => showEditModal(true)}
         >
           <MaterialIcons
             name='more-horiz'

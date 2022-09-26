@@ -47,16 +47,23 @@ export const AuthInput = (props: Props) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
+    innerContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     icon: {
       color: '#333',
       marginLeft: 20,
     },
     input: {
-      marginLeft: 20,
-      width: '70%',
+      paddingLeft: 20,
+      maxWidth: '45%',
     },
     cancelButton: {
-      display: 'none'
+      display: 'none',
+      position: 'absolute',
+      right: 10
     },
     cancelButtonIcon: {
       color: '#333',
@@ -65,7 +72,7 @@ export const AuthInput = (props: Props) => {
   return (
     <View style={[styles.container, props.style]}>
       <TouchableWithoutFeedback onPress={() => { localInputRef.current!.focus() }}>
-        <View style={styles.container}>
+        <View style={styles.innerContainer}>
           <MaterialIcons
             name={props.icon}
             size={20}
