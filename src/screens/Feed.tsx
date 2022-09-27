@@ -25,15 +25,16 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   const { colors } = useTheme()
   const { user, loggedUser } = useContext(AuthContext)
 
-  useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
-      if (!loggedUser) {
-        return
-      } else {
-        e.preventDefault()
-      }
-    })
-  }, [loggedUser])
+  // useEffect(() => {
+  //   navigation.addListener('beforeRemove', (e) => {
+  //     if (loggedUser) {
+  //       navigation.dispatch(e.data.action)
+  //       return
+  //     } else {
+  //       e.preventDefault()
+  //     }
+  //   })
+  // }, [loggedUser])
 
   const post = user.posts[0]
 

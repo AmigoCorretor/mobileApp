@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { Animated, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -40,26 +40,29 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   }, [])
 
   useEffect(() => {
-    console.log('effect', loggedUser)
-    if (!loggedUser) {
-      console.log('not logged')
-      navigation.addListener('beforeRemove', (e) => {
-        console.log('preveniu')
-        e.preventDefault()
-      })
-    } else {
-      return
-    }
+    // console.log('effect', loggedUser)
+    // if (!loggedUser) {
+    //   console.log('not logged')
+    //   navigation.addListener('beforeRemove', (e) => {
+    //     console.log('preveniu')
+    //     e.preventDefault()
+    //     console.log(e)
+
+    //   })
+    // } else {
+    //   navigation.navigate('Home', { screen: 'Feed' })
+    // }
     // navigation.addListener('beforeRemove', (e) => {
-    //   if (loggedUser != '') {
+    //   if (!loggedUser) {
     //     console.warn('logando')
+    //     navigation.dispatch(e.data.action)
+    //     // navigation.navigate('Home', { screen: 'Feed' })
     //     return
     //   } else {
-    //     console.warn('preveniu')
     //     e.preventDefault()
     //   }
     // })
-  }, [loggedUser, navigation])
+  }, [loggedUser])
 
   const loginOrSignup = () => {
     if (stageNew) {
@@ -108,7 +111,6 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
 
       setLoggedUser(JSON.stringify(res.data))
       await AsyncStorage.setItem('userData', JSON.stringify(res.data))
-      // navigateToFeed()
       // axios.defaults.headers.common[
       //   'Authorization'
       // ] = `bearer ${res.data.token}`
@@ -117,13 +119,6 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       showError(e)
     }
   }
-
-  // const navigateToFeed = () => {
-  //   if (loggedUser) {
-  //     navigation.navigate('Home', { screen: 'Feed' })
-  //   }
-  // }
-
   const toggleIsRealtor = () => setIsRealtor(previousState => !previousState)
 
   useEffect(() => {
