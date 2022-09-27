@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidin
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useState } from 'react'
-import { CustomInput } from '../CustomInput'
+import { AuthInput } from '../AuthInput'
 import { AuthContext, Post, User } from '../../contexts/AuthContext'
 import axios from 'axios'
 import { server, showError, showSuccess } from '../../common'
@@ -142,7 +142,7 @@ export const EditPost = (props: Props) => {
           contentContainerStyle={styles.scrollContainer}
         >
           <Text style={styles.title}>Editar Publicação</Text>
-          <CustomInput
+          <AuthInput
             icon='title'
             style={styles.input}
             placeholder='Título'
@@ -150,7 +150,7 @@ export const EditPost = (props: Props) => {
             onChangeText={setTitle}
             placeholderTextColor='#333'
           />
-          {/* <CustomInput
+          {/* <AuthInput
               icon='photo'
               style={styles.input}
               placeholder='Foto'
@@ -158,7 +158,7 @@ export const EditPost = (props: Props) => {
               onChangeText={setImage}
               placeholderTextColor='#333'
             /> */}
-          <CustomInput
+          <AuthInput
             icon='description'
             style={styles.input}
             placeholder='Descrição'
@@ -169,7 +169,7 @@ export const EditPost = (props: Props) => {
 
           <View style={styles.aditionalInfosContainer}>
             <Text style={[styles.numberInputData, styles.aditionalInfosInputData]}>Informações Adicionais:</Text>
-            <CustomInput
+            <AuthInput
               icon='crop-din'
               style={styles.numberInputData}
               placeholder='Área total'
@@ -177,7 +177,7 @@ export const EditPost = (props: Props) => {
               onChangeText={setTotalArea}
               placeholderTextColor='#333'
             />
-            <CustomInput
+            <AuthInput
               icon='aspect-ratio'
               style={styles.numberInputData}
               placeholder='Área útil'
@@ -185,7 +185,7 @@ export const EditPost = (props: Props) => {
               onChangeText={setUseFulArea}
               placeholderTextColor='#333'
             />
-            <CustomInput
+            <AuthInput
               icon='bathtub'
               style={styles.numberInputData}
               placeholder='Banheiro(s)'
@@ -193,7 +193,7 @@ export const EditPost = (props: Props) => {
               onChangeText={setBathrooms}
               placeholderTextColor='#333'
             />
-            <CustomInput
+            <AuthInput
               icon='airline-seat-individual-suite'
               style={styles.numberInputData}
               placeholder='Quarto(s)'
@@ -201,7 +201,7 @@ export const EditPost = (props: Props) => {
               onChangeText={setBedrooms}
               placeholderTextColor='#333'
             />
-            <CustomInput
+            <AuthInput
               icon='king-bed'
               style={styles.numberInputData}
               placeholder='Suítes'

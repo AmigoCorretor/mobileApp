@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
@@ -24,7 +24,13 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
 }) => {
   const { colors } = useTheme()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
-  const { user, setUser } = useContext(AuthContext)
+  const { user, loggedUser, setLoggedUser } = useContext(AuthContext)
+
+  // useEffect(() => {
+  //   if (!loggedUser) {
+  //     console.warn("logout")
+  //   }
+  // }, [loggedUser])
 
   useEffect(() => {
     navigation.addListener('tabLongPress', e => {
@@ -32,8 +38,9 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     })
   }, [navigation])
 
-  const handleLogout = () => {
-    AsyncStorage.setItem('userData', '')
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('userData')
+    setLoggedUser('')
     navigation.navigate('Auth')
     setShowLogoutModal(false)
   }

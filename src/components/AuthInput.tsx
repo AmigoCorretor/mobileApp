@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 type Props = {
   icon: keyof typeof MaterialIcons.glyphMap
   style: object
+  textInputStyle?: object
   placeholder: string
   value: string
   onChangeText: any
@@ -12,7 +13,7 @@ type Props = {
   placeholderTextColor?: string
   showCancelButton?: boolean
   autoFocus?: boolean
-  closeKeyboardOnCancel?: boolean,
+  closeKeyboardOnCancel?: boolean
   multiline?: boolean
 }
 
@@ -70,35 +71,34 @@ export const AuthInput = (props: Props) => {
     },
   })
   return (
-    <View style={[styles.container, props.style]}>
-      <TouchableWithoutFeedback onPress={() => { localInputRef.current!.focus() }}>
-        <View style={styles.innerContainer}>
+
+    <TouchableWithoutFeedback onPress={() => { localInputRef.current!.focus() }}>
+      <View style={[styles.container, props.style]}>
+        <MaterialIcons
+          name={props.icon}
+          size={20}
+          style={styles.icon}
+          onPress={() => { localInputRef.current!.focus() }}
+        />
+        <TextInput
+          {...props}
+          style={[styles.input, props.textInputStyle]}
+          onFocus={() => setShowCancelButton(true)}
+          onBlur={() => setShowCancelButton(false)}
+          ref={(ref) => {
+            localInputRef && (localInputRef.current = ref as any)
+          }}
+        />
+        <TouchableOpacity onPress={handleCancel}
+          style={[styles.cancelButton, showCancelButton ? { display: 'flex' } : {}]}>
           <MaterialIcons
-            name={props.icon}
+            name='cancel'
             size={20}
-            style={styles.icon}
-            onPress={() => { localInputRef.current!.focus() }}
+            style={styles.cancelButtonIcon}
+            solid
           />
-          <TextInput
-            {...props}
-            style={styles.input}
-            onFocus={() => setShowCancelButton(true)}
-            onBlur={() => setShowCancelButton(false)}
-            ref={(ref) => {
-              localInputRef && (localInputRef.current = ref as any)
-            }}
-          />
-          <TouchableOpacity onPress={handleCancel}
-            style={[styles.cancelButton, showCancelButton ? { display: 'flex' } : {}]}>
-            <MaterialIcons
-              name='cancel'
-              size={20}
-              style={styles.cancelButtonIcon}
-              solid
-            />
-          </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   )
 }

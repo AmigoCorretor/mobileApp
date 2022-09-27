@@ -1,10 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, BackHandler } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
-import { useTheme } from '@react-navigation/native'
+import { useFocusEffect, useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useContext } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { FeedPost } from '../components/feed/FeedPost'
 
@@ -23,7 +23,17 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   route,
 }) => {
   const { colors } = useTheme()
-  const { user } = useContext(AuthContext)
+  const { user, loggedUser } = useContext(AuthContext)
+
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      if (!loggedUser) {
+        return
+      } else {
+        e.preventDefault()
+      }
+    })
+  }, [loggedUser])
 
   const post = user.posts[0]
 
@@ -55,9 +65,9 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
         onPress={() => navigation.navigate('Post', { user, post })}>
         <Text style={styles.title}>Abrir POST</Text>
       </TouchableOpacity> */}
-      <FeedPost 
+      {/* <FeedPost
         post={post}
-      />
+      /> */}
     </SafeAreaView>
   )
 }

@@ -12,9 +12,10 @@ import jwtDecode from 'jwt-decode'
 type AuthScreenProps = NativeStackScreenProps<StackParamList, 'AuthOrApp'>
 
 export const AuthOrApp: React.FC<AuthScreenProps> = ({ navigation }) => {
-  const { user, setUser } = useContext(AuthContext)
+  const { user, setUser, setLoggedUser } = useContext(AuthContext)
   useEffect(() => {
     const getData = async () => {
+      setLoggedUser('')
       const userDataJson = await AsyncStorage.getItem('userData')
       let userData = null
       try {
@@ -29,6 +30,7 @@ export const AuthOrApp: React.FC<AuthScreenProps> = ({ navigation }) => {
         // ] = `bearer ${userData.token}`
         const userDecoded: { id: number, iat: number } = jwtDecode(userData.token)
         const currentUserInfo = await (await axios.get(`${server}/users/${userDecoded.id}`)).data
+        setLoggedUser(userDataJson as string)
         setUser(currentUserInfo)
 
         navigation.navigate('Home', { screen: 'Feed' })

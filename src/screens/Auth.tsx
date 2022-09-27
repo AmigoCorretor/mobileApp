@@ -28,20 +28,38 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   const { colors } = useTheme()
   const theme = useTheme()
 
-  const { user, setUser } = useContext(AuthContext)
+  const { user, setUser, loggedUser, setLoggedUser } = useContext(AuthContext)
 
   let position = useRef(new Animated.ValueXY({ x: 0, y: 200 })).current
 
   useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
-      e.preventDefault()
-    })
     Animated.spring(position, {
       toValue: { x: 0, y: 0 },
       useNativeDriver: false
     }).start()
   }, [])
 
+  useEffect(() => {
+    console.log('effect', loggedUser)
+    if (!loggedUser) {
+      console.log('not logged')
+      navigation.addListener('beforeRemove', (e) => {
+        console.log('preveniu')
+        e.preventDefault()
+      })
+    } else {
+      return
+    }
+    // navigation.addListener('beforeRemove', (e) => {
+    //   if (loggedUser != '') {
+    //     console.warn('logando')
+    //     return
+    //   } else {
+    //     console.warn('preveniu')
+    //     e.preventDefault()
+    //   }
+    // })
+  }, [loggedUser, navigation])
 
   const loginOrSignup = () => {
     if (stageNew) {
@@ -88,8 +106,9 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       const currentUserInfo = await (await axios.get(`${server}/users/${userDecoded.id}`)).data
       setUser(currentUserInfo)
 
-      AsyncStorage.setItem('userData', JSON.stringify(res.data))
-
+      setLoggedUser(JSON.stringify(res.data))
+      await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+      // navigateToFeed()
       // axios.defaults.headers.common[
       //   'Authorization'
       // ] = `bearer ${res.data.token}`
@@ -98,6 +117,12 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       showError(e)
     }
   }
+
+  // const navigateToFeed = () => {
+  //   if (loggedUser) {
+  //     navigation.navigate('Home', { screen: 'Feed' })
+  //   }
+  // }
 
   const toggleIsRealtor = () => setIsRealtor(previousState => !previousState)
 
@@ -242,9 +267,10 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
               icon='vpn-key'
               placeholder='CRECI'
               value={creci}
-              style={[styles.input, { width: '50%' }]}
+              style={[styles.input, { width: '60%' }]}
               onChangeText={setCreci}
               placeholderTextColor='#333'
+              textInputStyle={{ width: '55%' }}
             />
           )}
 

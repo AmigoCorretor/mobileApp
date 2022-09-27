@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from "axios"
 import React, { createContext, useState } from "react"
 import { server } from "../common"
@@ -139,9 +140,12 @@ export type AuthContent = {
   user: User,
   setUser: (u: User) => void,
   updateUser: () => void
+  loggedUser: string,
+  setLoggedUser: (u: string) => void,
+  updateLoggedUser: () => void
 }
 
-export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { } })
+export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { } })
 
 type Props = {
   children: JSX.Element,
@@ -149,13 +153,20 @@ type Props = {
 
 const AuthProvider: React.FC<Props> = (props) => {
   const [user, setUser] = useState<User>(userInfo)
+  const [loggedUser, setLoggedUser] = useState('')
 
   const updateUser = async () => {
     const currentUserInfo = await (await axios.get(`${server}/users/${user.id}`)).data
     setUser(currentUserInfo)
   }
+
+  const updateLoggedUser = async () => {
+    const loggedUser = await AsyncStorage.getItem('userData')
+    setLoggedUser(loggedUser as string)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, setUser, updateUser }}>
+    <AuthContext.Provider value={{ user, setUser, updateUser, loggedUser, setLoggedUser, updateLoggedUser }}>
       {props.children}
     </AuthContext.Provider>
   )
