@@ -38,7 +38,7 @@ export const EditRealtorProfile = (props: Props) => {
       setEmail(currentUserInfo.email)
       setPhone(currentUserInfo.phone)
       setBio(currentUserInfo.bio)
-      // setPhoto(currentUserInfo.photo)
+      setPhoto(currentUserInfo.photo)
     }
     updateUser()
   }, [props.isVisible])
@@ -108,7 +108,7 @@ export const EditRealtorProfile = (props: Props) => {
       animationType="slide">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}>
+        style={{flexGrow: 1}}>
         <ScrollView keyboardShouldPersistTaps='handled'
           contentContainerStyle={styles.container}
         >
@@ -192,6 +192,7 @@ export const EditRealtorProfile = (props: Props) => {
               <Text>Logout</Text>
             </TouchableOpacity>
           </View>
+          
         </ScrollView>
       </KeyboardAvoidingView>
     </Modal>
