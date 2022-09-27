@@ -6,6 +6,7 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
+import { FeedPost } from '../components/feed/FeedPost'
 
 type FeedScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Feed'>,
@@ -47,13 +48,16 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Feed</Text>
       {/* <Text style={styles.text}>{route.params?.payload.name}</Text> */}
-      <Text>Id: {user.id}</Text>
+      {/* <Text>Id: {user.id}</Text>
       <Text>Nome: {user.name}</Text>
       <Text>E-mail: {user.email}</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate('Post', { user, post })}>
         <Text style={styles.title}>Abrir POST</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <FeedPost 
+        post={post}
+      />
     </SafeAreaView>
   )
 }
