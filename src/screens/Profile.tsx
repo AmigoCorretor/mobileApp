@@ -54,7 +54,8 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       name,
       email,
       phone,
-      bio
+      bio,
+      photo
     }
     try {
       await axios.patch(`${server}/users/${user.id}`, newUserInfo)

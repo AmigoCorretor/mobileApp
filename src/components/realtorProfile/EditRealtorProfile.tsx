@@ -25,6 +25,8 @@ export const EditRealtorProfile = (props: Props) => {
   const [email, setEmail] = useState(props.userInfo.email)
   const [phone, setPhone] = useState(props.userInfo.phone)
   const [bio, setBio] = useState(props.userInfo.bio)
+  const [showPhotoInput, setShowPhotoInput] = useState(false)
+  const [photo, setPhoto] = useState(props.userInfo.photo)
   // const [password, setPassword] = useState('123456')
   // const [confirmPassword, setConfirmPassword] = useState('123456')
 
@@ -36,6 +38,7 @@ export const EditRealtorProfile = (props: Props) => {
       setEmail(currentUserInfo.email)
       setPhone(currentUserInfo.phone)
       setBio(currentUserInfo.bio)
+      // setPhoto(currentUserInfo.photo)
     }
     updateUser()
   }, [props.isVisible])
@@ -111,7 +114,7 @@ export const EditRealtorProfile = (props: Props) => {
         >
           <Text style={styles.title}>Editar perfil</Text>
           <View style={styles.editInfosContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowPhotoInput(prev => !prev)}>
               <View style={{ alignItems: 'center' }}>
                 <Image
                   style={styles.profilePicture}
@@ -119,6 +122,14 @@ export const EditRealtorProfile = (props: Props) => {
                 <Text style={styles.subTitle}>Troca foto de perfil</Text>
               </View>
             </TouchableOpacity>
+            {showPhotoInput ? <AuthInput
+              value={photo}
+              onChangeText={setPhoto}
+              icon='image'
+              placeholder='Link da foto de perfil'
+              style={styles.input} placeholderTextColor='#333' /> :
+              null
+            }
             <AuthInput
               value={name}
               onChangeText={setName}
@@ -160,7 +171,7 @@ export const EditRealtorProfile = (props: Props) => {
             <TouchableOpacity
               style={[styles.button, { backgroundColor: '#8F8' }]}
               onPress={() => {
-                props.handleSaveEdit(name, email, phone, bio)
+                props.handleSaveEdit(name, email, phone, bio, photo)
                 props.onCancel()
               }}>
               <MaterialIcons
