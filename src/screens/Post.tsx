@@ -90,6 +90,7 @@ export const Post: React.FC<Props> = ({
           onCancel={() => setShowEditPost(false)}
           isVisible={showEditPost}
           postInfo={post}
+          deletePost={deletePost}
         />
         <PostImages user={user} post={post} deletePost={deletePost} showEditModal={setShowEditPost} />
         <PostInfos post={post} />

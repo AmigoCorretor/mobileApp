@@ -12,6 +12,7 @@ type Props = {
   postInfo: Post,
   isVisible: boolean
   onCancel: any,
+  deletePost: (id: number) => void
 }
 
 export const EditPost = (props: Props) => {
@@ -220,6 +221,16 @@ export const EditPost = (props: Props) => {
                 style={styles.cancelButtonIcon}
               />
               <Text>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#F88' }]}
+              onPress={() => {props.deletePost(props.postInfo.id)}}>
+              <MaterialIcons
+                name='delete'
+                size={20}
+                style={styles.cancelButtonIcon}
+              />
+              <Text>Apagar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, validPost ? { backgroundColor: '#8F8' } : { backgroundColor: '#AAA' }]}

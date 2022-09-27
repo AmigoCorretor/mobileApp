@@ -24,7 +24,11 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const { colors } = useTheme()
     const [title, setTitle] = useState('')
-    const [image, setImage] = useState('https://picsum.photos/id/222/300')
+    const [arrayImages, setArrayImages] = useState<string[]>([])
+    const [idCreatedPost, setIdCreatedPost] = useState(0)
+    const [image, setImage] = useState('https://picsum.photos/id/1048/800')
+    const [image1, setImage1] = useState('https://picsum.photos/id/1011/800')
+    const [image2, setImage2] = useState('https://picsum.photos/id/1029/800')
     const [description, setDescription] = useState('')
     const [totalArea, setTotalArea] = useState('')
     const [usefulArea, setUseFulArea] = useState('')
@@ -90,6 +94,21 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         return str.charAt(0).toUpperCase() + str.slice(1)
     }
 
+    const updateUserInfo = async () => {
+        const updatedUser = await (await axios.get(`${server}/users/${user.id}`)).data
+        setUser(updatedUser)
+        showSuccess('Post criado com sucesso!')
+    }
+
+    useEffect(() => {
+        if (idCreatedPost != 0) {
+            arrayImages.forEach(async (imgURL) => {
+                await saveImage(imgURL, idCreatedPost)
+            })
+            updateUserInfo()
+        }
+    }, [idCreatedPost])
+
     useEffect(() => {
         validateInputs()
     })
@@ -116,17 +135,18 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             })
 
             const idNewPost = +res.data.results.id
-
-            const savedImage: Image = await axios.post(`${server}/images`, {
-                link: image,
-                post: idNewPost
-            })
-            const updatedUser = await (await axios.get(`${server}/users/${user.id}`)).data
-            setUser(updatedUser)
-            showSuccess('Post criado com sucesso!')
+            setArrayImages([image, image1, image2])
+            setIdCreatedPost(idNewPost)
         } catch (e) {
             showError(e)
         }
+    }
+
+    const saveImage = async (imageURI: string, postId: number) => {
+        await axios.post(`${server}/images`, {
+            link: imageURI,
+            post: postId
+        })
     }
 
     return (
@@ -152,6 +172,22 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         placeholder='Foto'
                         value={image}
                         onChangeText={setImage}
+                        placeholderTextColor='#333'
+                    />
+                    <AuthInput
+                        icon='photo'
+                        style={styles.inputs}
+                        placeholder='Foto'
+                        value={image1}
+                        onChangeText={setImage1}
+                        placeholderTextColor='#333'
+                    />
+                    <AuthInput
+                        icon='photo'
+                        style={styles.inputs}
+                        placeholder='Foto'
+                        value={image2}
+                        onChangeText={setImage2}
                         placeholderTextColor='#333'
                     />
                     <AuthInput
