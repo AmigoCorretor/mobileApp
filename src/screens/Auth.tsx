@@ -37,31 +37,35 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       toValue: { x: 0, y: 0 },
       useNativeDriver: false
     }).start()
-  }, [])
+  })
 
   useEffect(() => {
-    // console.log('effect', loggedUser)
-    // if (!loggedUser) {
-    //   console.log('not logged')
-    //   navigation.addListener('beforeRemove', (e) => {
-    //     console.log('preveniu')
-    //     e.preventDefault()
-    //     console.log(e)
+    console.log('effect')
+    navigation.addListener('beforeRemove', (e) => {
+      console.log('event')
+      if (loggedUser) {
+        console.log('Logged')
+        // navigation.dispatch(e.data.action)
+        return
+      }
+      console.log('preveniu')
+      e.preventDefault()
 
-    //   })
-    // } else {
-    //   navigation.navigate('Home', { screen: 'Feed' })
-    // }
-    // navigation.addListener('beforeRemove', (e) => {
-    //   if (!loggedUser) {
-    //     console.warn('logando')
-    //     navigation.dispatch(e.data.action)
-    //     // navigation.navigate('Home', { screen: 'Feed' })
-    //     return
-    //   } else {
-    //     e.preventDefault()
-    //   }
-    // })
+      // Alert.alert(
+      //   'Sair?',
+      //   'You have unsaved changes. Are you sure to discard them and leave the screen?',
+      //   [
+      //     { text: "Não sair", style: 'cancel', onPress: () => { } },
+      //     {
+      //       text: 'Sair',
+      //       style: 'destructive',
+      //       // If the user confirmed, then we dispatch the action we blocked earlier
+      //       // This will continue the action that had triggered the removal of the screen
+      //       onPress: () => navigation.dispatch(e.data.action),
+      //     },
+      //   ]
+      // )
+    })
   }, [loggedUser])
 
   const loginOrSignup = () => {

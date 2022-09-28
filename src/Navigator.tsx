@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { CompositeScreenProps, NavigationContainer, useTheme } from '@react-navigation/native'
+import React, { useState, useEffect, useContext } from 'react'
+import { NavigationContainer, useTheme } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack'
 import { Auth } from './screens/Auth'
 import { Feed } from './screens/Feed'
-import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigatorScreenParams } from '@react-navigation/native'
 import { DefaultTheme, DarkTheme } from '@react-navigation/native'
-import { StatusBar, useColorScheme } from 'react-native'
+import { Alert, StatusBar, useColorScheme } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Profile } from './screens/Profile'
 import { Search } from './screens/Search'
 import { Publication } from './screens/Publication'
-import AuthProvider, { Post, User } from './contexts/AuthContext'
+import AuthProvider, { AuthContext, Post, User } from './contexts/AuthContext'
 import { Post as PostScreen } from './screens/Post'
 import { AuthOrApp } from './screens/AuthOrApp'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -82,6 +83,39 @@ const HomeScreen = ({
   navigation,
   route,
 }: NativeStackScreenProps<StackParamList, 'Home'>) => {
+  const { user, loggedUser, setLoggedUser } = useContext(AuthContext)
+
+  useEffect(() => {
+    console.log('effect')
+    navigation.addListener('beforeRemove', (e) => {
+      console.log('event')
+      if (!loggedUser) {
+        console.log('not logged')
+        // navigation.dispatch(e.data.action)
+        return
+      }
+      console.log('preveniu')
+      e.preventDefault()
+
+      Alert.alert(
+        'Sair?',
+        'Deseja sair da sua conta?',
+        [
+          { text: "Não sair", style: 'cancel', onPress: () => { } },
+          {
+            text: 'Sair',
+            style: 'destructive',
+            onPress: async () => {
+              await AsyncStorage.removeItem('userData')
+              setLoggedUser('')
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ]
+      )
+    })
+  }, [loggedUser, navigation])
+
   return (
     <BottomTab.Navigator
       initialRouteName="Feed"

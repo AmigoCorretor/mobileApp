@@ -15,7 +15,6 @@ export const AuthOrApp: React.FC<AuthScreenProps> = ({ navigation }) => {
   const { user, setUser, setLoggedUser } = useContext(AuthContext)
   useEffect(() => {
     const getData = async () => {
-      setLoggedUser('')
       const userDataJson = await AsyncStorage.getItem('userData')
       let userData = null
       try {
