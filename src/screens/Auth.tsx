@@ -40,15 +40,11 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   })
 
   useEffect(() => {
-    console.log('effect')
     navigation.addListener('beforeRemove', (e) => {
-      console.log('event')
       if (loggedUser) {
-        console.log('Logged')
         // navigation.dispatch(e.data.action)
         return
       }
-      console.log('preveniu')
       e.preventDefault()
 
       // Alert.alert(
