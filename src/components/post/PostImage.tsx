@@ -3,6 +3,7 @@ import { Animated, Dimensions, Image, Platform, StyleSheet, Text, TouchableOpaci
 import { useTheme } from '@react-navigation/native'
 import { Post, User } from '../../contexts/AuthContext'
 import { MaterialIcons } from '@expo/vector-icons'
+import { UserBadge } from '../feed/UserBadge'
 
 type Props = {
   user: User,
@@ -59,7 +60,7 @@ export const PostImages: React.FC<Props> = ({ user, post, deletePost, showEditMo
   return (
     <View>
       <View style={{ width: '100%', height: 100, position: 'absolute', zIndex: 1 }}>
-        <View style={styles.userContainer}>
+        {/* <View style={styles.userContainer}>
           <View>
             <Image
               style={styles.profilePicture}
@@ -71,7 +72,14 @@ export const PostImages: React.FC<Props> = ({ user, post, deletePost, showEditMo
             />
           </View>
           <Text style={styles.name}>{user.name}</Text>
-        </View>
+        </View> */}
+        <UserBadge
+          name={user.name}
+          photo={user.photo}
+          badgeStyle={{
+            top: Platform.OS === 'android' ? 56 : 0
+          }}
+        />
         <TouchableOpacity style={{
           position: 'absolute',
           zIndex: 1,

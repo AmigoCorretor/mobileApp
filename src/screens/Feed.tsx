@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, BackHandler } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, BackHandler, FlatList } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useFocusEffect, useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
@@ -36,8 +36,6 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   //   })
   // }, [loggedUser])
 
-  const post = user.posts[0]
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -58,21 +56,18 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Feed</Text>
-      {/* <Text style={styles.text}>{route.params?.payload.name}</Text> */}
-      {/* <Text>Id: {user.id}</Text>
-      <Text>Nome: {user.name}</Text>
-      <Text>E-mail: {user.email}</Text>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Post', { user, post })}>
-        <Text style={styles.title}>Abrir POST</Text>
-      </TouchableOpacity> */}
-      <FeedPost
-        post={user.posts[0]}
-        navigation={navigation}
-      />
-      <FeedPost
-        post={user.posts[1]}
-        navigation={navigation}
+
+      <FlatList
+        data={user.posts}
+        keyExtractor={(post) => post.id.toString()}
+        renderItem={({ item }) => {
+          return (
+            <FeedPost
+              post={item}
+              navigation={navigation}
+            />
+          )
+        }}
       />
     </SafeAreaView>
   )

@@ -1,24 +1,19 @@
 import React from 'react'
-import { Text, View, StyleSheet, Image } from 'react-native'
+import { Text, View, StyleSheet, Image, StyleProp, ViewStyle } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 
 interface Props {
     name: string
     photo: string
+    badgeStyle?: StyleProp<ViewStyle>
 }
 
-export const UserBadge: React.FC<Props> = ({ name, photo }) => {
+export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle }) => {
 
     const { colors } = useTheme()
 
     const styles = StyleSheet.create({
-        container: {
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            padding: 10
-        },
         icon: {
             color: colors.text,
             fontSize: 25,
@@ -38,25 +33,25 @@ export const UserBadge: React.FC<Props> = ({ name, photo }) => {
             padding: 10,
             width: 150,
             // top: Platform.OS === 'android' ? 56 : 0
-          },
-          name: {
+        },
+        name: {
             fontSize: 20,
             color: colors.text,
-          },
-          profilePicture: {
+        },
+        profilePicture: {
             width: 50,
             height: 50,
             borderRadius: 25,
-          },
-          verifiedIcon: {
+        },
+        verifiedIcon: {
             color: colors.primary,
             position: 'absolute',
             right: 0
-          }
+        }
     })
 
     return (
-        <View style={styles.userContainer}>
+        <View style={[styles.userContainer, badgeStyle]}>
             <View>
                 <Image
                     style={styles.profilePicture}

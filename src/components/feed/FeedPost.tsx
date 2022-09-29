@@ -2,8 +2,8 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Animated, Dimensions, TouchableWithoutFeedback, FlatList } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { AuthContext, Post, User } from '../../contexts/AuthContext'
-import {InfosFooter} from './InfosFooter'
-import { UserBadge} from './UserBadge'
+import { InfosFooter } from './InfosFooter'
+import { UserBadge } from './UserBadge'
 
 
 interface Props {
@@ -16,8 +16,6 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
     const [showLogoutModal, setShowLogoutModal] = useState(false)
     const { user, setUser } = useContext(AuthContext)
     const { width, height } = Dimensions.get('screen')
-
-    const scrollX = useRef(new Animated.Value(0)).current
 
     const imageWidth = width * .5
     const imageHeight = imageWidth * 1
@@ -43,17 +41,21 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
 
         },
         viewHeader: {
-
+            height: 80,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
         },
         viewFooter: {
             width: '100%',
             flexDirection: 'row',
             justifyContent: 'space-around'
         },
-        title:{
+        title: {
             color: colors.text,
             fontSize: 25,
-            
+            maxWidth: '60%'
         },
         imagesContainer: {
 
@@ -62,11 +64,14 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
 
     return (
         <View style={styles.container}>
-            <UserBadge
-                name={user.name}
-                photo={user.photo}
-            />
             <View style={styles.viewHeader}>
+                <UserBadge
+                    name={user.name}
+                    photo={user.photo}
+                    badgeStyle={{
+                        position: 'relative'
+                    }}
+                />
                 <Text style={styles.title}>{post.title} </Text>
             </View>
             <FlatList
@@ -78,7 +83,7 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
                 // )}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
-                pagingEnabled
+                // pagingEnabled
                 renderItem={({ item }) => {
                     return (
                         <View style={{
@@ -109,26 +114,26 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
                 }}
             />
             <View style={styles.viewFooter}>
-              <InfosFooter
-                infos={post.bedrooms.toString()}
-                icon='airline-seat-individual-suite'
-              />
-              <InfosFooter
-                infos={post.suites.toString()}
-                icon='king-bed'
-              />
-              <InfosFooter
-                infos={post.bathrooms.toString()}
-                icon='bathtub'
-              />
-              <InfosFooter
-                infos={post.totalArea.toString()}
-                icon='crop-din'
-              />
-              <InfosFooter
-                infos={post.usefulArea.toString()}
-                icon='aspect-ratio'
-              />
+                <InfosFooter
+                    infos={post.bedrooms.toString()}
+                    icon='airline-seat-individual-suite'
+                />
+                <InfosFooter
+                    infos={post.suites.toString()}
+                    icon='king-bed'
+                />
+                <InfosFooter
+                    infos={post.bathrooms.toString()}
+                    icon='bathtub'
+                />
+                <InfosFooter
+                    infos={post.totalArea.toString()}
+                    icon='crop-din'
+                />
+                <InfosFooter
+                    infos={post.usefulArea.toString()}
+                    icon='aspect-ratio'
+                />
             </View>
         </View>
     )
