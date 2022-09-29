@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { Alert, Animated, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -40,11 +40,15 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   })
 
   useEffect(() => {
+    // console.log('effect')
     navigation.addListener('beforeRemove', (e) => {
+      // console.log('event')
       if (loggedUser) {
-        // navigation.dispatch(e.data.action)
+        // console.log('Logged')
+        navigation.dispatch(e.data.action)
         return
       }
+      // console.log('preveniu')
       e.preventDefault()
 
       // Alert.alert(
@@ -197,106 +201,111 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
   })
 
   return (
-    <Animated.View style={styles.container}>
+    <ScrollView keyboardShouldPersistTaps='handled'
+      contentContainerStyle={[styles.container, { width: '122%' }]}
+    >
       <LinearGradient
         colors={theme.dark ? [colors.primary, '#332657'] : [colors.primary, '#F2F2F2']}
         start={[0.1, 0.1]}
         style={styles.background}
       >
-        <Animated.View style={[styles.container, position.getLayout()]}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <Animated.View style={[styles.container, position.getLayout()]}>
+            <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
+            {stageNew && (
+              <AuthInput
+                icon='person'
+                placeholder='Nome'
+                value={name}
+                style={styles.input}
+                onChangeText={setName}
+                placeholderTextColor='#333'
+              />
+            )}
 
-          <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
-          {stageNew && (
             <AuthInput
-              icon='person'
-              placeholder='Nome'
-              value={name}
+              icon='email'
               style={styles.input}
-              onChangeText={setName}
+              placeholder='E-mail'
+              value={email}
+              onChangeText={setEmail}
               placeholderTextColor='#333'
             />
-          )}
-
-          <AuthInput
-            icon='email'
-            style={styles.input}
-            placeholder='E-mail'
-            value={email}
-            onChangeText={setEmail}
-            placeholderTextColor='#333'
-          />
-          <AuthInput
-            icon='lock'
-            style={styles.input}
-            placeholder='Senha'
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholderTextColor='#333'
-          />
-          {stageNew && (
             <AuthInput
               icon='lock'
-              placeholder='Confirmar senha'
-              value={confirmPassword}
               style={styles.input}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={true}
+              placeholder='Senha'
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
               placeholderTextColor='#333'
             />
-          )}
-          {stageNew && (
-            <View style={styles.switchContainer}>
-              <Text style={styles.text}>Você é corretor?</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: colors.primary }}
-                thumbColor={isRealtor ? '#FFF' : '#AAA'}
-                ios_backgroundColor='#3e3e3e'
-                onValueChange={toggleIsRealtor}
-                value={isRealtor}
+            {stageNew && (
+              <AuthInput
+                icon='lock'
+                placeholder='Confirmar senha'
+                value={confirmPassword}
+                style={styles.input}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={true}
+                placeholderTextColor='#333'
               />
-            </View>
-          )}
-          {(stageNew && isRealtor) && (
-            <AuthInput
-              icon='vpn-key'
-              placeholder='CRECI'
-              value={creci}
-              style={[styles.input, { width: '60%' }]}
-              onChangeText={setCreci}
-              placeholderTextColor='#333'
-              textInputStyle={{ width: '55%' }}
-            />
-          )}
+            )}
+            {stageNew && (
+              <View style={styles.switchContainer}>
+                <Text style={styles.text}>Você é corretor?</Text>
+                <Switch
+                  trackColor={{ false: '#767577', true: colors.primary }}
+                  thumbColor={isRealtor ? '#FFF' : '#AAA'}
+                  ios_backgroundColor='#3e3e3e'
+                  onValueChange={toggleIsRealtor}
+                  value={isRealtor}
+                />
+              </View>
+            )}
+            {(stageNew && isRealtor) && (
+              <AuthInput
+                icon='vpn-key'
+                placeholder='CRECI'
+                value={creci}
+                style={[styles.input, { width: '60%' }]}
+                onChangeText={setCreci}
+                placeholderTextColor='#333'
+                textInputStyle={{ width: '55%' }}
+              />
+            )}
 
-          <TouchableOpacity
-            onPress={loginOrSignup}
-            disabled={!validForm}>
-            <View
-              style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
-              <MaterialIcons
-                name='login'
-                size={20}
-                color='#FFF'
-                style={styles.buttonIcon}
-                solid
-              />
+            <TouchableOpacity
+              onPress={loginOrSignup}
+              disabled={!validForm}>
+              <View
+                style={[styles.button, validForm ? {} : { backgroundColor: '#AAA' }]}>
+                <MaterialIcons
+                  name='login'
+                  size={20}
+                  color='#FFF'
+                  style={styles.buttonIcon}
+                  solid
+                />
+                <Text style={styles.buttonText}>
+                  {stageNew ? 'Registrar' : 'Entrar'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{ padding: 10 }}
+              onPress={() => setStageNew(!stageNew)}>
               <Text style={styles.buttonText}>
-                {stageNew ? 'Registrar' : 'Entrar'}
+                {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
               </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ padding: 10 }}
-            onPress={() => setStageNew(!stageNew)}>
-            <Text style={styles.buttonText}>
-              {stageNew ? 'Já possui conta? Fazer login' : 'Criar nova conta'}
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
+            </TouchableOpacity>
+          </Animated.View>
+        </KeyboardAvoidingView>
       </LinearGradient>
-    </Animated.View>
+    </ScrollView>
   )
 
 }

@@ -86,11 +86,15 @@ const HomeScreen = ({
   const { user, loggedUser, setLoggedUser } = useContext(AuthContext)
 
   useEffect(() => {
+    // console.log('effect')
     navigation.addListener('beforeRemove', (e) => {
+      // console.log('event')
       if (!loggedUser) {
+        // console.log('not logged')
         // navigation.dispatch(e.data.action)
         return
       }
+      // console.log('preveniu')
       e.preventDefault()
 
       Alert.alert(
