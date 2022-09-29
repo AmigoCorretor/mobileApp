@@ -66,9 +66,14 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
         onPress={() => navigation.navigate('Post', { user, post })}>
         <Text style={styles.title}>Abrir POST</Text>
       </TouchableOpacity> */}
-      {/* <FeedPost
-        post={post}
-      /> */}
+      <FeedPost
+        post={user.posts[0]}
+        navigation={navigation}
+      />
+      <FeedPost
+        post={user.posts[1]}
+        navigation={navigation}
+      />
     </SafeAreaView>
   )
 }
