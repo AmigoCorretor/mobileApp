@@ -2,8 +2,10 @@ import React, { useContext, useState, useEffect } from "react"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, useTheme } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, ScrollView } from "react-native"
+import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, ScrollView, Dimensions, Alert } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons'
+import MapView, { Marker } from 'react-native-maps'
+import * as Location from 'expo-location'
 
 import { AuthInput } from '../components/AuthInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
@@ -18,6 +20,13 @@ type PublicationScreenNavigationProp = CompositeScreenProps<
 interface NewPostResponse {
     message: string,
     results: Post
+}
+
+interface Region {
+    latitude: number,
+    longitude: number,
+    latitudeDelta: number,
+    longitudeDelta: number
 }
 
 export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
@@ -37,11 +46,15 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [suites, setSuites] = useState('')
     const [validPost, setValidPost] = useState(false)
 
+    const [region, setRegion] = useState<Region>()
+    // const [marcadores, setMarcadores] = useState([])
+
     const { user, setUser } = useContext(AuthContext)
 
     const styles = StyleSheet.create({
         container: {
             alignItems: 'center',
+            flexGrow: 1,
         },
         title: {
             fontSize: 22,
@@ -88,7 +101,34 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         cancelButtonIcon: {
             color: '#333',
         },
+        map: {
+            marginVertical: 10,
+            width: '90%',
+            borderRadius: 16,
+            height: Dimensions.get('window').width/2,
+        }
     })
+
+    useEffect(() => {
+        (async () => {
+            if (Platform.OS !== "web") {
+                const { status } = await Location.requestForegroundPermissionsAsync()
+
+                if (status !== "granted") {
+                    Alert.alert("Insufficient permissions!")
+                    return;
+                }
+            }
+
+            let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest })
+            setRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.0022,
+                longitudeDelta: 0.0421
+            })
+        })()
+    }, [])
 
     const capitalize = (str: string) => {
         return str.charAt(0).toUpperCase() + str.slice(1)
@@ -151,9 +191,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     return (
         <SafeAreaView>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            >
                 <ScrollView keyboardShouldPersistTaps='handled'
                     contentContainerStyle={styles.container}
                 >
@@ -242,6 +279,26 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                             placeholderTextColor='#333'
                         />
                     </View>
+                    <MapView
+                        style={styles.map}
+                        region={region}
+                        zoomEnabled={true}
+                        minZoomLevel={15}
+                        maxZoomLevel={19}
+                        showsUserLocation={true}
+                        loadingEnabled={true}
+                        // onLongPress={(e) => novoMarcador(e)}
+                    >
+                        {/* {marcadores.map(mark => {
+                            return (
+                                <Marker
+                                    key={mark.key}
+                                    coordinate={mark.coords}
+                                    pinColor={mark.pinColor} />
+                            )
+                        })} */}
+
+                    </MapView>
                     <View style={styles.viewButton}>
                         <TouchableOpacity
                             style={[styles.button, { backgroundColor: '#F88' }]}
@@ -266,53 +323,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
-            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         alignItems: 'center',
-//     },
-//     viewNumberInputData: {
-//         flexDirection: 'row',
-//         flexWrap: 'wrap',
-//         justifyContent: 'space-between',
-//         width: '90%',
-//         alignItems: 'center'
-//     },
-//     infosInputData:{
-//         color:
-//     },
-//     numberInputData: {
-//         width: 150,
-//         borderRadius: 5,
-//         marginVertical: 10
-//     },
-//     viewButton: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-around',
-//         width: '80%',
-//     },
-//     inputs: {
-//         marginVertical: 10,
-//         borderRadius: 5,
-//         width: '90%'
-//     },
-//     button: {
-//         width: 100,
-//         backgroundColor: '#fff',
-//         flexDirection: 'row',
-//         alignItems: 'center',
-//         justifyContent: 'space-around',
-//         padding: 10,
-//         borderRadius: 8,
-//     },
-//     cancelButtonIcon: {
-//         color: '#333',
-//     },
-// })
-
-
-
