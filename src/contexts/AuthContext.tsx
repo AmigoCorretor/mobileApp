@@ -25,6 +25,11 @@ export interface Post {
   user?: number
   images: Image[]
   favorites?: Favorite[]
+  type?: string
+  sellOrRent?: string
+  price?: number
+  latitude?: number
+  longitude?: number
 }
 export interface User {
   id: number

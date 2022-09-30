@@ -47,7 +47,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [validPost, setValidPost] = useState(false)
 
     const [region, setRegion] = useState<Region>()
-    // const [marcadores, setMarcadores] = useState([])
+    const [marker, setMarker] = useState<any>([])
 
     const { user, setUser } = useContext(AuthContext)
 
@@ -105,7 +105,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             marginVertical: 10,
             width: '90%',
             borderRadius: 16,
-            height: Dimensions.get('window').width/2,
+            height: Dimensions.get('window').width / 2,
         }
     })
 
@@ -120,7 +120,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 }
             }
 
-            let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest })
+            let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
             setRegion({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
@@ -129,6 +129,26 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             })
         })()
     }, [])
+
+    const newMarker = (e: any) => {
+        let data = {
+            key: marker.length,
+            coords: {
+                latitude: e.nativeEvent.coordinate.latitude,
+                longitude: e.nativeEvent.coordinate.longitude,
+            },
+            pinColor: colors.primary
+        }
+
+        setRegion({
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude,
+            latitudeDelta: 0.0022,
+            longitudeDelta: 0.0421
+        })
+
+        setMarker(data)
+    }
 
     const capitalize = (str: string) => {
         return str.charAt(0).toUpperCase() + str.slice(1)
@@ -163,7 +183,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const saveNewPost = async () => {
         try {
-            const res = await axios.post<NewPostResponse>(`${server}/posts`, {
+            const newPost = {
                 title: capitalize(title),
                 description: capitalize(description),
                 totalArea: +totalArea,
@@ -171,8 +191,15 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 bathrooms: +bathrooms,
                 bedrooms: +bedrooms,
                 suites: +suites,
-                user: user.id
-            })
+                available: true,
+                user: user.id,
+                // type,
+                // sellOrRent,
+                // price,
+                latitude: marker.coords ? marker.coords.latitude : null,
+                longitude: marker.coords ? marker.coords.longitude : null
+            }
+            const res = await axios.post<NewPostResponse>(`${server}/posts`, newPost)
 
             const idNewPost = +res.data.results.id
             setArrayImages([image, image1, image2])
@@ -191,138 +218,136 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     return (
         <SafeAreaView>
-                <ScrollView keyboardShouldPersistTaps='handled'
-                    contentContainerStyle={styles.container}
+            <ScrollView keyboardShouldPersistTaps='handled'
+                contentContainerStyle={styles.container}
+            >
+                <Text style={styles.title}>Nova Publicação</Text>
+                <Text style={styles.title}>{marker.coords ? marker.coords.latitude : null}</Text>
+                <Text style={styles.title}>{marker.coords ? marker.coords.longitude : null}</Text>
+                <AuthInput
+                    icon='title'
+                    style={styles.inputs}
+                    placeholder='Título'
+                    value={title}
+                    onChangeText={setTitle}
+                    placeholderTextColor='#333'
+                />
+                <AuthInput
+                    icon='photo'
+                    style={styles.inputs}
+                    placeholder='Foto'
+                    value={image}
+                    onChangeText={setImage}
+                    placeholderTextColor='#333'
+                />
+                <AuthInput
+                    icon='photo'
+                    style={styles.inputs}
+                    placeholder='Foto'
+                    value={image1}
+                    onChangeText={setImage1}
+                    placeholderTextColor='#333'
+                />
+                <AuthInput
+                    icon='photo'
+                    style={styles.inputs}
+                    placeholder='Foto'
+                    value={image2}
+                    onChangeText={setImage2}
+                    placeholderTextColor='#333'
+                />
+                <AuthInput
+                    icon='description'
+                    style={styles.inputs}
+                    placeholder='Descrição'
+                    value={description}
+                    onChangeText={setDescription}
+                    placeholderTextColor='#333'
+                />
+
+                <View style={styles.viewNumberInputData}>
+                    <Text style={[styles.numberInputData, styles.adicitionalInfosInputData]}>Informações Adicionais:</Text>
+                    <AuthInput
+                        icon='crop-din'
+                        style={styles.numberInputData}
+                        placeholder='Área total'
+                        value={totalArea}
+                        onChangeText={setTotalArea}
+                        placeholderTextColor='#333'
+                    />
+                    <AuthInput
+                        icon='aspect-ratio'
+                        style={styles.numberInputData}
+                        placeholder='Área útil'
+                        value={usefulArea}
+                        onChangeText={setUseFulArea}
+                        placeholderTextColor='#333'
+                    />
+                    <AuthInput
+                        icon='bathtub'
+                        style={styles.numberInputData}
+                        placeholder='Banheiro(s)'
+                        value={bathrooms}
+                        onChangeText={setBathrooms}
+                        placeholderTextColor='#333'
+                    />
+                    <AuthInput
+                        icon='airline-seat-individual-suite'
+                        style={styles.numberInputData}
+                        placeholder='Quarto(s)'
+                        value={bedrooms}
+                        onChangeText={setBedrooms}
+                        placeholderTextColor='#333'
+                    />
+                    <AuthInput
+                        icon='king-bed'
+                        style={styles.numberInputData}
+                        placeholder='Suítes'
+                        value={suites}
+                        onChangeText={setSuites}
+                        placeholderTextColor='#333'
+                    />
+                </View>
+                <MapView
+                    style={styles.map}
+                    region={region}
+                    zoomEnabled={true}
+                    minZoomLevel={15}
+                    maxZoomLevel={19}
+                    showsUserLocation={true}
+                    loadingEnabled={true}
+                    onLongPress={(e) => newMarker(e)}
                 >
-                    <Text style={styles.title}>Nova Publicação</Text>
-                    <AuthInput
-                        icon='title'
-                        style={styles.inputs}
-                        placeholder='Título'
-                        value={title}
-                        onChangeText={setTitle}
-                        placeholderTextColor='#333'
-                    />
-                    <AuthInput
-                        icon='photo'
-                        style={styles.inputs}
-                        placeholder='Foto'
-                        value={image}
-                        onChangeText={setImage}
-                        placeholderTextColor='#333'
-                    />
-                    <AuthInput
-                        icon='photo'
-                        style={styles.inputs}
-                        placeholder='Foto'
-                        value={image1}
-                        onChangeText={setImage1}
-                        placeholderTextColor='#333'
-                    />
-                    <AuthInput
-                        icon='photo'
-                        style={styles.inputs}
-                        placeholder='Foto'
-                        value={image2}
-                        onChangeText={setImage2}
-                        placeholderTextColor='#333'
-                    />
-                    <AuthInput
-                        icon='description'
-                        style={styles.inputs}
-                        placeholder='Descrição'
-                        value={description}
-                        onChangeText={setDescription}
-                        placeholderTextColor='#333'
-                    />
+                    <Marker
+                        key={marker.key}
+                        coordinate={marker.coords}
+                        pinColor={marker.pinColor} />
 
-                    <View style={styles.viewNumberInputData}>
-                        <Text style={[styles.numberInputData, styles.adicitionalInfosInputData]}>Informações Adicionais:</Text>
-                        <AuthInput
-                            icon='crop-din'
-                            style={styles.numberInputData}
-                            placeholder='Área total'
-                            value={totalArea}
-                            onChangeText={setTotalArea}
-                            placeholderTextColor='#333'
+                </MapView>
+                <View style={styles.viewButton}>
+                    <TouchableOpacity
+                        style={[styles.button, { backgroundColor: '#F88' }]}
+                        onPress={() => { }}>
+                        <MaterialIcons
+                            name='cancel'
+                            size={20}
+                            style={styles.cancelButtonIcon}
                         />
-                        <AuthInput
-                            icon='aspect-ratio'
-                            style={styles.numberInputData}
-                            placeholder='Área útil'
-                            value={usefulArea}
-                            onChangeText={setUseFulArea}
-                            placeholderTextColor='#333'
+                        <Text>Cancelar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, validPost ? { backgroundColor: '#8F8' } : { backgroundColor: '#AAA' }]}
+                        onPress={saveNewPost}
+                        disabled={!validPost}>
+                        <MaterialIcons
+                            name='save'
+                            size={20}
+                            style={styles.cancelButtonIcon}
                         />
-                        <AuthInput
-                            icon='bathtub'
-                            style={styles.numberInputData}
-                            placeholder='Banheiro(s)'
-                            value={bathrooms}
-                            onChangeText={setBathrooms}
-                            placeholderTextColor='#333'
-                        />
-                        <AuthInput
-                            icon='airline-seat-individual-suite'
-                            style={styles.numberInputData}
-                            placeholder='Quarto(s)'
-                            value={bedrooms}
-                            onChangeText={setBedrooms}
-                            placeholderTextColor='#333'
-                        />
-                        <AuthInput
-                            icon='king-bed'
-                            style={styles.numberInputData}
-                            placeholder='Suítes'
-                            value={suites}
-                            onChangeText={setSuites}
-                            placeholderTextColor='#333'
-                        />
-                    </View>
-                    <MapView
-                        style={styles.map}
-                        region={region}
-                        zoomEnabled={true}
-                        minZoomLevel={15}
-                        maxZoomLevel={19}
-                        showsUserLocation={true}
-                        loadingEnabled={true}
-                        // onLongPress={(e) => novoMarcador(e)}
-                    >
-                        {/* {marcadores.map(mark => {
-                            return (
-                                <Marker
-                                    key={mark.key}
-                                    coordinate={mark.coords}
-                                    pinColor={mark.pinColor} />
-                            )
-                        })} */}
-
-                    </MapView>
-                    <View style={styles.viewButton}>
-                        <TouchableOpacity
-                            style={[styles.button, { backgroundColor: '#F88' }]}
-                            onPress={() => { }}>
-                            <MaterialIcons
-                                name='cancel'
-                                size={20}
-                                style={styles.cancelButtonIcon}
-                            />
-                            <Text>Cancelar</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.button, validPost ? { backgroundColor: '#8F8' } : { backgroundColor: '#AAA' }]}
-                            onPress={saveNewPost}
-                            disabled={!validPost}>
-                            <MaterialIcons
-                                name='save'
-                                size={20}
-                                style={styles.cancelButtonIcon}
-                            />
-                            <Text>Salvar</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                        <Text>Salvar</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
