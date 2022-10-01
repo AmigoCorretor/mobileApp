@@ -13,20 +13,15 @@ interface Props {
 
 export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
     const { colors } = useTheme()
-    const [showLogoutModal, setShowLogoutModal] = useState(false)
-    const { user, setUser } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const { width, height } = Dimensions.get('screen')
 
     const imageWidth = width * .5
     const imageHeight = imageWidth * 1
 
-    //   const handleOpenPost = (post: Post) => {
-    //     navigation.navigate('Post', { user, post })
-    //   }
-
     const styles = StyleSheet.create({
         container: {
-            width: '98%',
+            width: '100%',
             alignItems: 'center',
             backgroundColor: 'rgba(0, 0, 0, 0.35)',
             marginVertical: 10,
@@ -77,24 +72,12 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
             <FlatList
                 contentContainerStyle={styles.imagesContainer}
                 data={post.images}
-                // onScroll={Animated.event(
-                //     [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                //     { useNativeDriver: true }
-                // )}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
-                // pagingEnabled
                 renderItem={({ item }) => {
                     return (
                         <View style={{
                             justifyContent: 'center', alignItems: 'center',
-                            // shadowColor: '#000',
-                            // shadowOpacity: .5,
-                            // shadowOffset: {
-                            //     width: 0,
-                            //     height: 0
-                            // },
-                            // shadowRadius: 20
                         }}>
                             <TouchableWithoutFeedback
                                 onPress={() => navigation.navigate('Post', { user, post })}
