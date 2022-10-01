@@ -29,6 +29,15 @@ interface Region {
     longitudeDelta: number
 }
 
+interface Marker {
+    key: 0,
+    coords: {
+        latitude: number,
+        longitude: number,
+    },
+    pinColor: string
+}
+
 export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const { colors } = useTheme()
@@ -47,7 +56,14 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [validPost, setValidPost] = useState(false)
 
     const [region, setRegion] = useState<Region>()
-    const [marker, setMarker] = useState<any>([])
+    const [marker, setMarker] = useState<Marker>({
+        key: 0,
+        coords: {
+            latitude: 0,
+            longitude: 0,
+        },
+        pinColor: colors.primary
+    })
 
     const { user, setUser } = useContext(AuthContext)
 
@@ -131,8 +147,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     }, [])
 
     const newMarker = (e: any) => {
-        let data = {
-            key: marker.length,
+        let data: Marker = {
+            key: 0,
             coords: {
                 latitude: e.nativeEvent.coordinate.latitude,
                 longitude: e.nativeEvent.coordinate.longitude,
@@ -222,8 +238,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 contentContainerStyle={styles.container}
             >
                 <Text style={styles.title}>Nova Publicação</Text>
-                <Text style={styles.title}>{marker.coords ? marker.coords.latitude : null}</Text>
-                <Text style={styles.title}>{marker.coords ? marker.coords.longitude : null}</Text>
                 <AuthInput
                     icon='title'
                     style={styles.inputs}
@@ -312,7 +326,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     style={styles.map}
                     region={region}
                     zoomEnabled={true}
-                    minZoomLevel={15}
+                    // minZoomLevel={15}
                     maxZoomLevel={19}
                     showsUserLocation={true}
                     loadingEnabled={true}
