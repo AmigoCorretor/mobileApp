@@ -52,9 +52,17 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
             fontSize: 25,
             maxWidth: '60%'
         },
+        infosTextView: {
+            justifyContent: 'space-around',
+            flexDirection: 'row',
+            width: '100%',
+        },
+        infosText:{
+            color: colors.text
+        },
         imagesContainer: {
 
-        }
+        },
     })
 
     return (
@@ -96,6 +104,11 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
                     )
                 }}
             />
+            <View style={styles.infosTextView}>
+                <Text style={styles.infosText}>{post.price} </Text>
+                <Text style={styles.infosText}>{post.type} </Text>
+            </View>
+
             <View style={styles.viewFooter}>
                 <InfosFooter
                     infos={post.bedrooms.toString()}
