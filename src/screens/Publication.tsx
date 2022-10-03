@@ -2,16 +2,17 @@ import React, { useContext, useState, useEffect } from "react"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, useTheme } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, ScrollView, Dimensions, Alert } from "react-native"
+import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, Platform, ScrollView, Dimensions, Alert } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons'
 import MapView, { Marker } from 'react-native-maps'
 import * as Location from 'expo-location'
+import { Picker } from '@react-native-picker/picker'
 
 import { AuthInput } from '../components/AuthInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
 import axios from "axios"
 import { server, showError, showSuccess } from "../common"
-import { AuthContext, Image, Post } from "../contexts/AuthContext"
+import { AuthContext, Post } from "../contexts/AuthContext"
 
 type PublicationScreenNavigationProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabParamList, 'Publication'>,
@@ -38,6 +39,7 @@ interface Marker {
     pinColor: string
 }
 
+
 export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const { colors } = useTheme()
@@ -54,6 +56,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [bedrooms, setBedrooms] = useState('')
     const [suites, setSuites] = useState('')
     const [validPost, setValidPost] = useState(false)
+    const [price, setPrice] = useState(0)
+    const [type, setType] = useState('')
+    const [sellOrRent, setSellOrRent] = useState('')
 
     const [region, setRegion] = useState<Region>()
     const [marker, setMarker] = useState<Marker>({
@@ -122,7 +127,12 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             width: '90%',
             borderRadius: 16,
             height: Dimensions.get('window').width / 2,
-        }
+        },
+        picker:{
+            marginVertical: 10,
+            borderRadius: 5,
+            width: '50%',                            
+        },
     })
 
     useEffect(() => {
@@ -209,9 +219,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 suites: +suites,
                 available: true,
                 user: user.id,
-                // type,
-                // sellOrRent,
-                // price,
+                type,
+                sellOrRent,
+                price,
                 latitude: marker.coords ? marker.coords.latitude : null,
                 longitude: marker.coords ? marker.coords.longitude : null
             }
@@ -278,7 +288,23 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     onChangeText={setDescription}
                     placeholderTextColor='#333'
                 />
-
+                <Text>Tipo de imóvel:</Text>
+                <Picker style={styles.picker}
+                    selectedValue={type}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setType(itemValue)
+                    }>
+                    <Picker.Item label="" value="" />
+                    <Picker.Item label="Casa" value="Casa" />
+                    <Picker.Item label="Apartamento" value="Apartamento" />
+                    <Picker.Item label="Terreno" value="Terreno" />
+                    <Picker.Item label="Sítio" value="Sítio" />
+                    <Picker.Item label="Kitnet" value="Kitnet" />
+                    <Picker.Item label="Quarto" value="Quarto" />
+                    <Picker.Item label="Galpão" value="Galpão" />
+                    <Picker.Item label="Sala comercial" value="Sala comercial" />
+                    <Picker.Item label="Studio" value="Studio" />
+                </Picker>
                 <View style={styles.viewNumberInputData}>
                     <Text style={[styles.numberInputData, styles.adicitionalInfosInputData]}>Informações Adicionais:</Text>
                     <AuthInput
@@ -321,6 +347,22 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         onChangeText={setSuites}
                         placeholderTextColor='#333'
                     />
+                    <AuthInput
+                        icon='money'
+                        style={styles.numberInputData}
+                        placeholder='Preço'
+                        value={price.toString()}
+                        onChangeText={setPrice}
+                        placeholderTextColor='#333'
+                    />
+                    {/* <AuthInput
+                        icon='shopping-cart'
+                        style={styles.numberInputData}
+                        placeholder='Venda/Aluguel'
+                        value={sellOrRent}
+                        onChangeText={setSellOrRent}
+                        placeholderTextColor='#333'
+                    /> */}
                 </View>
                 <MapView
                     style={styles.map}
