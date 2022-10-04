@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, useTheme } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, Platform, ScrollView, Dimensions, Alert, Image, FlatList } from "react-native"
+import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, Platform, ScrollView, Dimensions, Alert, Image, FlatList, ActionSheetIOS } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons'
 import MapView, { Marker } from 'react-native-maps'
 import * as Location from 'expo-location'
@@ -57,7 +57,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [bedrooms, setBedrooms] = useState('')
     const [suites, setSuites] = useState('')
     const [validPost, setValidPost] = useState(false)
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState<number | undefined>()
     const [type, setType] = useState('')
     const [sellOrRent, setSellOrRent] = useState('')
     const [imagePickerArray, setImagePickerArray] = useState<string[]>()
@@ -91,7 +91,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             width: '90%',
             alignItems: 'center'
         },
-        adicitionalInfosInputData: {
+        aditionalInfosInputData: {
             color: colors.text,
             fontSize: 17,
             textAlign: 'center'
@@ -133,7 +133,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         picker: {
             marginVertical: 10,
             borderRadius: 5,
-            width: '50%',
+            width: 150,
+            backgroundColor: colors.text
         },
         selectionImageButton: {
             backgroundColor: 'silver',
@@ -147,6 +148,18 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             height: 200,
             marginHorizontal: 10,
             borderRadius: 16
+        },
+        iosPickerButton: {
+            backgroundColor: '#EEE',
+            width: 150,
+            height: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 5,
+            marginVertical: 10
+        },
+        iosPickerText: {
+            color: '#333',
         }
     })
 
@@ -218,6 +231,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         const validations: boolean[] = []
         validations.push(title.length > 0)
         validations.push(image.length > 0)
+        validations.push(type != '')
+        validations.push(sellOrRent != '')
 
         setValidPost(validations.reduce((total, current) => total && current))
     }
@@ -250,6 +265,25 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         }
     }
 
+    const onCancel = () => {
+        setTitle('')
+        setArrayImages([])
+        setImage('https://picsum.photos/id/1048/800')
+        setImage1('https://picsum.photos/id/1011/800')
+        setImage2('https://picsum.photos/id/1029/800')
+        setDescription('')
+        setTotalArea('')
+        setUseFulArea('')
+        setBathrooms('')
+        setBedrooms('')
+        setSuites('')
+        setValidPost(false)
+        setPrice(undefined)
+        setType('')
+        setSellOrRent('')
+        setImagePickerArray([])
+    }
+
     const saveImage = async (imageURI: string, postId: number) => {
         await axios.post(`${server}/images`, {
             link: imageURI,
@@ -264,7 +298,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             aspect: [4, 3],
             quality: 1,
             allowsMultipleSelection: true
-        });
+        })
 
         if (!result.cancelled) {
             const uriArray = result.selected.map((picture) => {
@@ -274,6 +308,62 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         }
     }
 
+    const actionSheet = () =>
+        ActionSheetIOS.showActionSheetWithOptions(
+            {
+                options: ['Venda', 'Aluguel'],
+                // cancelButtonIndex: 0,
+                userInterfaceStyle: 'dark'
+            },
+            buttonIndex => {
+                if (buttonIndex === 0) {
+                    setSellOrRent('Venda')
+                } else if (buttonIndex === 1) {
+                    setSellOrRent('Aluguel')
+                }
+            }
+        )
+    const actionSheetType = () =>
+        ActionSheetIOS.showActionSheetWithOptions(
+            {
+                options: ['Casa', 'Apartamento', 'Terreno', 'Sítio', 'Kitnet', 'Quarto', 'Galpão', 'Sala comercial', 'Studio'],
+                // cancelButtonIndex: 0,
+                userInterfaceStyle: 'dark'
+            },
+            buttonIndex => {
+                switch (buttonIndex) {
+                    case 0:
+                        setType('Casa')
+                        break
+                    case 1:
+                        setType('Apartamento')
+                        break
+                    case 2:
+                        setType('Terreno')
+                        break
+                    case 3:
+                        setType('Sítio')
+                        break
+                    case 4:
+                        setType('Kitnet')
+                        break
+                    case 5:
+                        setType('Quarto')
+                        break
+                    case 6:
+                        setType('Galpão')
+                        break
+                    case 7:
+                        setType('Sala comercial')
+                        break
+                    case 8:
+                        setType('Studio')
+                        break
+                    default:
+                        break
+                }
+            }
+        )
 
     return (
         <SafeAreaView>
@@ -321,25 +411,53 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     onChangeText={setDescription}
                     placeholderTextColor='#333'
                 />
-                <Text>Tipo de imóvel:</Text>
-                <Picker style={styles.picker}
-                    selectedValue={type}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setType(itemValue)
-                    }>
-                    <Picker.Item label="" value="" />
-                    <Picker.Item label="Casa" value="Casa" />
-                    <Picker.Item label="Apartamento" value="Apartamento" />
-                    <Picker.Item label="Terreno" value="Terreno" />
-                    <Picker.Item label="Sítio" value="Sítio" />
-                    <Picker.Item label="Kitnet" value="Kitnet" />
-                    <Picker.Item label="Quarto" value="Quarto" />
-                    <Picker.Item label="Galpão" value="Galpão" />
-                    <Picker.Item label="Sala comercial" value="Sala comercial" />
-                    <Picker.Item label="Studio" value="Studio" />
-                </Picker>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
+                    <Text style={[styles.numberInputData, styles.aditionalInfosInputData]}>Tipo de imóvel:</Text>
+                    {
+                        Platform.OS === 'android' ? (
+                            <Picker
+                                style={styles.picker}
+                                selectedValue={type}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setType(itemValue)
+                                }>
+                                <Picker.Item label="Casa" value="Casa" />
+                                <Picker.Item label="Apartamento" value="Apartamento" />
+                                <Picker.Item label="Terreno" value="Terreno" />
+                                <Picker.Item label="Sítio" value="Sítio" />
+                                <Picker.Item label="Kitnet" value="Kitnet" />
+                                <Picker.Item label="Quarto" value="Quarto" />
+                                <Picker.Item label="Galpão" value="Galpão" />
+                                <Picker.Item label="Sala comercial" value="Sala comercial" />
+                                <Picker.Item label="Studio" value="Studio" />
+                            </Picker>
+                        ) : (
+                            <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                                <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                            </TouchableOpacity>
+                        )
+                    }
+                </View>
+
                 <View style={styles.viewNumberInputData}>
-                    <Text style={[styles.numberInputData, styles.adicitionalInfosInputData]}>Informações Adicionais:</Text>
+                    <Text style={[styles.numberInputData, styles.aditionalInfosInputData]}>Venda/Aluguel:</Text>
+                    {
+                        Platform.OS === 'android' ? (
+                            <Picker
+                                style={[styles.picker]}
+                                selectedValue={sellOrRent}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setSellOrRent(itemValue)
+                                }>
+                                <Picker.Item label="Venda" value="Venda" />
+                                <Picker.Item label="Aluguel" value="Aluguel" />
+                            </Picker>
+                        ) : (
+                            <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                                <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                     <AuthInput
                         icon='crop-din'
                         style={styles.numberInputData}
@@ -381,10 +499,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         placeholderTextColor='#333'
                     />
                     <AuthInput
-                        icon='money'
+                        icon='attach-money'
                         style={styles.numberInputData}
                         placeholder='Preço'
-                        value={price.toString()}
+                        value={price ? price.toString() : undefined}
                         onChangeText={setPrice}
                         placeholderTextColor='#333'
                     />
@@ -433,7 +551,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 <View style={styles.viewButton}>
                     <TouchableOpacity
                         style={[styles.button, { backgroundColor: '#F88' }]}
-                        onPress={() => { }}>
+                        onPress={onCancel}>
                         <MaterialIcons
                             name='cancel'
                             size={20}

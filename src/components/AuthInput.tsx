@@ -7,7 +7,7 @@ type Props = {
   style: object
   textInputStyle?: object
   placeholder: string
-  value: string
+  value: string | undefined
   onChangeText: any
   secureTextEntry?: boolean
   placeholderTextColor?: string
