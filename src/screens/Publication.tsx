@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, useTheme } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, Platform, ScrollView, Dimensions, Alert, Image } from "react-native"
+import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, Platform, ScrollView, Dimensions, Alert, Image, FlatList } from "react-native"
 import { MaterialIcons } from '@expo/vector-icons'
 import MapView, { Marker } from 'react-native-maps'
 import * as Location from 'expo-location'
@@ -60,7 +60,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [price, setPrice] = useState(0)
     const [type, setType] = useState('')
     const [sellOrRent, setSellOrRent] = useState('')
-    const [image4, setImage4] = useState([''])
+    const [imagePickerArray, setImagePickerArray] = useState<string[]>()
 
     const [region, setRegion] = useState<Region>()
     const [marker, setMarker] = useState<Marker>({
@@ -141,12 +141,13 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             padding: 10,
             borderRadius: 10,
             marginTop: 30
-          },
-          img: {
-            width: '95%',//Dimensions.get(window).width - 30,
-            height: 500,
-            marginHorizontal: 30
-          }
+        },
+        img: {
+            width: 200,//Dimensions.get(window).width - 30,
+            height: 200,
+            marginHorizontal: 10,
+            borderRadius: 16
+        }
     })
 
     useEffect(() => {
@@ -262,14 +263,14 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             // allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-            allowsMultipleSelection:true
+            allowsMultipleSelection: true
         });
 
         if (!result.cancelled) {
             const uriArray = result.selected.map((picture) => {
                 return picture.uri
             })
-            setImage4(uriArray);
+            setImagePickerArray(uriArray);
         }
     }
 
@@ -387,21 +388,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         onChangeText={setPrice}
                         placeholderTextColor='#333'
                     />
-                    {/* <AuthInput
-                        icon='shopping-cart'
-                        style={styles.numberInputData}
-                        placeholder='Venda/Aluguel'
-                        value={sellOrRent}
-                        onChangeText={setSellOrRent}
-                        placeholderTextColor='#333'
-                    /> */}
-                    {image4 &&
-                image4.forEach((imgUri)=> {
-                    return (
-                        <Image source={{ uri: imgUri }} style={styles.img} />
-                    )
-                })
-                }
                 </View>
                 <MapView
                     style={styles.map}
@@ -419,7 +405,26 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         pinColor={marker.pinColor} />
 
                 </MapView>
-                
+
+                <FlatList
+                    data={imagePickerArray}
+                    style={{ width: '90%', borderRadius: 16 }}
+                    horizontal
+                    contentContainerStyle={{ alignItems: 'center' }}
+                    keyExtractor={(img, index) => index.toString()}
+                    renderItem={({ item }) => {
+                        if (item) {
+                            return (
+                                <Image source={{ uri: item }} style={styles.img} />
+                            )
+                        } else {
+                            return (
+                                <></>
+                            )
+                        }
+                    }}
+                />
+
                 <TouchableOpacity
                     style={styles.selectionImageButton}
                     onPress={selectImage}>
