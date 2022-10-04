@@ -42,23 +42,25 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
             alignItems: 'center',
             justifyContent: 'space-between'
         },
-        viewFooter: {
+        footerContainer: {
             width: '100%',
             flexDirection: 'row',
-            justifyContent: 'space-around'
+            justifyContent: 'space-around',
         },
         title: {
             color: colors.text,
             fontSize: 25,
             maxWidth: '60%'
         },
-        infosTextView: {
+        infosTextContainer: {
             justifyContent: 'space-around',
             flexDirection: 'row',
             width: '100%',
+            marginVertical: 10,
         },
-        infosText:{
-            color: colors.text
+        infosText: {
+            color: colors.text,
+            fontSize: 25,
         },
         imagesContainer: {
 
@@ -79,37 +81,34 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
             </View>
             <FlatList
                 contentContainerStyle={styles.imagesContainer}
+                style={{ borderRadius: 16 }}
                 data={post.images}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
                 renderItem={({ item }) => {
                     return (
-                        <View style={{
-                            justifyContent: 'center', alignItems: 'center',
-                        }}>
-                            <TouchableWithoutFeedback
-                                onPress={() => navigation.navigate('Post', { user, post })}
-                            >
-                                <Image
-                                    source={{ uri: item.link }}
-                                    style={{
-                                        width: imageWidth,
-                                        height: imageHeight,
-                                        resizeMode: 'cover',
-                                        borderRadius: 16,
-                                        margin: 5
-                                    }} />
-                            </TouchableWithoutFeedback>
-                        </View>
+                        <TouchableWithoutFeedback
+                            onPress={() => navigation.navigate('Post', { user, post })}
+                        >
+                            <Image
+                                source={{ uri: item.link }}
+                                style={{
+                                    width: imageWidth,
+                                    height: imageHeight,
+                                    resizeMode: 'cover',
+                                    borderRadius: 16,
+                                    marginHorizontal: 5
+                                }} />
+                        </TouchableWithoutFeedback>
                     )
                 }}
             />
-            <View style={styles.infosTextView}>
-                <Text style={styles.infosText}>{post.price} </Text>
+            <View style={styles.infosTextContainer}>
+                <Text style={styles.infosText}>R${post.price} </Text>
                 <Text style={styles.infosText}>{post.type} </Text>
             </View>
 
-            <View style={styles.viewFooter}>
+            <View style={styles.footerContainer}>
                 <InfosFooter
                     infos={post.bedrooms.toString()}
                     icon='airline-seat-individual-suite'

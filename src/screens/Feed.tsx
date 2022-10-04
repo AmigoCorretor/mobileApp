@@ -59,7 +59,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
 
       <FlatList
         data={user.posts}
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         keyExtractor={(post) => post.id.toString()}
         renderItem={({ item }) => {
           return (
