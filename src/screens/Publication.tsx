@@ -134,7 +134,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             marginVertical: 10,
             borderRadius: 5,
             width: 150,
-            backgroundColor: colors.text
+            backgroundColor: '#EEE',
+            color: '#333'
         },
         selectionImageButton: {
             backgroundColor: 'silver',
