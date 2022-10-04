@@ -230,10 +230,12 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const validateInputs = () => {
         const validations: boolean[] = []
-        validations.push(title.length > 0)
+        validations.push(title.length > 0 && title.length < 30)
         validations.push(image.length > 0)
         validations.push(type != '')
         validations.push(sellOrRent != '')
+        validations.push(price! <= 999999999 )
+
 
         setValidPost(validations.reduce((total, current) => total && current))
     }
@@ -433,10 +435,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label="Studio" value="Studio" />
                             </Picker>
                         ) : (
-                            <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                                <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                            </TouchableOpacity>
-                        )
+                                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                                </TouchableOpacity>
+                            )
                     }
                 </View>
 
@@ -454,10 +456,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label="Aluguel" value="Aluguel" />
                             </Picker>
                         ) : (
-                            <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                                <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                            </TouchableOpacity>
-                        )
+                                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                                </TouchableOpacity>
+                            )
                     }
                     <AuthInput
                         icon='crop-din'
