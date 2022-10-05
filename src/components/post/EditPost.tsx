@@ -29,7 +29,7 @@ export const EditPost = (props: Props) => {
   const [suites, setSuites] = useState(props.postInfo.suites)
   const [validPost, setValidPost] = useState(false)
   const [type, setType] = useState(props.postInfo.type)
-  const [price, setPrice] = useState<string | undefined>(props.postInfo.price)
+  const [price, setPrice] = useState(props.postInfo.price)
   const [sellOrRent, setSellOrRent] = useState(props.postInfo.sellOrRent)
 
 
@@ -297,10 +297,10 @@ export const EditPost = (props: Props) => {
                   <Picker.Item label="Studio" value="Studio" />
                 </Picker>
               ) : (
-                  <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                  </TouchableOpacity>
-                )
+                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                  <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                </TouchableOpacity>
+              )
             }
           </View>
           <View style={styles.aditionalInfosContainer}>
@@ -317,10 +317,10 @@ export const EditPost = (props: Props) => {
                   <Picker.Item label="Aluguel" value="Aluguel" />
                 </Picker>
               ) : (
-                  <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                  </TouchableOpacity>
-                )
+                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                  <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                </TouchableOpacity>
+              )
             }
             <AuthInput
               icon='crop-din'
@@ -366,7 +366,7 @@ export const EditPost = (props: Props) => {
               icon='attach-money'
               style={styles.numberInputData}
               placeholder='Preço'
-              value={price ? price.toString() : undefined}
+              value={price ? price : undefined}
               onChangeText={setPrice}
               placeholderTextColor='#333'
               inputMask='money'

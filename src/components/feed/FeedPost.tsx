@@ -104,8 +104,8 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
                 }}
             />
             <View style={styles.infosTextContainer}>
-                <Text style={styles.infosText}>R${post.price} </Text>
-                <Text style={styles.infosText}>{post.type} </Text>
+                <Text style={styles.infosText}>{post.price}</Text>
+                <Text style={styles.infosText}>{post.type}</Text>
             </View>
 
             <View style={styles.footerContainer}>

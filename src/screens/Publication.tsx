@@ -133,7 +133,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         picker: {
             marginVertical: 10,
             borderRadius: 5,
-            width: 150,
+            width: 170,
             backgroundColor: '#EEE',
             color: '#333'
         },
@@ -425,15 +425,16 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 onValueChange={(itemValue, itemIndex) =>
                                     setType(itemValue)
                                 }>
-                                <Picker.Item label="Casa" value="Casa" />
-                                <Picker.Item label="Apartamento" value="Apartamento" />
-                                <Picker.Item label="Terreno" value="Terreno" />
-                                <Picker.Item label="Sítio" value="Sítio" />
-                                <Picker.Item label="Kitnet" value="Kitnet" />
-                                <Picker.Item label="Quarto" value="Quarto" />
-                                <Picker.Item label="Galpão" value="Galpão" />
-                                <Picker.Item label="Sala comercial" value="Sala comercial" />
-                                <Picker.Item label="Studio" value="Studio" />
+                                <Picker.Item label='' value='' />
+                                <Picker.Item label='Casa' value='Casa' />
+                                <Picker.Item label='Apartamento' value='Apartamento' />
+                                <Picker.Item label='Terreno' value='Terreno' />
+                                <Picker.Item label='Sítio' value='Sítio' />
+                                <Picker.Item label='Kitnet' value='Kitnet' />
+                                <Picker.Item label='Quarto' value='Quarto' />
+                                <Picker.Item label='Galpão' value='Galpão' />
+                                <Picker.Item label='Sala comercial' value='Sala comercial' />
+                                <Picker.Item label='Studio' value='Studio' />
                             </Picker>
                         ) : (
                             <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
@@ -453,8 +454,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 onValueChange={(itemValue, itemIndex) =>
                                     setSellOrRent(itemValue)
                                 }>
-                                <Picker.Item label="Venda" value="Venda" />
-                                <Picker.Item label="Aluguel" value="Aluguel" />
+                                <Picker.Item label='' value='' />
+                                <Picker.Item label='Venda' value='Venda' />
+                                <Picker.Item label='Aluguel' value='Aluguel' />
                             </Picker>
                         ) : (
                             <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
