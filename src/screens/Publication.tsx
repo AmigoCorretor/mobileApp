@@ -57,7 +57,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [bedrooms, setBedrooms] = useState('')
     const [suites, setSuites] = useState('')
     const [validPost, setValidPost] = useState(false)
-    const [price, setPrice] = useState<number | undefined>()
+    const [price, setPrice] = useState<string | undefined>()
     const [type, setType] = useState('')
     const [sellOrRent, setSellOrRent] = useState('')
     const [imagePickerArray, setImagePickerArray] = useState<string[]>()
@@ -102,7 +102,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             width: '90%'
         },
         numberInputData: {
-            width: 150,
+            width: 180,
             borderRadius: 5,
             marginVertical: 10
         },
@@ -234,7 +234,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         validations.push(image.length > 0)
         validations.push(type != '')
         validations.push(sellOrRent != '')
-        validations.push(price! <= 999999999 )
+        validations.push(price!.length <= 15)
 
 
         setValidPost(validations.reduce((total, current) => total && current))
@@ -468,6 +468,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={totalArea}
                         onChangeText={setTotalArea}
                         placeholderTextColor='#333'
+                        keyboardType='number-pad'
                     />
                     <AuthInput
                         icon='aspect-ratio'
@@ -476,6 +477,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={usefulArea}
                         onChangeText={setUseFulArea}
                         placeholderTextColor='#333'
+                        keyboardType='number-pad'
                     />
                     <AuthInput
                         icon='bathtub'
@@ -484,6 +486,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={bathrooms}
                         onChangeText={setBathrooms}
                         placeholderTextColor='#333'
+                        keyboardType='number-pad'
                     />
                     <AuthInput
                         icon='airline-seat-individual-suite'
@@ -492,6 +495,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={bedrooms}
                         onChangeText={setBedrooms}
                         placeholderTextColor='#333'
+                        keyboardType='number-pad'
                     />
                     <AuthInput
                         icon='king-bed'
@@ -500,6 +504,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={suites}
                         onChangeText={setSuites}
                         placeholderTextColor='#333'
+                        keyboardType='number-pad'
                     />
                     <AuthInput
                         icon='attach-money'
@@ -508,6 +513,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={price ? price.toString() : undefined}
                         onChangeText={setPrice}
                         placeholderTextColor='#333'
+                        inputMask='money'
+                        keyboardType='number-pad'
                     />
                 </View>
                 <MapView

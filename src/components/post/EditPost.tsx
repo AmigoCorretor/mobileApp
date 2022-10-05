@@ -29,7 +29,7 @@ export const EditPost = (props: Props) => {
   const [suites, setSuites] = useState(props.postInfo.suites)
   const [validPost, setValidPost] = useState(false)
   const [type, setType] = useState(props.postInfo.type)
-  const [price, setPrice] = useState<number | undefined>(props.postInfo.price)
+  const [price, setPrice] = useState<string | undefined>(props.postInfo.price)
   const [sellOrRent, setSellOrRent] = useState(props.postInfo.sellOrRent)
 
 
@@ -60,7 +60,7 @@ export const EditPost = (props: Props) => {
     validations.push(title.length > 0 && title.length < 30)
     validations.push(type != '')
     validations.push(sellOrRent != '')
-    validations.push(price! <= 999999999)
+    validations.push(price!.length <= 15)
 
 
     setValidPost(validations.reduce((total, current) => total && current))
@@ -369,6 +369,8 @@ export const EditPost = (props: Props) => {
               value={price ? price.toString() : undefined}
               onChangeText={setPrice}
               placeholderTextColor='#333'
+              inputMask='money'
+              keyboardType='number-pad'
             />
           </View>
 

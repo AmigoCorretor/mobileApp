@@ -1,6 +1,7 @@
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard, TouchableWithoutFeedback, KeyboardType } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useEffect, useRef, useState } from 'react'
+import { TextInputMask } from 'react-native-masked-text'
 
 type Props = {
   icon: keyof typeof MaterialIcons.glyphMap
@@ -15,6 +16,8 @@ type Props = {
   autoFocus?: boolean
   closeKeyboardOnCancel?: boolean
   multiline?: boolean
+  inputMask?: string
+  keyboardType?: KeyboardType
 }
 
 export const AuthInput = (props: Props) => {
@@ -58,7 +61,7 @@ export const AuthInput = (props: Props) => {
       marginLeft: 20,
     },
     input: {
-      paddingLeft: 20,
+      paddingLeft: 5,
       width: '70%',
     },
     cancelButton: {
@@ -80,7 +83,7 @@ export const AuthInput = (props: Props) => {
           style={styles.icon}
           onPress={() => { localInputRef.current!.focus() }}
         />
-        <TextInput
+        {/* <TextInput
           {...props}
           style={[styles.input, props.textInputStyle]}
           onFocus={() => setShowCancelButton(true)}
@@ -88,7 +91,31 @@ export const AuthInput = (props: Props) => {
           ref={(ref) => {
             localInputRef && (localInputRef.current = ref as any)
           }}
+        /> */}
+        <TextInputMask
+          {...props}
+          type={props.inputMask ? props.inputMask : 'custom'}
+          options={{
+            /**
+             * mask: (String | required | default '')
+             * the mask pattern
+             * 9 - accept digit.
+             * A - accept alpha.
+             * S - accept alphanumeric.
+             * * - accept all, EXCEPT white space.
+            */
+            mask: '******************************'
+          }}
+          keyboardType={props.keyboardType ? props.keyboardType : 'default'}
+          style={[styles.input, props.textInputStyle]}
+          onFocus={() => setShowCancelButton(true)}
+          onBlur={() => setShowCancelButton(false)}
+          ref={(ref) => {
+            localInputRef && (localInputRef.current = ref as any)
+          }}
+
         />
+
         <TouchableOpacity onPress={handleCancel}
           style={[styles.cancelButton, showCancelButton ? { display: 'flex' } : {}]}>
           <MaterialIcons

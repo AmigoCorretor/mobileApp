@@ -27,7 +27,7 @@ export interface Post {
   favorites?: Favorite[]
   type?: string
   sellOrRent?: string
-  price?: number
+  price?: string
   latitude?: number
   longitude?: number
 }
