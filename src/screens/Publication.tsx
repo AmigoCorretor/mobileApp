@@ -152,7 +152,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         },
         iosPickerButton: {
             backgroundColor: '#EEE',
-            width: 150,
+            width: 170,
             height: 40,
             alignItems: 'center',
             justifyContent: 'center',
@@ -235,7 +235,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         validations.push(type != '')
         validations.push(sellOrRent != '')
         if (price) {
-            validations.push(price!.length <= 15)
+            validations.push(price.length > 1 && price.length <= 15)
+        } else {
+            validations.push(false)
         }
 
         setValidPost(validations.reduce((total, current) => total && current))

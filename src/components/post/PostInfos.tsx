@@ -67,8 +67,9 @@ export const PostInfos: React.FC<Props> = ({ post }) => {
       <View>
         <View style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
           <View>
-            <Text style={[styles.subtitle, { textAlign: 'right' }]}>venda/aluguel</Text>
-            <Text style={[styles.subtitle, { textAlign: 'right' }]}>valor</Text>
+            <Text style={[styles.subtitle, { textAlign: 'right' }]}>{post.type}</Text>
+            <Text style={[styles.subtitle, { textAlign: 'right' }]}>{post.sellOrRent}</Text>
+            <Text style={[styles.subtitle, { textAlign: 'right' }]}>{post.price}</Text>
           </View>
         </View>
         <View style={styles.numericInfoContainer}>

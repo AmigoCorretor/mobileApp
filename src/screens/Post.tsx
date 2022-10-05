@@ -91,6 +91,7 @@ export const Post: React.FC<Props> = ({
           isVisible={showEditPost}
           postInfo={post}
           deletePost={deletePost}
+          navigation={navigation}
         />
         <PostImages user={user} post={post} deletePost={deletePost} showEditModal={setShowEditPost} />
         <PostInfos post={post} />

@@ -52,7 +52,6 @@ export const PostImages: React.FC<Props> = ({ user, post, deletePost, showEditMo
       right: 0
     }
   })
-
   const imageWidth = width * 1
   const imageHeight = imageWidth * 1.54
 
@@ -74,7 +73,7 @@ export const PostImages: React.FC<Props> = ({ user, post, deletePost, showEditMo
           <Text style={styles.name}>{user.name}</Text>
         </View> */}
         <UserBadge
-          name={user.name}
+          name={user.name.split(' ')[0]}
           photo={user.photo}
           badgeStyle={{
             top: Platform.OS === 'android' ? 56 : 0

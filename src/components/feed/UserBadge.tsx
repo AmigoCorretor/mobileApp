@@ -27,16 +27,17 @@ export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle }) => {
             zIndex: 1,
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
             backgroundColor: `${colors.background}7`,
             borderRadius: 40,
             padding: 10,
-            width: 150,
+            minWidth: 100,
             // top: Platform.OS === 'android' ? 56 : 0
         },
         name: {
             fontSize: 20,
             color: colors.text,
+            paddingHorizontal: 5
         },
         profilePicture: {
             width: 50,

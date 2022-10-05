@@ -4,16 +4,17 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useState } from 'react'
 import { AuthInput } from '../AuthInput'
-import { AuthContext, Post, User } from '../../contexts/AuthContext'
+import { AuthContext, Post} from '../../contexts/AuthContext'
 import axios from 'axios'
 import { server, showError, showSuccess } from '../../common'
 import { Picker } from '@react-native-picker/picker'
 
 type Props = {
-  postInfo: Post,
+  postInfo: Post
   isVisible: boolean
-  onCancel: any,
+  onCancel: any
   deletePost: (id: number) => void
+  navigation: any
 }
 
 export const EditPost = (props: Props) => {
@@ -32,7 +33,6 @@ export const EditPost = (props: Props) => {
   const [price, setPrice] = useState(props.postInfo.price)
   const [sellOrRent, setSellOrRent] = useState(props.postInfo.sellOrRent)
 
-
   const updatePost = async () => {
     const newPostInfo = {
       ...props.postInfo,
@@ -48,8 +48,11 @@ export const EditPost = (props: Props) => {
       sellOrRent
     }
     try {
-      await axios.patch(`${server}/users/${user.id}`, newPostInfo)
-      showSuccess('Perfil atualizado com sucesso!')
+      await axios.patch(`${server}/posts/${props.postInfo.id}`, newPostInfo)
+      updateUser()
+      props.onCancel()
+      props.navigation.goBack()
+      showSuccess('Post atualizado com sucesso!')
     } catch (e) {
       showError(e)
     }
@@ -60,7 +63,11 @@ export const EditPost = (props: Props) => {
     validations.push(title.length > 0 && title.length < 30)
     validations.push(type != '')
     validations.push(sellOrRent != '')
-    validations.push(price!.length <= 15)
+    if (price) {
+      validations.push(price.length > 1 && price.length <= 15)
+    } else {
+      validations.push(false)
+    }
 
 
     setValidPost(validations.reduce((total, current) => total && current))
@@ -69,22 +76,6 @@ export const EditPost = (props: Props) => {
   useEffect(() => {
     validateInputs()
   })
-
-  const handleSaveEdit = async (name: string, email: string, phone: string, bio: string, photo?: string) => {
-    const newUserInfo = {
-      ...user,
-      name,
-      email,
-      phone,
-      bio
-    }
-    try {
-      await axios.patch(`${server}/users/${user.id}`, newUserInfo)
-      showSuccess('Perfil atualizado com sucesso!')
-    } catch (e) {
-      showError(e)
-    }
-  }
 
   const actionSheetType = () =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -159,7 +150,6 @@ export const EditPost = (props: Props) => {
     setSellOrRent(props.postInfo.sellOrRent)
     props.onCancel()
   }
-
 
   const styles = StyleSheet.create({
     container: {
@@ -297,10 +287,10 @@ export const EditPost = (props: Props) => {
                   <Picker.Item label="Studio" value="Studio" />
                 </Picker>
               ) : (
-                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                  <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                </TouchableOpacity>
-              )
+                  <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                  </TouchableOpacity>
+                )
             }
           </View>
           <View style={styles.aditionalInfosContainer}>
@@ -317,10 +307,10 @@ export const EditPost = (props: Props) => {
                   <Picker.Item label="Aluguel" value="Aluguel" />
                 </Picker>
               ) : (
-                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                  <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                </TouchableOpacity>
-              )
+                  <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                  </TouchableOpacity>
+                )
             }
             <AuthInput
               icon='crop-din'
