@@ -120,7 +120,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
               style={styles.dummyPostImage}
               source={{ uri: item.images[0].link }}
             />
-            <Text style={styles.postText}>{item.title}</Text>
+            <Text style={styles.postText}>{item.title.substring(0, 14)}...</Text>
           </TouchableOpacity>
         )}
       />
