@@ -202,7 +202,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
 
   return (
     <ScrollView keyboardShouldPersistTaps='handled'
-      contentContainerStyle={[styles.container, { width: '122%' }]}
+      contentContainerStyle={[styles.container, { width: '126%' }]}
     >
       <LinearGradient
         colors={theme.dark ? [colors.primary, '#332657'] : [colors.primary, '#F2F2F2']}

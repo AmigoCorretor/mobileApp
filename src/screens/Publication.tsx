@@ -106,11 +106,12 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             borderRadius: 5,
             marginVertical: 10
         },
-        viewButton: {
+        buttonsContainer: {
             flexDirection: 'row',
             justifyContent: 'space-around',
             width: '80%',
-            marginTop: 10
+            marginTop: 10,
+            marginBottom: 50
         },
         button: {
             width: 100,
@@ -563,7 +564,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     onPress={selectImage}>
                     <Text>Selecione Imagem</Text>
                 </TouchableOpacity>
-                <View style={styles.viewButton}>
+                <View style={styles.buttonsContainer}>
                     <TouchableOpacity
                         style={[styles.button, { backgroundColor: '#F88' }]}
                         onPress={onCancel}>
