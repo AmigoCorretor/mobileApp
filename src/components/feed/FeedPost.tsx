@@ -23,7 +23,8 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
         container: {
             width: '100%',
             alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.35)',
+            // backgroundColor: 'rgba(0, 0, 0, 0.35)',
+            backgroundColor: `${colors.primary}35`,
             marginVertical: 10,
             borderRadius: 16,
             padding: 7,
