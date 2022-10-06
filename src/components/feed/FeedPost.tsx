@@ -49,7 +49,7 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
         },
         title: {
             color: colors.text,
-            fontSize: 25,
+            fontSize: 22,
             maxWidth: '60%'
         },
         infosTextContainer: {
@@ -60,7 +60,7 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
         },
         infosText: {
             color: colors.text,
-            fontSize: 25,
+            fontSize: 22,
         },
         imagesContainer: {
 
@@ -74,7 +74,11 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
                     name={user.name}
                     photo={user.photo}
                     badgeStyle={{
-                        position: 'relative'
+                        position: 'relative',
+                        padding: 5 
+                    }}
+                    nameStyle={{
+                        fontSize: 18
                     }}
                 />
                 <Text style={styles.title}>{post.title} </Text>

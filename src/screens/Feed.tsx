@@ -58,7 +58,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       <Text style={styles.title}>Feed</Text>
 
       <FlatList
-        data={user.posts}
+        data={user.posts.reverse()}
         style={{ width: '100%' }}
         keyExtractor={(post) => post.id.toString()}
         renderItem={({ item }) => {

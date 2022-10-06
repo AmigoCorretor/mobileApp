@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, Image, StyleProp, ViewStyle } from 'react-native'
+import { Text, View, StyleSheet, Image, StyleProp, ViewStyle, TextStyle } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 
@@ -7,9 +7,10 @@ interface Props {
     name: string
     photo: string
     badgeStyle?: StyleProp<ViewStyle>
+    nameStyle?: StyleProp<TextStyle>
 }
 
-export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle }) => {
+export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle, nameStyle }) => {
 
     const { colors } = useTheme()
 
@@ -27,7 +28,6 @@ export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle }) => {
             zIndex: 1,
             flexDirection: 'row',
             alignItems: 'center',
-            // justifyContent: 'space-between',
             backgroundColor: `${colors.background}7`,
             borderRadius: 40,
             padding: 10,
@@ -35,7 +35,6 @@ export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle }) => {
             // top: Platform.OS === 'android' ? 56 : 0
         },
         name: {
-            fontSize: 20,
             color: colors.text,
             paddingHorizontal: 5
         },
@@ -63,7 +62,7 @@ export const UserBadge: React.FC<Props> = ({ name, photo, badgeStyle }) => {
                     style={styles.verifiedIcon}
                 />
             </View>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={[styles.name, nameStyle ]}>{name}</Text>
         </View>
     )
 }

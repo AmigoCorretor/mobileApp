@@ -106,7 +106,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
         handleSaveEdit={handleSaveEdit}
       />
       <FlatList
-        data={user.posts}
+        data={user.posts.reverse()}
         keyExtractor={post => `${post.id}`}
         numColumns={2}
         ListHeaderComponent={() => <RealtorProfile userInfo={user} setShowLogoutModal={setShowLogoutModal} />}
