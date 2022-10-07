@@ -7,6 +7,13 @@ import { Alert, Platform } from 'react-native'
 const server =
   Platform.OS === 'ios' ? 'http://localhost:3000' : 'http://xxx.xxx.xxx.xxx:3000'
 
+export const FIREBASE_API_KEY=''
+export const FIREBASE_AUTHDOMAIN=''
+export const FIREBASE_PROJECTID=''
+export const FIREBASE_STORAGEBUCKET=''
+export const FIREBASE_MESSAGINGSENDERID=''
+export const FIREBASE_APPID=''
+
 function showSuccess(msg: string) {
   Alert.alert('Sucesso!', msg)
 }

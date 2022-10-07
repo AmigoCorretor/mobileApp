@@ -15,6 +15,10 @@ import axios from "axios"
 import { server, showError, showSuccess } from "../common"
 import { AuthContext, Post } from "../contexts/AuthContext"
 
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
+import { firebaseApp } from "../FirebaseConfig"
+const firebaseStorage = getStorage(firebaseApp)
+
 type PublicationScreenNavigationProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabParamList, 'Publication'>,
     NativeStackScreenProps<StackParamList>
@@ -61,6 +65,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [type, setType] = useState('')
     const [sellOrRent, setSellOrRent] = useState('')
     const [imagePickerArray, setImagePickerArray] = useState<string[]>()
+    const [imgUri, setImgUri] = useState('')
 
     const [region, setRegion] = useState<Region>()
     const [marker, setMarker] = useState<Marker>({
@@ -217,17 +222,17 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     }
 
     useEffect(() => {
-        if (idCreatedPost != 0) {
-            arrayImages.forEach(async (imgURL) => {
-                await saveImage(imgURL, idCreatedPost)
-            })
-            updateUserInfo()
-        }
-    }, [idCreatedPost])
-
-    useEffect(() => {
         validateInputs()
     })
+
+    useEffect(() => {
+        const pathReference = ref(firebaseStorage, 'IMG_8629.JPG')
+        getDownloadURL(pathReference)
+            .then((url) => {
+                setImgUri(url)
+                console.log(url)
+            })
+    }, [])
 
     const validateInputs = () => {
         const validations: boolean[] = []
@@ -272,6 +277,36 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         }
     }
 
+    const saveImageToFirebase = async (imageURI: any, name: string = 'teste.jpeg') => {
+        const storageRef = ref(firebaseStorage, name)
+        const img = await fetch(imageURI)
+        const imgBytes = await img.blob()
+
+        uploadBytes(storageRef, imgBytes).then((snapshot) => {
+            console.log('Uploaded a blob or file!')
+        })
+    }
+
+    useEffect(() => {
+        if (idCreatedPost != 0) {
+            arrayImages.forEach(async (imgURL) => {
+                await saveImageUrlToDB(imgURL, idCreatedPost)
+            })
+            updateUserInfo()
+        }
+    }, [idCreatedPost])
+
+    const saveImageUrlToDB = async (imageURI: string, postId: number) => {
+        await axios.post(`${server}/images`, {
+            link: imageURI,
+            post: postId
+        })
+    }
+
+    const testeSaveFirebase = () => {
+        saveImageToFirebase(imagePickerArray![0], 'images/testePrimeiroPost.jpeg')
+    }
+
     const onCancel = () => {
         setTitle('')
         setArrayImages([])
@@ -289,13 +324,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         setType('')
         setSellOrRent('')
         setImagePickerArray([])
-    }
-
-    const saveImage = async (imageURI: string, postId: number) => {
-        await axios.post(`${server}/images`, {
-            link: imageURI,
-            post: postId
-        })
     }
 
     const selectImage = async () => {
@@ -559,6 +587,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     }}
                 />
 
+                {imgUri ? <Image style={{ width: 300, height: 300 }} source={{ uri: imgUri }} /> : null}
+
                 <TouchableOpacity
                     style={styles.selectionImageButton}
                     onPress={selectImage}>
@@ -577,7 +607,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.button, validPost ? { backgroundColor: '#8F8' } : { backgroundColor: '#AAA' }]}
-                        onPress={saveNewPost}
+                        // onPress={saveNewPost}
+                        onPress={testeSaveFirebase}
                         disabled={!validPost}>
                         <MaterialIcons
                             name='save'
