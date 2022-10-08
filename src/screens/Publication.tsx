@@ -13,7 +13,7 @@ import { AuthInput } from '../components/AuthInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
 import axios from "axios"
 import { server, showError, showSuccess } from "../common"
-import { AuthContext, Post } from "../contexts/AuthContext"
+import { AuthContext, Post, userInfo } from "../contexts/AuthContext"
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { firebaseApp } from "../FirebaseConfig"
@@ -49,11 +49,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
     const { colors } = useTheme()
     const [title, setTitle] = useState('')
-    const [arrayImages, setArrayImages] = useState<string[]>([])
-    const [idCreatedPost, setIdCreatedPost] = useState(0)
-    const [image, setImage] = useState('https://picsum.photos/id/1048/800')
-    const [image1, setImage1] = useState('https://picsum.photos/id/1011/800')
-    const [image2, setImage2] = useState('https://picsum.photos/id/1029/800')
     const [description, setDescription] = useState('')
     const [totalArea, setTotalArea] = useState('')
     const [usefulArea, setUseFulArea] = useState('')
@@ -65,6 +60,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [type, setType] = useState('')
     const [sellOrRent, setSellOrRent] = useState('')
     const [imagePickerArray, setImagePickerArray] = useState<string[]>()
+    const [imagesArray, setImagesArray] = useState<any[]>([])
     const [imgUri, setImgUri] = useState('')
 
     const [region, setRegion] = useState<Region>()
@@ -225,19 +221,19 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         validateInputs()
     })
 
-    useEffect(() => {
-        const pathReference = ref(firebaseStorage, 'IMG_8629.JPG')
-        getDownloadURL(pathReference)
-            .then((url) => {
-                setImgUri(url)
-                console.log(url)
-            })
-    }, [])
+    // useEffect(() => {
+    //     const pathReference = ref(firebaseStorage, 'IMG_8629.JPG')
+    //     getDownloadURL(pathReference)
+    //         .then((url) => {
+    //             setImgUri(url)
+    //             // console.log(url)
+    //         })
+    // }, [])
 
     const validateInputs = () => {
         const validations: boolean[] = []
         validations.push(title.length > 0 && title.length < 30)
-        validations.push(image.length > 0)
+        // validations.push(image.length > 0)
         validations.push(type != '')
         validations.push(sellOrRent != '')
         if (price) {
@@ -270,8 +266,19 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             const res = await axios.post<NewPostResponse>(`${server}/posts`, newPost)
 
             const idNewPost = +res.data.results.id
-            setArrayImages([image, image1, image2])
-            setIdCreatedPost(idNewPost)
+
+            // Upload images to Firebase
+            imagesArray.map(async (image: any) => {
+                await saveImageToFirebase(image.uri, `images/${user.id}/${image.assetId}`)
+            })
+
+            // Save images links to postgres
+            imagesArray.map(async (image: any) => {
+                const pathReference = ref(firebaseStorage, `images/${user.id}/${image.assetId}`)
+                const url = await getDownloadURL(pathReference)
+                await saveImageUrlToDB(url, idNewPost)
+            })
+            updateUserInfo()
         } catch (e) {
             showError(e)
         }
@@ -287,15 +294,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         })
     }
 
-    useEffect(() => {
-        if (idCreatedPost != 0) {
-            arrayImages.forEach(async (imgURL) => {
-                await saveImageUrlToDB(imgURL, idCreatedPost)
-            })
-            updateUserInfo()
-        }
-    }, [idCreatedPost])
-
     const saveImageUrlToDB = async (imageURI: string, postId: number) => {
         await axios.post(`${server}/images`, {
             link: imageURI,
@@ -303,16 +301,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         })
     }
 
-    const testeSaveFirebase = () => {
-        saveImageToFirebase(imagePickerArray![0], 'images/testePrimeiroPost.jpeg')
-    }
-
     const onCancel = () => {
         setTitle('')
-        setArrayImages([])
-        setImage('https://picsum.photos/id/1048/800')
-        setImage1('https://picsum.photos/id/1011/800')
-        setImage2('https://picsum.photos/id/1029/800')
         setDescription('')
         setTotalArea('')
         setUseFulArea('')
@@ -336,10 +326,14 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         })
 
         if (!result.cancelled) {
-            const uriArray = result.selected.map((picture) => {
-                return picture.uri
+            const uriArray = result.selected.map(picture => picture.uri)
+
+            const images = result.selected.map(picture => {
+                // console.log(picture)
+                return picture
             })
-            setImagePickerArray(uriArray);
+            setImagePickerArray(uriArray)
+            setImagesArray(images)
         }
     }
 
@@ -415,30 +409,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     placeholderTextColor='#333'
                 />
                 <AuthInput
-                    icon='photo'
-                    style={styles.inputs}
-                    placeholder='Foto'
-                    value={image}
-                    onChangeText={setImage}
-                    placeholderTextColor='#333'
-                />
-                <AuthInput
-                    icon='photo'
-                    style={styles.inputs}
-                    placeholder='Foto'
-                    value={image1}
-                    onChangeText={setImage1}
-                    placeholderTextColor='#333'
-                />
-                <AuthInput
-                    icon='photo'
-                    style={styles.inputs}
-                    placeholder='Foto'
-                    value={image2}
-                    onChangeText={setImage2}
-                    placeholderTextColor='#333'
-                />
-                <AuthInput
                     icon='description'
                     style={styles.inputs}
                     placeholder='Descrição'
@@ -468,10 +438,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Studio' value='Studio' />
                             </Picker>
                         ) : (
-                            <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                                <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                            </TouchableOpacity>
-                        )
+                                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                                </TouchableOpacity>
+                            )
                     }
                 </View>
 
@@ -490,10 +460,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Aluguel' value='Aluguel' />
                             </Picker>
                         ) : (
-                            <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                                <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                            </TouchableOpacity>
-                        )
+                                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                                </TouchableOpacity>
+                            )
                     }
                     <AuthInput
                         icon='crop-din'
@@ -586,9 +556,6 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         }
                     }}
                 />
-
-                {imgUri ? <Image style={{ width: 300, height: 300 }} source={{ uri: imgUri }} /> : null}
-
                 <TouchableOpacity
                     style={styles.selectionImageButton}
                     onPress={selectImage}>
@@ -607,8 +574,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.button, validPost ? { backgroundColor: '#8F8' } : { backgroundColor: '#AAA' }]}
-                        // onPress={saveNewPost}
-                        onPress={testeSaveFirebase}
+                        onPress={saveNewPost}
                         disabled={!validPost}>
                         <MaterialIcons
                             name='save'
