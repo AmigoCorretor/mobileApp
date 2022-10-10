@@ -13,7 +13,7 @@ import { AuthInput } from '../components/AuthInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
 import axios from "axios"
 import { server, showError, showSuccess } from "../common"
-import { AuthContext, Post, userInfo } from "../contexts/AuthContext"
+import { AuthContext, Post } from "../contexts/AuthContext"
 
 import { getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage"
 import { firebaseApp } from "../FirebaseConfig"
@@ -44,9 +44,23 @@ interface Marker {
     pinColor: string
 }
 
+// export const saveImageToFirebase = async (imageURI: any, pathReference: StorageReference) => {
+//     const img = await fetch(imageURI)
+//     const imgBytes = await img.blob()
+
+//     await uploadBytes(pathReference, imgBytes).then(() => {
+//         console.log('Uploaded a picture')
+//     })
+// }
+
+// export const saveImageUrlToDB = async (imageURI: string, postId: number) => {
+//     await axios.post(`${server}/images`, {
+//         link: imageURI,
+//         post: postId
+//     })
+// }
 
 export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
-
     const { colors } = useTheme()
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -59,9 +73,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [price, setPrice] = useState<string | undefined>()
     const [type, setType] = useState('')
     const [sellOrRent, setSellOrRent] = useState('')
-    const [imagePickerArray, setImagePickerArray] = useState<string[]>()
     const [imagesArray, setImagesArray] = useState<any[]>([])
-    const [imgUri, setImgUri] = useState('')
 
     const [region, setRegion] = useState<Region>()
     const [marker, setMarker] = useState<Marker>({
@@ -73,7 +85,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         pinColor: colors.primary
     })
 
-    const { user, setUser } = useContext(AuthContext)
+    const { user, setUser, saveImageToFirebase, saveImageUrlToDB } = useContext(AuthContext)
 
     const styles = StyleSheet.create({
         container: {
@@ -221,19 +233,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         validateInputs()
     })
 
-    // useEffect(() => {
-    //     const pathReference = ref(firebaseStorage, 'IMG_8629.JPG')
-    //     getDownloadURL(pathReference)
-    //         .then((url) => {
-    //             setImgUri(url)
-    //             // console.log(url)
-    //         })
-    // }, [])
-
     const validateInputs = () => {
         const validations: boolean[] = []
         validations.push(title.length > 0 && title.length < 30)
-        // validations.push(image.length > 0)
+        validations.push(imagesArray.length > 1)
         validations.push(type != '')
         validations.push(sellOrRent != '')
         if (price) {
@@ -284,28 +287,13 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
             })
 
             save.then(() => {
-                console.log('Terminou')
+                setTimeout(() => {
+                }, 1000)
                 updateUserInfo()
             })
         } catch (e) {
             showError(e)
         }
-    }
-
-    const saveImageToFirebase = async (imageURI: any, pathReference: StorageReference) => {
-        const img = await fetch(imageURI)
-        const imgBytes = await img.blob()
-
-        await uploadBytes(pathReference, imgBytes).then((snapshot) => {
-            console.log('Uploaded a blob or file!')
-        })
-    }
-
-    const saveImageUrlToDB = async (imageURI: string, postId: number) => {
-        await axios.post(`${server}/images`, {
-            link: imageURI,
-            post: postId
-        })
     }
 
     const onCancel = () => {
@@ -320,27 +308,24 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         setPrice(undefined)
         setType('')
         setSellOrRent('')
-        setImagePickerArray([])
+        setImagesArray([])
     }
 
     const selectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             // allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [3, 4],
             quality: 1,
             allowsMultipleSelection: true
         })
 
         if (!result.cancelled) {
-            const uriArray = result.selected.map(picture => picture.uri)
-
-            const images = result.selected.map(picture => {
-                // console.log(picture)
-                return picture
-            })
-            setImagePickerArray(uriArray)
-            setImagesArray(images)
+            if (result.selected) {
+                // const uriArray = result.selected.map(picture => picture.uri)
+                const images = result.selected.map(picture => picture)
+                setImagesArray(images)
+            }
         }
     }
 
@@ -445,10 +430,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Studio' value='Studio' />
                             </Picker>
                         ) : (
-                            <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                                <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                            </TouchableOpacity>
-                        )
+                                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                                </TouchableOpacity>
+                            )
                     }
                 </View>
 
@@ -467,10 +452,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Aluguel' value='Aluguel' />
                             </Picker>
                         ) : (
-                            <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                                <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                            </TouchableOpacity>
-                        )
+                                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                                </TouchableOpacity>
+                            )
                     }
                     <AuthInput
                         icon='crop-din'
@@ -544,9 +529,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         pinColor={marker.pinColor} />
 
                 </MapView>
-
+                <Text>Selecione no mínimo duas imagens</Text>
                 <FlatList
-                    data={imagePickerArray}
+                    data={imagesArray}
                     style={{ width: '90%', borderRadius: 16 }}
                     horizontal
                     contentContainerStyle={{ alignItems: 'center' }}
@@ -554,7 +539,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     renderItem={({ item }) => {
                         if (item) {
                             return (
-                                <Image source={{ uri: item }} style={styles.img} />
+                                <Image source={{ uri: item.uri }} style={styles.img} />
                             )
                         } else {
                             return (

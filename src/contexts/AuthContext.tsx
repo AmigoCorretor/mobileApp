@@ -3,6 +3,8 @@ import axios from "axios"
 import React, { createContext, useState } from "react"
 import { server } from "../common"
 
+import { StorageReference, uploadBytes } from "firebase/storage"
+
 export interface Image {
   id: number
   link: string,
@@ -147,10 +149,12 @@ export type AuthContent = {
   updateUser: () => void
   loggedUser: string,
   setLoggedUser: (u: string) => void,
-  updateLoggedUser: () => void
+  updateLoggedUser: () => void,
+  saveImageToFirebase: (uri: string, pathReference: StorageReference) => Promise<void>,
+  saveImageUrlToDB: (uri: string, id: number) => Promise<void>
 }
 
-export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { } })
+export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { }, saveImageToFirebase: () => { }, saveImageUrlToDB: () => { } })
 
 type Props = {
   children: JSX.Element,
@@ -170,8 +174,24 @@ const AuthProvider: React.FC<Props> = (props) => {
     setLoggedUser(loggedUser as string)
   }
 
+  const saveImageToFirebase = async (imageURI: any, pathReference: StorageReference) => {
+    const img = await fetch(imageURI)
+    const imgBytes = await img.blob()
+
+    await uploadBytes(pathReference, imgBytes).then(() => {
+      console.log('Uploaded a picture')
+    })
+  }
+
+  const saveImageUrlToDB = async (imageURI: string, postId: number) => {
+    await axios.post(`${server}/images`, {
+      link: imageURI,
+      post: postId
+    })
+  }
+
   return (
-    <AuthContext.Provider value={{ user, setUser, updateUser, loggedUser, setLoggedUser, updateLoggedUser }}>
+    <AuthContext.Provider value={{ user, setUser, updateUser, loggedUser, setLoggedUser, updateLoggedUser, saveImageToFirebase, saveImageUrlToDB }}>
       {props.children}
     </AuthContext.Provider>
   )

@@ -7,6 +7,8 @@ import { AuthInput } from '../AuthInput'
 import { AuthContext, User } from '../../contexts/AuthContext'
 import axios from 'axios'
 import { server } from '../../common'
+import { Picker } from '@react-native-picker/picker'
+import * as ImagePicker from 'expo-image-picker'
 
 type Props = {
   // icon: keyof typeof MaterialIcons.glyphMap
@@ -25,8 +27,7 @@ export const EditRealtorProfile = (props: Props) => {
   const [email, setEmail] = useState(props.userInfo.email)
   const [phone, setPhone] = useState(props.userInfo.phone)
   const [bio, setBio] = useState(props.userInfo.bio)
-  const [showPhotoInput, setShowPhotoInput] = useState(false)
-  const [photo, setPhoto] = useState(props.userInfo.photo)
+  const [photo, setPhoto] = useState<any>()
   // const [password, setPassword] = useState('123456')
   // const [confirmPassword, setConfirmPassword] = useState('123456')
 
@@ -43,6 +44,18 @@ export const EditRealtorProfile = (props: Props) => {
     updateUser()
   }, [props.isVisible])
 
+  const selectProfilePhoto = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    })
+
+    if (!result.cancelled) {
+      setPhoto(result)
+    }
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -108,13 +121,13 @@ export const EditRealtorProfile = (props: Props) => {
       animationType="slide">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{flexGrow: 1}}>
+        style={{ flexGrow: 1 }}>
         <ScrollView keyboardShouldPersistTaps='handled'
           contentContainerStyle={styles.container}
         >
           <Text style={styles.title}>Editar perfil</Text>
           <View style={styles.editInfosContainer}>
-            <TouchableOpacity onPress={() => setShowPhotoInput(prev => !prev)}>
+            <TouchableOpacity onPress={selectProfilePhoto}>
               <View style={{ alignItems: 'center' }}>
                 <Image
                   style={styles.profilePicture}
@@ -122,14 +135,6 @@ export const EditRealtorProfile = (props: Props) => {
                 <Text style={styles.subTitle}>Troca foto de perfil</Text>
               </View>
             </TouchableOpacity>
-            {showPhotoInput ? <AuthInput
-              value={photo}
-              onChangeText={setPhoto}
-              icon='image'
-              placeholder='Link da foto de perfil'
-              style={styles.input} placeholderTextColor='#333' /> :
-              null
-            }
             <AuthInput
               value={name}
               onChangeText={setName}
@@ -192,7 +197,6 @@ export const EditRealtorProfile = (props: Props) => {
               <Text>Logout</Text>
             </TouchableOpacity>
           </View>
-          
         </ScrollView>
       </KeyboardAvoidingView>
     </Modal>

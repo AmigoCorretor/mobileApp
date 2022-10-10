@@ -11,6 +11,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthContext, Post, User } from '../contexts/AuthContext'
 import { server, showError, showSuccess } from '../common'
 import axios from 'axios'
+import { getDownloadURL, getStorage, ref, } from "firebase/storage"
+import { firebaseApp } from "../FirebaseConfig"
+const firebaseStorage = getStorage(firebaseApp)
 
 type ProfileScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Profile'>,
@@ -24,7 +27,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
 }) => {
   const { colors } = useTheme()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
-  const { user, loggedUser, setLoggedUser } = useContext(AuthContext)
+  const { user, setUser, setLoggedUser, saveImageToFirebase } = useContext(AuthContext)
 
   // useEffect(() => {
   //   if (!loggedUser) {
@@ -48,18 +51,27 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     navigation.navigate('Post', { user, post })
   }
 
-  const handleSaveEdit = async (name: string, email: string, phone: string, bio: string, photo?: string) => {
+  const handleSaveEdit = async (name: string, email: string, phone: string, bio: string, photo?: any) => {
+    const path = `images/${user.id}/profilePicture`
+    const pathReference = ref(firebaseStorage, path)
+    await saveImageToFirebase(photo.uri, pathReference)
+
+    const url = await getDownloadURL(pathReference)
+    console.log(url)    
+
     const newUserInfo = {
       ...user,
       name,
       email,
       phone,
       bio,
-      photo
+      photo: url
     }
     try {
       await axios.patch(`${server}/users/${user.id}`, newUserInfo)
-      showSuccess('Perfil atualizado com sucesso!')
+      const updatedUser = await (await axios.get(`${server}/users/${user.id}`)).data
+      setUser(updatedUser)
+      showSuccess('Post criado com sucesso!')
     } catch (e) {
       showError(e)
     }
