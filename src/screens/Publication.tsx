@@ -15,7 +15,7 @@ import axios from "axios"
 import { server, showError, showSuccess } from "../common"
 import { AuthContext, Post, userInfo } from "../contexts/AuthContext"
 
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
+import { getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage"
 import { firebaseApp } from "../FirebaseConfig"
 const firebaseStorage = getStorage(firebaseApp)
 
@@ -267,29 +267,36 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
 
             const idNewPost = +res.data.results.id
 
-            // Upload images to Firebase
-            imagesArray.map(async (image: any) => {
-                await saveImageToFirebase(image.uri, `images/${user.id}/${image.assetId}`)
+            const save = new Promise<void>((resolve, reject) => {
+                imagesArray.forEach(async (image: any, index) => {
+                    // Upload images to Firebase
+                    const name = `images/${user.id}/${image.assetId}`
+                    const pathReference = ref(firebaseStorage, name)
+                    await saveImageToFirebase(image.uri, pathReference)
+
+                    // Get url for images
+                    const url = await getDownloadURL(pathReference)
+
+                    //save images urls to postgres
+                    await saveImageUrlToDB(url, idNewPost)
+                    if (index === imagesArray.length - 1) resolve()
+                })
             })
 
-            // Save images links to postgres
-            imagesArray.map(async (image: any) => {
-                const pathReference = ref(firebaseStorage, `images/${user.id}/${image.assetId}`)
-                const url = await getDownloadURL(pathReference)
-                await saveImageUrlToDB(url, idNewPost)
+            save.then(() => {
+                console.log('Terminou')
+                updateUserInfo()
             })
-            updateUserInfo()
         } catch (e) {
             showError(e)
         }
     }
 
-    const saveImageToFirebase = async (imageURI: any, name: string = 'teste.jpeg') => {
-        const storageRef = ref(firebaseStorage, name)
+    const saveImageToFirebase = async (imageURI: any, pathReference: StorageReference) => {
         const img = await fetch(imageURI)
         const imgBytes = await img.blob()
 
-        uploadBytes(storageRef, imgBytes).then((snapshot) => {
+        await uploadBytes(pathReference, imgBytes).then((snapshot) => {
             console.log('Uploaded a blob or file!')
         })
     }
@@ -438,10 +445,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Studio' value='Studio' />
                             </Picker>
                         ) : (
-                                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                                </TouchableOpacity>
-                            )
+                            <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                                <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                            </TouchableOpacity>
+                        )
                     }
                 </View>
 
@@ -460,10 +467,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Aluguel' value='Aluguel' />
                             </Picker>
                         ) : (
-                                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                                </TouchableOpacity>
-                            )
+                            <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                                <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                            </TouchableOpacity>
+                        )
                     }
                     <AuthInput
                         icon='crop-din'
