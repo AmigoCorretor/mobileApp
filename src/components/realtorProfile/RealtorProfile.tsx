@@ -12,7 +12,10 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo, setShowLogoutModal }
 
   const styles = StyleSheet.create({
     container: {
+      backgroundColor: `${colors.primary}35`,
       width: '100%',
+      alignItems: 'center',
+      borderRadius: 16
     },
     title: {
       fontSize: 24,
@@ -98,7 +101,7 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo, setShowLogoutModal }
   })
 
   return (
-    <View>
+    <View >
       <View style={styles.headerContainer}>
         <Text style={styles.title}>{userInfo.name}</Text>
         <TouchableOpacity style={styles.settingsButton} onPress={() => setShowLogoutModal(true)}>
@@ -131,7 +134,7 @@ export const RealtorProfile: React.FC<Props> = ({ userInfo, setShowLogoutModal }
             </Text>
           </View>
         </View>
-        <View>
+        <View style={styles.container}>
           <Text style={{ color: colors.text, fontSize: 20 }}>Estatísticas</Text>
           <View style={styles.statisticsContainer}>
             <View style={{ alignItems: 'center' }}>

@@ -175,6 +175,9 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         },
         iosPickerText: {
             color: '#333',
+        },
+        textInfos:{
+            color: colors.text
         }
     })
 
@@ -266,6 +269,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 latitude: marker.coords ? marker.coords.latitude : null,
                 longitude: marker.coords ? marker.coords.longitude : null
             }
+            
             const res = await axios.post<NewPostResponse>(`${server}/posts`, newPost)
 
             const idNewPost = +res.data.results.id
@@ -291,6 +295,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 }, 1000)
                 updateUserInfo()
             })
+            onCancel()
         } catch (e) {
             showError(e)
         }
@@ -535,7 +540,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         pinColor={marker.pinColor} />
 
                 </MapView>
-                <Text>Selecione no mínimo duas imagens</Text>
+                <Text style={styles.textInfos}>Selecione no mínimo duas imagens</Text>
                 <FlatList
                     data={imagesArray}
                     style={{ width: '90%', borderRadius: 16 }}

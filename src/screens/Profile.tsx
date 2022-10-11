@@ -71,7 +71,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       await axios.patch(`${server}/users/${user.id}`, newUserInfo)
       const updatedUser = await (await axios.get(`${server}/users/${user.id}`)).data
       setUser(updatedUser)
-      showSuccess('Post criado com sucesso!')
+      showSuccess('Perfil atualizado com sucesso!')
     } catch (e) {
       showError(e)
     }
@@ -105,7 +105,9 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       backgroundColor: '#c6c6c6bb',
       zIndex: 1,
       position: 'absolute',
-      marginTop: 15
+      marginTop: 15,
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     postText: {
       fontSize: 18,
@@ -117,6 +119,13 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       width: 150,
       borderRadius: 20,
     },
+    unavailable:{
+      fontSize: 25,
+      width: '100%',
+      textAlign: 'center',
+      color: '#fff',
+      backgroundColor: `${colors.primary}35`,
+    }
   })
 
   return (
@@ -139,14 +148,16 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
             onPress={() => handleOpenPost(item)}
             style={styles.post}>
             {/* <View style={styles.dummyPostImage} /> */}
-            <View style={!item.available ? styles.postNotAvailable : null}><Text>Indisponível</Text>
-            </View>
+            {!item.available ? <View style={styles.postNotAvailable}>
+              <Text style={styles.unavailable}>Indisponível</Text>
+            </View> : null}
+
 
             <Image
               style={styles.dummyPostImage}
               source={{ uri: item.images[0].link }}
             />
-            <Text style={styles.postText}>{item.title.substring(0, 14)}...</Text>
+            <Text style={styles.postText}>{item.title.substring(0, 14)}{item.title.length >= 14 ? '...' : null  }</Text>
           </TouchableOpacity>
         )}
       />
