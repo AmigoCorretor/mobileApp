@@ -32,6 +32,7 @@ export interface Post {
   price?: string
   latitude?: number
   longitude?: number
+  available?:boolean
 }
 export interface User {
   id: number

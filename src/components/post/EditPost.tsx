@@ -1,10 +1,10 @@
 import { useEffect, useContext } from 'react'
-import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform, ScrollView, ActionSheetIOS } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform, ScrollView, ActionSheetIOS, Switch } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useState } from 'react'
 import { AuthInput } from '../AuthInput'
-import { AuthContext, Post} from '../../contexts/AuthContext'
+import { AuthContext, Post } from '../../contexts/AuthContext'
 import axios from 'axios'
 import { server, showError, showSuccess } from '../../common'
 import { Picker } from '@react-native-picker/picker'
@@ -32,6 +32,8 @@ export const EditPost = (props: Props) => {
   const [type, setType] = useState(props.postInfo.type)
   const [price, setPrice] = useState(props.postInfo.price)
   const [sellOrRent, setSellOrRent] = useState(props.postInfo.sellOrRent)
+  const [available, setAvailable] = useState(props.postInfo.available )
+
 
   const updatePost = async () => {
     const newPostInfo = {
@@ -45,7 +47,8 @@ export const EditPost = (props: Props) => {
       suites,
       price,
       type,
-      sellOrRent
+      sellOrRent,
+      available
     }
     try {
       await axios.patch(`${server}/posts/${props.postInfo.id}`, newPostInfo)
@@ -150,6 +153,9 @@ export const EditPost = (props: Props) => {
     setSellOrRent(props.postInfo.sellOrRent)
     props.onCancel()
   }
+
+  const toggleAvailable = () => setAvailable(previousState => !previousState)
+
 
   const styles = StyleSheet.create({
     container: {
@@ -363,6 +369,15 @@ export const EditPost = (props: Props) => {
               keyboardType='number-pad'
             />
           </View>
+
+          <Text style={[styles.numberInputData, styles.aditionalInfosInputData]}>Imóvel vendido?</Text>
+          <Switch
+            trackColor={{ false: '#767577', true: colors.primary }}
+            thumbColor={available ? '#FFF' : '#AAA'}
+            ios_backgroundColor='#3e3e3e'
+            onValueChange={toggleAvailable}
+            value={!available}
+          />
 
 
           <View style={styles.buttonContainer}>

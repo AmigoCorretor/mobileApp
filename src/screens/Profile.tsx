@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
@@ -57,7 +57,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     await saveImageToFirebase(photo.uri, pathReference)
 
     const url = await getDownloadURL(pathReference)
-    console.log(url)    
+    console.log(url)
 
     const newUserInfo = {
       ...user,
@@ -77,6 +77,8 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     }
   }
 
+
+
   const styles = StyleSheet.create({
     container: {
       width: '100%',
@@ -95,6 +97,15 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
     post: {
       alignItems: 'center',
       padding: 15,
+    },
+    postNotAvailable: {
+      height: 150,
+      width: 150,
+      borderRadius: 20,
+      backgroundColor: '#c6c6c6bb',
+      zIndex: 1,
+      position: 'absolute',
+      marginTop: 15
     },
     postText: {
       fontSize: 18,
@@ -128,6 +139,9 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
             onPress={() => handleOpenPost(item)}
             style={styles.post}>
             {/* <View style={styles.dummyPostImage} /> */}
+            <View style={!item.available ? styles.postNotAvailable : null}><Text>Indisponível</Text>
+            </View>
+
             <Image
               style={styles.dummyPostImage}
               source={{ uri: item.images[0].link }}

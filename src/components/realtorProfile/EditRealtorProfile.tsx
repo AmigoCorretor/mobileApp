@@ -27,6 +27,7 @@ export const EditRealtorProfile = (props: Props) => {
   const [email, setEmail] = useState(props.userInfo.email)
   const [phone, setPhone] = useState(props.userInfo.phone)
   const [bio, setBio] = useState(props.userInfo.bio)
+  const [previewPhoto, setPreviewPhoto] = useState(props.userInfo.photo)
   const [photo, setPhoto] = useState<any>()
   // const [password, setPassword] = useState('123456')
   // const [confirmPassword, setConfirmPassword] = useState('123456')
@@ -39,7 +40,8 @@ export const EditRealtorProfile = (props: Props) => {
       setEmail(currentUserInfo.email)
       setPhone(currentUserInfo.phone)
       setBio(currentUserInfo.bio)
-      setPhoto(currentUserInfo.photo)
+      // setPhoto(currentUserInfo.photo)
+      setPreviewPhoto(currentUserInfo.photo)
     }
     updateUser()
   }, [props.isVisible])
@@ -54,6 +56,7 @@ export const EditRealtorProfile = (props: Props) => {
 
     if (!result.cancelled) {
       setPhoto(result)
+      setPreviewPhoto(result.uri)
     }
   }
 
@@ -129,9 +132,11 @@ export const EditRealtorProfile = (props: Props) => {
           <View style={styles.editInfosContainer}>
             <TouchableOpacity onPress={selectProfilePhoto}>
               <View style={{ alignItems: 'center' }}>
+
                 <Image
                   style={styles.profilePicture}
-                  source={{ uri: props.userInfo.photo }} />
+                  source={{ uri: previewPhoto }} />
+
                 <Text style={styles.subTitle}>Troca foto de perfil</Text>
               </View>
             </TouchableOpacity>
