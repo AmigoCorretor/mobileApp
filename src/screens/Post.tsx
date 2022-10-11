@@ -12,6 +12,10 @@ import { server, showError, showSuccess } from '../common'
 import { AuthContext } from '../contexts/AuthContext'
 import { EditPost } from '../components/post/EditPost'
 
+import { getStorage, ref, deleteObject } from "firebase/storage"
+import { firebaseApp } from "../FirebaseConfig"
+const firebaseStorage = getStorage(firebaseApp)
+
 // type PostScreenNavigationProp = CompositeScreenProps<
 //   BottomTabScreenProps<BottomTabParamList, 'Post'>,
 //   NativeStackScreenProps<StackParamList>
@@ -75,7 +79,27 @@ export const Post: React.FC<Props> = ({
     }
   })
 
+
+  const getFileNameFromURL = (url: string) => {
+    const name = url.split('%2F')[2].split('?alt=')[0]
+    return name
+  }
+
+  const deleteImageFromFirebase = async (url: string) => {
+    const name = getFileNameFromURL(url)
+    const imgRef = ref(firebaseStorage, `images/${user.id}/${name}`)
+
+    await deleteObject(imgRef).then(() => {
+      console.log('Imagem apagada do firebase')
+    }).catch((error) => {
+      console.log('Problema ao apagar imagem no firebase')
+    })
+  }
+
   const deletePost = async (id: number) => {
+    post.images.forEach(img => {
+      deleteImageFromFirebase(img.link)
+    })
     await axios.delete(`${server}/posts/${id}`)
       .then(_ => showSuccess('Post apagado!'))
       .then(_ => updateUser())
@@ -93,7 +117,7 @@ export const Post: React.FC<Props> = ({
           deletePost={deletePost}
           navigation={navigation}
         />
-        <PostImages user={user} post={post} deletePost={deletePost} showEditModal={setShowEditPost} />
+        <PostImages user={user} post={post} showEditModal={setShowEditPost} />
         <PostInfos post={post} />
       </ScrollView>
     </SafeAreaView>

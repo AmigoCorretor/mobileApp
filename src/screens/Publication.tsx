@@ -15,7 +15,7 @@ import axios from "axios"
 import { server, showError, showSuccess } from "../common"
 import { AuthContext, Post } from "../contexts/AuthContext"
 
-import { getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage"
+import { getDownloadURL, getStorage, ref } from "firebase/storage"
 import { firebaseApp } from "../FirebaseConfig"
 const firebaseStorage = getStorage(firebaseApp)
 
@@ -323,7 +323,13 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         if (!result.cancelled) {
             if (result.selected) {
                 // const uriArray = result.selected.map(picture => picture.uri)
-                const images = result.selected.map(picture => picture)
+                const images = result.selected.map(picture => {
+                    if (Platform.OS === 'ios') {
+                        return { ...picture, assetId: picture.assetId?.replaceAll('/', '-') }
+                    } else {
+                        return picture
+                    }
+                })
                 setImagesArray(images)
             }
         }
@@ -430,10 +436,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Studio' value='Studio' />
                             </Picker>
                         ) : (
-                                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                                </TouchableOpacity>
-                            )
+                            <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                                <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                            </TouchableOpacity>
+                        )
                     }
                 </View>
 
@@ -452,10 +458,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                                 <Picker.Item label='Aluguel' value='Aluguel' />
                             </Picker>
                         ) : (
-                                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                                </TouchableOpacity>
-                            )
+                            <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                                <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                            </TouchableOpacity>
+                        )
                     }
                     <AuthInput
                         icon='crop-din'

@@ -32,7 +32,7 @@ export const EditPost = (props: Props) => {
   const [type, setType] = useState(props.postInfo.type)
   const [price, setPrice] = useState(props.postInfo.price)
   const [sellOrRent, setSellOrRent] = useState(props.postInfo.sellOrRent)
-  const [available, setAvailable] = useState(props.postInfo.available )
+  const [available, setAvailable] = useState(props.postInfo.available)
 
 
   const updatePost = async () => {
@@ -293,10 +293,10 @@ export const EditPost = (props: Props) => {
                   <Picker.Item label="Studio" value="Studio" />
                 </Picker>
               ) : (
-                  <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
-                    <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
-                  </TouchableOpacity>
-                )
+                <TouchableOpacity onPress={actionSheetType} style={styles.iosPickerButton}>
+                  <Text style={styles.iosPickerText}>{type ? type : 'Tipo de imóvel'}</Text>
+                </TouchableOpacity>
+              )
             }
           </View>
           <View style={styles.aditionalInfosContainer}>
@@ -313,10 +313,10 @@ export const EditPost = (props: Props) => {
                   <Picker.Item label="Aluguel" value="Aluguel" />
                 </Picker>
               ) : (
-                  <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
-                    <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
-                  </TouchableOpacity>
-                )
+                <TouchableOpacity onPress={actionSheet} style={styles.iosPickerButton}>
+                  <Text style={styles.iosPickerText}>{sellOrRent ? sellOrRent : 'Venda/Aluguel'}</Text>
+                </TouchableOpacity>
+              )
             }
             <AuthInput
               icon='crop-din'

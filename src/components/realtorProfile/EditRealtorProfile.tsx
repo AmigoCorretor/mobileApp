@@ -7,7 +7,6 @@ import { AuthInput } from '../AuthInput'
 import { AuthContext, User } from '../../contexts/AuthContext'
 import axios from 'axios'
 import { server } from '../../common'
-import { Picker } from '@react-native-picker/picker'
 import * as ImagePicker from 'expo-image-picker'
 
 type Props = {

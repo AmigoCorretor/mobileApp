@@ -8,11 +8,10 @@ import { UserBadge } from '../feed/UserBadge'
 type Props = {
   user: User,
   post: Post,
-  showEditModal: (show: boolean) => void,
-  deletePost: (id: number) => void
+  showEditModal: (show: boolean) => void
 }
 
-export const PostImages: React.FC<Props> = ({ user, post, deletePost, showEditModal }) => {
+export const PostImages: React.FC<Props> = ({ user, post, showEditModal }) => {
   const { colors } = useTheme()
   const { width, height } = Dimensions.get('screen')
 
