@@ -26,8 +26,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF",
-        "userInterfaceStyle": "automatic"
+        "backgroundColor": "#FFFFFF"
       },
       "package": "com.AmigoCorretor.AmigoCorretor",
       "versionCode": 1
