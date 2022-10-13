@@ -72,7 +72,7 @@ export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
         <View style={styles.container}>
             <View style={styles.viewHeader}>
                 <UserBadge
-                    name={user.name}
+                    name={user.name.split(' ')[0]}
                     photo={user.photo}
                     badgeStyle={{
                         position: 'relative',
