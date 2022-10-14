@@ -4,9 +4,11 @@ import { useFocusEffect, useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useCallback, useContext, useEffect } from 'react'
-import { AuthContext } from '../contexts/AuthContext'
+import { useCallback, useContext, useEffect, useState } from 'react'
+import { AuthContext, Post } from '../contexts/AuthContext'
 import { FeedPost } from '../components/feed/FeedPost'
+import axios from 'axios'
+import { server } from '../common'
 
 type FeedScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Feed'>,
@@ -23,7 +25,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   route,
 }) => {
   const { colors } = useTheme()
-  const { user, loggedUser } = useContext(AuthContext)
+  const [posts, setPosts] = useState<Post[]>()
 
   // useEffect(() => {
   //   navigation.addListener('beforeRemove', (e) => {
@@ -35,6 +37,15 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   //     }
   //   })
   // }, [loggedUser])
+
+  useEffect(() => {
+    const getData = async () => {
+      const postsArray = await (await axios.get(`${server}/posts`)).data as Post[]
+      const availablePosts = postsArray.filter(post => post.available)      
+      setPosts(availablePosts)
+    }
+    getData()
+  }, [])
 
   const styles = StyleSheet.create({
     container: {
@@ -58,7 +69,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       <Text style={styles.title}>Feed</Text>
 
       <FlatList
-        data={user.posts.reverse()}
+        data={posts}
         style={{ width: '100%' }}
         keyExtractor={(post) => post.id.toString()}
         renderItem={({ item }) => {

@@ -13,9 +13,9 @@ interface Props {
 
 export const FeedPost: React.FC<Props> = ({ post, navigation }) => {
     const { colors } = useTheme()
-    const { user } = useContext(AuthContext)
+    // const { user } = useContext(AuthContext)
     const { width, height } = Dimensions.get('screen')
-
+    const user = post.user!
     const imageWidth = width * .5
     const imageHeight = imageWidth * 1
 

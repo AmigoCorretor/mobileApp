@@ -24,7 +24,7 @@ export interface Post {
   bathrooms: number
   bedrooms: number
   suites: number
-  user?: number
+  user?: User
   images: Image[]
   favorites?: Favorite[]
   type?: string
@@ -46,7 +46,7 @@ export interface User {
   comletedSells: number
   completedRents: number
   phone: string
-  posts: Post[]
+  posts?: Post[]
 }
 export let userInfo: User = {
   id: 11,
