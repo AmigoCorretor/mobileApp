@@ -1,14 +1,16 @@
-import { SafeAreaView, StyleSheet, Text, BackHandler, FlatList } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, FlatList, TouchableOpacity, View } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
-import { useFocusEffect, useTheme } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { AuthContext, Post } from '../contexts/AuthContext'
+import { useEffect, useState } from 'react'
+import { Post } from '../contexts/AuthContext'
 import { FeedPost } from '../components/feed/FeedPost'
 import axios from 'axios'
 import { server } from '../common'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { FilterModal } from '../components/feed/FilterModal'
 
 type FeedScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, 'Feed'>,
@@ -26,6 +28,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
 }) => {
   const { colors } = useTheme()
   const [posts, setPosts] = useState<Post[]>()
+  const [showFilterModal, setShowFilterModal] = useState(false)
 
   // useEffect(() => {
   //   navigation.addListener('beforeRemove', (e) => {
@@ -41,7 +44,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   useEffect(() => {
     const getData = async () => {
       const postsArray = await (await axios.get(`${server}/posts`)).data as Post[]
-      const availablePosts = postsArray.filter(post => post.available)      
+      const availablePosts = postsArray.filter(post => post.available)
       setPosts(availablePosts)
     }
     getData()
@@ -62,11 +65,41 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       fontSize: 18,
       color: colors.text,
     },
+    headerContainer: {
+      flexDirection: 'row',
+      height: 50,
+      borderBottomWidth: 1,
+      borderStyle: 'solid',
+      borderBottomColor: colors.text,
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    settingsButton: {
+      position: 'absolute',
+      right: 10,
+    },
+    settingsIcon: {
+      color: colors.primary,
+      fontSize: 30,
+    },
   })
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Feed</Text>
+      <FilterModal
+        isVisible={showFilterModal}
+        onCancel={() => setShowFilterModal(false)}
+      />
+      <View style={styles.headerContainer}>
+        <Text style={styles.title}>Feed</Text>
+        <TouchableOpacity style={styles.settingsButton} onPress={() => { setShowFilterModal(true) }}>
+          <MaterialCommunityIcons
+            name='filter-outline'
+            style={styles.settingsIcon}
+          />
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={posts}
