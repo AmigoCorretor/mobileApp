@@ -35,7 +35,7 @@ interface Region {
     longitudeDelta: number
 }
 
-interface Marker {
+interface MarkerInt {
     key: 0,
     coords: {
         latitude: number,
@@ -76,7 +76,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [imagesArray, setImagesArray] = useState<any[]>([])
 
     const [region, setRegion] = useState<Region>()
-    const [marker, setMarker] = useState<Marker>({
+    const [marker, setMarker] = useState<MarkerInt>({
         key: 0,
         coords: {
             latitude: 0,
@@ -203,7 +203,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     }, [])
 
     const newMarker = (e: any) => {
-        let data: Marker = {
+        let data: MarkerInt = {
             key: 0,
             coords: {
                 latitude: e.nativeEvent.coordinate.latitude,

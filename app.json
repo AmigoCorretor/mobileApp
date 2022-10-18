@@ -4,7 +4,7 @@
     "slug": "amigocorretor",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/iconbox logo darkmode 2.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
@@ -30,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6da2c97a-76fd-4914-9b7b-f6de7fd34d05"
+      }
     }
   }
 }

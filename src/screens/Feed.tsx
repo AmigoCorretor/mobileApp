@@ -50,6 +50,12 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
     getData()
   }, [])
 
+  const handleFilter = (house: boolean, apartment: boolean, land: boolean, farm: boolean, kitnet: boolean, room: boolean, shed: boolean, mall: boolean, studio: boolean) => {
+    console.log(house, apartment, land, farm, kitnet, room, shed, mall, studio)
+    const filteredPosts = posts?.filter(post => post.type === 'house')
+    setPosts(filteredPosts)
+  }
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -90,6 +96,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       <FilterModal
         isVisible={showFilterModal}
         onCancel={() => setShowFilterModal(false)}
+        handleFilter={handleFilter}
       />
       <View style={styles.headerContainer}>
         <Text style={styles.title}>Feed</Text>
