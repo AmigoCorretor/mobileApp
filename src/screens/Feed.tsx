@@ -1,10 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, FlatList, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, FlatList, TouchableOpacity, View, Image, Platform } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Post } from '../contexts/AuthContext'
 import { FeedPost } from '../components/feed/FeedPost'
 import axios from 'axios'
@@ -26,6 +26,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   navigation,
   route,
 }) => {
+  const theme = useTheme()
   const { colors } = useTheme()
   const [posts, setPosts] = useState<Post[]>()
   const [showFilterModal, setShowFilterModal] = useState(false)
@@ -63,9 +64,10 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    title: {
-      fontSize: 24,
-      color: colors.text,
+    logo: {
+      top: Platform.OS === 'ios' ? 5 : 14,
+      width: 170,
+      height: 65
     },
     text: {
       fontSize: 18,
@@ -74,12 +76,10 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
     headerContainer: {
       flexDirection: 'row',
       height: 50,
-      borderBottomWidth: 1,
-      borderStyle: 'solid',
-      borderBottomColor: colors.text,
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: 20
     },
     settingsButton: {
       position: 'absolute',
@@ -99,7 +99,10 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
         handleFilter={handleFilter}
       />
       <View style={styles.headerContainer}>
-        <Text style={styles.title}>Feed</Text>
+        <Image
+          source={theme.dark ? require('../../assets/icons/logoTextDarkmode.png') : require('../../assets/icons/logoTextLightmode.png')}
+          style={styles.logo}
+        />
         <TouchableOpacity style={styles.settingsButton} onPress={() => { setShowFilterModal(true) }}>
           <MaterialCommunityIcons
             name='filter-outline'
@@ -107,7 +110,6 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
           />
         </TouchableOpacity>
       </View>
-
       <FlatList
         data={posts}
         style={{ width: '100%' }}

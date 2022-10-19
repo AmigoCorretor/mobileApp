@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'

@@ -279,13 +279,13 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                     // Upload images to Firebase
                     const name = `images/${user.id}/${image.assetId}`
                     const pathReference = ref(firebaseStorage, name)
-                    await saveImageToFirebase(image.uri, pathReference)
+                    await saveImageToFirebase!(image.uri, pathReference)
 
                     // Get url for images
                     const url = await getDownloadURL(pathReference)
 
                     //save images urls to postgres
-                    await saveImageUrlToDB(url, idNewPost)
+                    await saveImageUrlToDB!(url, idNewPost)
                     if (index === imagesArray.length - 1) resolve()
                 })
             })
@@ -413,11 +413,12 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 />
                 <AuthInput
                     icon='description'
-                    style={styles.inputs}
+                    style={[styles.inputs, { height: 120}]}
                     placeholder='Descrição'
                     value={description}
                     onChangeText={setDescription}
                     placeholderTextColor='#333'
+                    multiline
                 />
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
                     <Text style={[styles.numberInputData, styles.aditionalInfosInputData]}>Tipo de imóvel:</Text>

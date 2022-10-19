@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
-import { useState, useEffect } from 'react'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
 import type { CompositeScreenProps } from '@react-navigation/native'

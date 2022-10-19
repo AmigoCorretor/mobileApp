@@ -1,3 +1,4 @@
+import React from 'react'
 import { View, StyleSheet, Text, Image, TouchableOpacity, Linking } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { User } from '../../contexts/AuthContext'

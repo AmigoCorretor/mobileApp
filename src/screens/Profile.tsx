@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { BottomTabParamList, StackParamList } from '../Navigator'
 import { useTheme } from '@react-navigation/native'
@@ -54,11 +54,11 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
   const handleSaveEdit = async (name: string, email: string, phone: string, bio: string, photo?: any) => {
     const path = `images/${user.id}/profilePicture`
     const pathReference = ref(firebaseStorage, path)
-    await saveImageToFirebase(photo.uri, pathReference)
-
+    if (photo) {
+      await saveImageToFirebase!(photo.uri, pathReference)
+    }
     const url = await getDownloadURL(pathReference)
-    console.log(url)
-
+    
     const newUserInfo = {
       ...user,
       name,

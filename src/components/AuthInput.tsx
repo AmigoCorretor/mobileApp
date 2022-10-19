@@ -1,6 +1,6 @@
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard, TouchableWithoutFeedback, KeyboardType } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { TextInputMask, TextInputMaskTypeProp } from 'react-native-masked-text'
 
 type Props = {

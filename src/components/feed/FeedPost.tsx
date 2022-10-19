@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react'
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Animated, Dimensions, TouchableWithoutFeedback, FlatList } from 'react-native'
+import React from 'react'
+import { Image, StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, FlatList } from 'react-native'
 import { useTheme } from '@react-navigation/native'
-import { AuthContext, Post, User } from '../../contexts/AuthContext'
+import { Post } from '../../contexts/AuthContext'
 import { InfosFooter } from './InfosFooter'
 import { UserBadge } from './UserBadge'
 

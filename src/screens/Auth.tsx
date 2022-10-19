@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react'
-import { Alert, Animated, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Animated, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View, Image } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthInput } from '../components/AuthInput'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -153,9 +153,17 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    logo: {
+      position: 'relative',
+      // top: 110,
+      marginBottom: 25,
+      width: 250,
+      height: 98
+    },
     title: {
       color: colors.text,
-      fontSize: 24
+      fontSize: 24,
+      marginBottom: 10
     },
     text: {
       color: colors.text,
@@ -183,7 +191,6 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 8,
-
     },
     buttonIcon: {
       marginRight: 10,
@@ -195,7 +202,6 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: 30
-
     },
 
   })
@@ -205,7 +211,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       contentContainerStyle={[styles.container, { width: '126%' }]}
     >
       <LinearGradient
-        colors={theme.dark ? [colors.primary, '#332657'] : [colors.primary, '#F2F2F2']}
+        colors={theme.dark ? ['#332657', colors.primary ] : ['#F2F2F2', colors.primary ]}
         start={[0.1, 0.1]}
         style={styles.background}
       >
@@ -213,6 +219,10 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <Animated.View style={[styles.container, position.getLayout()]}>
+            <Image
+            source={theme.dark ? require('../../assets/icons/logoTextDarkmode.png') : require('../../assets/icons/logoTextLightmode.png')}
+            style={styles.logo}
+            />
             <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
             {stageNew && (
               <AuthInput

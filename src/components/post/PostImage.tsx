@@ -1,7 +1,7 @@
-import { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { Animated, Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
-import { Post, User } from '../../contexts/AuthContext'
+import { AuthContext, Post, User } from '../../contexts/AuthContext'
 import { MaterialIcons } from '@expo/vector-icons'
 import { UserBadge } from '../feed/UserBadge'
 
@@ -13,6 +13,7 @@ type Props = {
 
 export const PostImages: React.FC<Props> = ({ user, post, showEditModal }) => {
   const { colors } = useTheme()
+  const { user: loggedUser } = useContext(AuthContext)
   const { width, height } = Dimensions.get('screen')
 
   const styles = StyleSheet.create({
@@ -58,19 +59,6 @@ export const PostImages: React.FC<Props> = ({ user, post, showEditModal }) => {
   return (
     <View>
       <View style={{ width: '100%', height: 100, position: 'absolute', zIndex: 1 }}>
-        {/* <View style={styles.userContainer}>
-          <View>
-            <Image
-              style={styles.profilePicture}
-              source={{ uri: user.photo }} />
-            <MaterialIcons
-              name='verified'
-              size={20}
-              style={styles.verifiedIcon}
-            />
-          </View>
-          <Text style={styles.name}>{user.name}</Text>
-        </View> */}
         <UserBadge
           name={user.name.split(' ')[0]}
           photo={user.photo}
@@ -78,23 +66,29 @@ export const PostImages: React.FC<Props> = ({ user, post, showEditModal }) => {
             top: Platform.OS === 'android' ? 56 : 0
           }}
         />
-        <TouchableOpacity style={{
-          position: 'absolute',
-          zIndex: 1,
-          backgroundColor: `${colors.background}7`,
-          borderRadius: 40,
-          padding: 10,
-          right: 0,
-          top: Platform.OS === 'android' ? 56 : 0
-        }}
-          onPress={() => showEditModal(true)}
-        >
-          <MaterialIcons
-            name='more-horiz'
-            size={20}
-            style={{ color: colors.text }}
-          />
-        </TouchableOpacity>
+        {
+          user.id !== loggedUser.id
+            ?
+            null
+            :
+            <TouchableOpacity style={{
+              position: 'absolute',
+              zIndex: 1,
+              backgroundColor: `${colors.background}7`,
+              borderRadius: 40,
+              padding: 10,
+              right: 0,
+              top: Platform.OS === 'android' ? 56 : 0
+            }}
+              onPress={() => showEditModal(true)}
+            >
+              <MaterialIcons
+                name='more-horiz'
+                size={20}
+                style={{ color: colors.text }}
+              />
+            </TouchableOpacity>
+        }
       </View>
 
       <View style={[StyleSheet.absoluteFillObject]}>
@@ -154,22 +148,5 @@ export const PostImages: React.FC<Props> = ({ user, post, showEditModal }) => {
         }}
       />
     </View >
-    // <ImageBackground
-    //   source={{ uri: post.images[0].link }}
-    //   style={styles.imageBackground}>
-    //   <View style={styles.userContainer}>
-    //     <View>
-    //       <Image
-    //         style={styles.profilePicture}
-    //         source={{ uri: user.photo }} />
-    //       <MaterialIcons
-    //         name='verified'
-    //         size={20}
-    //         style={styles.verifiedIcon}
-    //       />
-    //     </View>
-    //     <Text style={styles.name}>{user.name}</Text>
-    //   </View>
-    // </ImageBackground>
   )
 }

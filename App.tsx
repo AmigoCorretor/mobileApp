@@ -1,5 +1,4 @@
-// import { StatusBar } from 'expo-status-bar'
-import { StyleSheet } from 'react-native'
+import React from 'react'
 import { Navigator } from './src/Navigator'
 
 export default function App() {

@@ -151,11 +151,11 @@ export type AuthContent = {
   loggedUser: string,
   setLoggedUser: (u: string) => void,
   updateLoggedUser: () => void,
-  saveImageToFirebase: (uri: string, pathReference: StorageReference) => Promise<void>,
-  saveImageUrlToDB: (uri: string, id: number) => Promise<void>
+  saveImageToFirebase?: (uri: string, pathReference: StorageReference) => Promise<void>,
+  saveImageUrlToDB?: (uri: string, id: number) => Promise<void>
 }
 
-export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { }, saveImageToFirebase: () => { }, saveImageUrlToDB: () => { } })
+export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { }})
 
 type Props = {
   children: JSX.Element,

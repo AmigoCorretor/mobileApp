@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform, ScrollView, ActionSheetIOS, Switch } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -266,11 +266,12 @@ export const EditPost = (props: Props) => {
             /> */}
           <AuthInput
             icon='description'
-            style={styles.input}
+            style={[styles.input, { height: 120}]}
             placeholder='Descrição'
             value={description}
             onChangeText={setDescription}
             placeholderTextColor='#333'
+            multiline
           />
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
             <Text style={[styles.numberInputData, styles.aditionalInfosInputData]}>Tipo de imóvel:</Text>

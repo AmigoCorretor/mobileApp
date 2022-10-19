@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { View, StyleSheet, TouchableOpacity, Text, Modal, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'

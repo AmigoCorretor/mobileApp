@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, View } from 'react-native'
+import react, { Platform, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { Post } from '../../contexts/AuthContext'
 import { MaterialIcons } from '@expo/vector-icons'

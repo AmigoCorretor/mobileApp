@@ -2,7 +2,7 @@ import { View, StyleSheet, TouchableOpacity, Text, Modal, KeyboardAvoidingView, 
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import BouncyCheckbox from "react-native-bouncy-checkbox"
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 type Props = {
   isVisible: boolean
