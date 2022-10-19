@@ -58,7 +58,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       await saveImageToFirebase!(photo.uri, pathReference)
     }
     const url = await getDownloadURL(pathReference)
-    
+
     const newUserInfo = {
       ...user,
       name,
@@ -119,7 +119,7 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
       width: 150,
       borderRadius: 20,
     },
-    unavailable:{
+    unavailable: {
       fontSize: 25,
       width: '100%',
       textAlign: 'center',
@@ -155,9 +155,9 @@ export const Profile: React.FC<ProfileScreenNavigationProp> = ({
 
             <Image
               style={styles.dummyPostImage}
-              source={{ uri: item.images[0].link }}
+              source={{ uri: item.images[0]?.link }}
             />
-            <Text style={styles.postText}>{item.title.substring(0, 14)}{item.title.length >= 14 ? '...' : null  }</Text>
+            <Text style={styles.postText}>{item.title.substring(0, 14)}{item.title.length >= 14 ? '...' : null}</Text>
           </TouchableOpacity>
         )}
       />

@@ -5,6 +5,20 @@ import { server } from "../common"
 
 import { StorageReference, uploadBytes } from "firebase/storage"
 
+export type TypePost = 'Casa' |
+  'Apartamento' |
+  'Terreno' |
+  'Sítio' |
+  'Kitnet' |
+  'Quarto' |
+  'Galpão' |
+  'Sala comercial' |
+  'Studio' |
+  ''
+
+export type TypeSellOrRent = 'Venda' |
+  'Aluguel' |
+  ''
 export interface Image {
   id: number
   link: string,
@@ -27,12 +41,12 @@ export interface Post {
   user?: User
   images: Image[]
   favorites?: Favorite[]
-  type?: string
-  sellOrRent?: string
+  type?: TypePost
+  sellOrRent?: TypeSellOrRent
   price?: string
   latitude?: number
   longitude?: number
-  available?:boolean
+  available?: boolean
 }
 export interface User {
   id: number
@@ -155,7 +169,7 @@ export type AuthContent = {
   saveImageUrlToDB?: (uri: string, id: number) => Promise<void>
 }
 
-export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { }})
+export const AuthContext = createContext<AuthContent>({ user: userInfo, setUser: () => { }, updateUser: () => { }, loggedUser: '', setLoggedUser: () => { }, updateLoggedUser: () => { } })
 
 type Props = {
   children: JSX.Element,

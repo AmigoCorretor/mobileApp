@@ -13,7 +13,7 @@ import { AuthInput } from '../components/AuthInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
 import axios from "axios"
 import { server, showError, showSuccess } from "../common"
-import { AuthContext, Post } from "../contexts/AuthContext"
+import { AuthContext, Post, TypePost, TypeSellOrRent } from "../contexts/AuthContext"
 
 import { getDownloadURL, getStorage, ref } from "firebase/storage"
 import { firebaseApp } from "../FirebaseConfig"
@@ -71,8 +71,8 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [suites, setSuites] = useState('')
     const [validPost, setValidPost] = useState(false)
     const [price, setPrice] = useState<string | undefined>()
-    const [type, setType] = useState('')
-    const [sellOrRent, setSellOrRent] = useState('')
+    const [type, setType] = useState<TypePost>('')
+    const [sellOrRent, setSellOrRent] = useState<TypeSellOrRent>('')
     const [imagesArray, setImagesArray] = useState<any[]>([])
 
     const [region, setRegion] = useState<Region>()
@@ -176,7 +176,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
         iosPickerText: {
             color: '#333',
         },
-        textInfos:{
+        textInfos: {
             color: colors.text
         }
     })
@@ -269,7 +269,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 latitude: marker.coords ? marker.coords.latitude : null,
                 longitude: marker.coords ? marker.coords.longitude : null
             }
-            
+
             const res = await axios.post<NewPostResponse>(`${server}/posts`, newPost)
 
             const idNewPost = +res.data.results.id
@@ -413,7 +413,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                 />
                 <AuthInput
                     icon='description'
-                    style={[styles.inputs, { height: 120}]}
+                    style={[styles.inputs, { height: 120 }]}
                     placeholder='Descrição'
                     value={description}
                     onChangeText={setDescription}

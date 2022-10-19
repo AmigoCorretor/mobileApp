@@ -98,6 +98,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={house}
               />
               <Text style={styles.itemTitle}>Casa</Text>
             </View>
@@ -109,6 +110,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={apartment}
               />
               <Text style={styles.itemTitle}>Apartamento</Text>
             </View>
@@ -120,6 +122,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={land}
               />
               <Text style={styles.itemTitle}>Terreno</Text>
             </View>
@@ -131,6 +134,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={farm}
               />
               <Text style={styles.itemTitle}>Sítio</Text>
             </View>
@@ -142,6 +146,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={kitnet}
               />
               <Text style={styles.itemTitle}>Kitnet</Text>
             </View>
@@ -153,6 +158,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={room}
               />
               <Text style={styles.itemTitle}>Quarto</Text>
             </View>
@@ -164,6 +170,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={shed}
               />
               <Text style={styles.itemTitle}>Galpão</Text>
             </View>
@@ -175,6 +182,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={mall}
               />
               <Text style={styles.itemTitle}>Sala comercial</Text>
             </View>
@@ -186,6 +194,7 @@ export const FilterModal = (props: Props) => {
                 fillColor={colors.primary}
                 unfillColor="#FFFFFF"
                 innerIconStyle={{ borderWidth: 0 }}
+                isChecked={studio}
               />
               <Text style={styles.itemTitle}>Studio</Text>
             </View>

@@ -29,6 +29,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
   const theme = useTheme()
   const { colors } = useTheme()
   const [posts, setPosts] = useState<Post[]>()
+  const [showPosts, setShowPosts] = useState<Post[]>()
   const [showFilterModal, setShowFilterModal] = useState(false)
 
   // useEffect(() => {
@@ -47,14 +48,53 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
       const postsArray = await (await axios.get(`${server}/posts`)).data as Post[]
       const availablePosts = postsArray.filter(post => post.available)
       setPosts(availablePosts)
+      setShowPosts(availablePosts)
     }
     getData()
   }, [])
 
   const handleFilter = (house: boolean, apartment: boolean, land: boolean, farm: boolean, kitnet: boolean, room: boolean, shed: boolean, mall: boolean, studio: boolean) => {
-    console.log(house, apartment, land, farm, kitnet, room, shed, mall, studio)
-    const filteredPosts = posts?.filter(post => post.type === 'house')
-    setPosts(filteredPosts)
+    const filteredPosts = posts?.filter(post => {
+      if (house) {
+        return post.type === 'Casa'
+      }
+      if (apartment) {
+        return post.type === 'Apartamento'
+      }
+      if (land) {
+        return post.type === 'Terreno'
+      }
+      if (farm) {
+        return post.type === 'Sítio'
+      }
+      if (kitnet) {
+        return post.type === 'Kitnet'
+      }
+      if (room) {
+        return post.type === 'Quarto'
+      }
+      if (shed) {
+        return post.type === 'Galpão'
+      }
+      if (mall) {
+        return post.type === 'Sala comercial'
+      }
+      if (studio) {
+        return post.type === 'Studio'
+      }
+      if (!house && !apartment && !land && !farm && !kitnet && !room && !shed && !mall && !studio) {
+        return post.type === 'Casa'
+          || post.type === 'Apartamento'
+          || post.type === 'Terreno'
+          || post.type === 'Sítio'
+          || post.type === 'Kitnet'
+          || post.type === 'Quarto'
+          || post.type === 'Galpão'
+          || post.type === 'Sala comercial'
+          || post.type === 'Studio'
+      }
+    })
+    setShowPosts(filteredPosts)
   }
 
   const styles = StyleSheet.create({
@@ -111,7 +151,7 @@ export const Feed: React.FC<FeedScreenNavigationProp> = ({
         </TouchableOpacity>
       </View>
       <FlatList
-        data={posts}
+        data={showPosts}
         style={{ width: '100%' }}
         keyExtractor={(post) => post.id.toString()}
         renderItem={({ item }) => {
