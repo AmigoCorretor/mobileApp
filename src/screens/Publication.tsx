@@ -9,6 +9,8 @@ import * as Location from 'expo-location'
 import { Picker } from '@react-native-picker/picker'
 import * as ImagePicker from 'expo-image-picker'
 
+import { Masks } from 'react-native-mask-input'
+
 import { AuthInput } from '../components/AuthInput'
 import { BottomTabParamList, StackParamList } from "../Navigator"
 import axios from "axios"
@@ -518,10 +520,10 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         icon='attach-money'
                         style={styles.numberInputData}
                         placeholder='Preço'
-                        value={price ? price.toString() : undefined}
+                        value={price}
                         onChangeText={setPrice}
                         placeholderTextColor='#333'
-                        inputMask='money'
+                        // mask={Masks.BRL_CURRENCY}
                         keyboardType='number-pad'
                     />
                 </View>

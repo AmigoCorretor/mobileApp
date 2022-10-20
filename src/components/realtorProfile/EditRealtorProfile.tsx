@@ -8,6 +8,7 @@ import { AuthContext, User } from '../../contexts/AuthContext'
 import axios from 'axios'
 import { server } from '../../common'
 import * as ImagePicker from 'expo-image-picker'
+import { Masks } from 'react-native-mask-input'
 
 type Props = {
   // icon: keyof typeof MaterialIcons.glyphMap
@@ -28,8 +29,8 @@ export const EditRealtorProfile = (props: Props) => {
   const [bio, setBio] = useState(props.userInfo.bio)
   const [previewPhoto, setPreviewPhoto] = useState(props.userInfo.photo)
   const [photo, setPhoto] = useState<any>()
-  // const [password, setPassword] = useState('123456')
-  // const [confirmPassword, setConfirmPassword] = useState('123456')
+  // const [password, setPassword] = useState('')
+  // const [confirmPassword, setConfirmPassword] = useState('')
 
   useEffect(() => {
     const updateUser = async () => {
@@ -156,6 +157,8 @@ export const EditRealtorProfile = (props: Props) => {
               onChangeText={setPhone}
               icon='phone'
               placeholder='Telefone'
+              mask={Masks.BRL_PHONE}
+              keyboardType='phone-pad'
               style={styles.input} placeholderTextColor='#333' />
             <AuthInput
               value={bio}

@@ -26,7 +26,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.amigocorretor.amigocorretor"
+      "package": "com.amigocorretor.amigocorretor",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD89GzSOY-ajANxNijlkiOCeOCJWdkzg3o"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

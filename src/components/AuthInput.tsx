@@ -1,7 +1,8 @@
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Keyboard, TouchableWithoutFeedback, KeyboardType } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import React, { useEffect, useRef, useState } from 'react'
-import { TextInputMask, TextInputMaskTypeProp } from 'react-native-masked-text'
+import MaskInput from 'react-native-mask-input'
+import { Mask } from 'react-native-mask-input/lib/typescript/src/formatWithMask.types'
 
 type Props = {
   icon: keyof typeof MaterialIcons.glyphMap
@@ -16,14 +17,14 @@ type Props = {
   autoFocus?: boolean
   closeKeyboardOnCancel?: boolean
   multiline?: boolean
-  inputMask?: TextInputMaskTypeProp
+  mask?: Mask
   keyboardType?: KeyboardType
 }
 
 export const AuthInput = (props: Props) => {
   const [showCancelButton, setShowCancelButton] = useState(false)
   const localInputRef = useRef<TextInput>()
-  const localInputMaskRef = useRef<TextInputMask>()
+  // const localInputMaskRef = useRef<TextInputMask>()
 
   const keyboardDidHideCallback = () => {
     localInputRef.current ? localInputRef.current!.blur?.() : null
@@ -84,25 +85,9 @@ export const AuthInput = (props: Props) => {
           style={styles.icon}
           onPress={() => { localInputRef.current ? localInputRef.current!.focus() : null }}
         />
-        {props.inputMask ? (
-          <TextInputMask
+        {props.mask ? (
+          <MaskInput
             {...props}
-            type={props.inputMask ? props.inputMask : 'custom'}
-            options={{
-              /**
-               * mask: (String | required | default '')
-               * the mask pattern
-               * 9 - accept digit.
-               * A - accept alpha.
-               * S - accept alphanumeric.
-               * * - accept all, EXCEPT white space.
-              */
-              mask: '******************************'
-            }}
-            keyboardType={props.keyboardType ? props.keyboardType : 'default'}
-            style={[styles.input, props.textInputStyle]}
-            onFocus={() => setShowCancelButton(true)}
-            onBlur={() => setShowCancelButton(false)}
           />
         ) : (
           <TextInput
