@@ -72,7 +72,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
     const [bedrooms, setBedrooms] = useState('')
     const [suites, setSuites] = useState('')
     const [validPost, setValidPost] = useState(false)
-    const [price, setPrice] = useState<string | undefined>()
+    const [price, setPrice] = useState<string>()
     const [type, setType] = useState<TypePost>('')
     const [sellOrRent, setSellOrRent] = useState<TypeSellOrRent>('')
     const [imagesArray, setImagesArray] = useState<any[]>([])
@@ -523,7 +523,7 @@ export const Publication: React.FC<PublicationScreenNavigationProp> = () => {
                         value={price}
                         onChangeText={setPrice}
                         placeholderTextColor='#333'
-                        // mask={Masks.BRL_CURRENCY}
+                        mask={Masks.BRL_CURRENCY}
                         keyboardType='number-pad'
                     />
                 </View>

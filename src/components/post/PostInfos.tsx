@@ -110,7 +110,6 @@ export const PostInfos: React.FC<Props> = ({ post }) => {
         <View>
           <Text style={styles.subtitle}>Descrição:</Text>
           <Text style={styles.text}>{post.description}</Text>
-          <Text style={styles.text}>Inserir aqui o mapa se houver localização</Text>
         </View>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <MapView
