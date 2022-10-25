@@ -17,10 +17,10 @@ type AuthScreenProps = NativeStackScreenProps<StackParamList, 'Auth'>
 
 export const Auth = ({ navigation }: AuthScreenProps) => {
   const [stageNew, setStageNew] = useState(false)
-  const [name, setName] = useState('Gustavo')
-  const [email, setEmail] = useState('gustavo@gmail.com')
-  const [password, setPassword] = useState('123456')
-  const [confirmPassword, setConfirmPassword] = useState('123456')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [isRealtor, setIsRealtor] = useState(false)
   const [validForm, setValidForm] = useState(false)
   const [creci, setCreci] = useState('')
@@ -211,7 +211,7 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
       contentContainerStyle={[styles.container, { width: '126%' }]}
     >
       <LinearGradient
-        colors={theme.dark ? ['#332657', colors.primary ] : ['#F2F2F2', colors.primary ]}
+        colors={theme.dark ? ['#332657', colors.primary] : ['#F2F2F2', colors.primary]}
         start={[0.1, 0.1]}
         style={styles.background}
       >
@@ -220,8 +220,8 @@ export const Auth = ({ navigation }: AuthScreenProps) => {
         >
           <Animated.View style={[styles.container, position.getLayout()]}>
             <Image
-            source={theme.dark ? require('../../assets/icons/logoTextDarkmode.png') : require('../../assets/icons/logoTextLightmode.png')}
-            style={styles.logo}
+              source={theme.dark ? require('../../assets/icons/logoTextDarkmode.png') : require('../../assets/icons/logoTextLightmode.png')}
+              style={styles.logo}
             />
             <Text style={styles.title}>{stageNew ? 'Crie a sua conta' : 'Fazer login'}</Text>
             {stageNew && (
